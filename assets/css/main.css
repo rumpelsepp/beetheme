@@ -12,8 +12,6 @@ body {
     max-width: 920px;
     margin: 0 auto;
     padding: 1rem;
-      
-
 }
 
 header.main-header {
@@ -184,6 +182,15 @@ article.content {
         }
     }
 
+    h1.draft:before,
+    h2.draft:before,
+    h3.draft:before,
+    h4.draft:before,
+    h5.draft:before,
+    h6.draft:before {
+        content: "DRAFT · "
+    }
+
     table {
         border-collapse: collapse;
         width: 100%;
@@ -239,20 +246,19 @@ article.content {
             text-align: center;
         }
     }
+}
 
-    .info {
-        padding: 1rem;
-        /* …border: 1px dotted; */
-        border-left: 0.2rem solid;
-        background-color: rgb(227, 227, 227);
+.info {
+    padding: 1rem;
+    /* …border: 1px dotted; */
+    border-left: 0.2rem solid;
+    background-color: rgb(227, 227, 227);
 
-        /* TODO: Move to beehen.de custom styles. */
-        .gscheidhaferl {
-            font-size: 1.4rem;
-            font-weight: bold;
-        }
+    /* TODO: Move to beehen.de custom styles. */
+    .gscheidhaferl {
+        font-size: 1.4rem;
+        font-weight: bold;
     }
-
 }
 
 .related {

@@ -1,8 +1,12 @@
 {{ define "main" }}
-<main class="home">
-    <article class="content">
-        <header><h1>{{ .Title }}</h1></header>
-        {{ .Content }}
-    </article>
-</main>
+{{ if $.Site.Params.blogAsHome }}
+    {{ partial "blog-section.html" . }}
+{{ else }}
+    <main class="home">
+        <article class="content">
+            <header><h1>{{ .Title }}</h1></header>
+            {{ .Content }}
+        </article>
+    </main>
+{{ end }}
 {{ end }}

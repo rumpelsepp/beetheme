@@ -57,9 +57,10 @@
 <body>
     <header class="main-header">
       {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
-      {{ block "banner" . }}
 
-      {{ with $banner := resources.Get "/img/banner.jpg" | resources.Fingerprint }}
+      {{ block "banner" . }}
+      {{ with $banner := resources.Get "/img/banner.jpg" }}
+        {{ $banner = $banner | resources.Fingerprint }}
         <div class="banner-container">
           <img id="banner" src="{{ $banner.Permalink }}" height="230" width="920">
 
@@ -73,18 +74,20 @@
         {{ end }}
       {{ end }}
 
-      <nav aria-label="breadcrumb" class="breadcrumb">
-        <ol>
-          {{ range .Ancestors.Reverse }}
-            <li>
-              <a href="{{ .Permalink }}">{{ if .IsHome }}Home{{ else }}{{ .LinkTitle }}{{ end }}</a>
-            </li>
-          {{ end }}
-          <li class="active">
-            <a aria-current="page" href="{{ .Permalink }}">{{ if .IsHome }}Home{{ else }}{{ .LinkTitle }}{{ end }}</a>
-          </li>
-        </ol>
-      </nav>
+      {{ if $.Site.Params.breadcrumb }}
+          <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol>
+              {{ range .Ancestors.Reverse }}
+                <li>
+                  <a href="{{ .Permalink }}">{{ if .IsHome }}Home{{ else }}{{ .LinkTitle }}{{ end }}</a>
+                </li>
+              {{ end }}
+              <li class="active">
+                <a aria-current="page" href="{{ .Permalink }}">{{ if .IsHome }}Home{{ else }}{{ .LinkTitle }}{{ end }}</a>
+              </li>
+            </ol>
+          </nav>
+      {{ end }}
     </header>
 
     {{ block "main" . }}
