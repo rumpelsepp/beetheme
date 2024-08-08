@@ -20,15 +20,14 @@
   <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}">
 {{ end }}
 
-  {{ with $favicon := resources.Get "favicon.png" }}
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ ( $favicon.Fill "16x16" ).Permalink }}">
-  <link rel="icon" type="image/png" sizes="48x48" href="{{ ( $favicon.Fill "48x48" ).Permalink }}">
-  <link rel="icon" type="image/png" sizes="192x192" href="{{ ( $favicon.Fill "192x192" ).Permalink }}">
+{{ with $favicon := resources.Get "favicon.png" }}
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ ( $favicon.Fill "16x16" ).Permalink }}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ ( $favicon.Fill "48x48" ).Permalink }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ ( $favicon.Fill "192x192" ).Permalink }}">
 {{ end -}}
-  {{ with $favicon := resources.Get "favicon.svg" }}
-  <link rel="icon" href="{{ $favicon.Permalink }}">
+{{ with $favicon := resources.Get "favicon.svg" }}
+    <link rel="icon" href="{{ $favicon.Permalink }}">
 {{ end -}}
-
 
   {{ block "css" . }}
     {{ $mainCSS := resources.Get "/css/main.css" | resources.Fingerprint }}
