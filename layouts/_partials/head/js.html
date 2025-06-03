@@ -1,0 +1,16 @@
+{{- with resources.Get "js/main.ts" }}
+  {{- $opts := dict
+    "sourceMap" (cond hugo.IsDevelopment "external" "")
+    "targetPath" "js/main.js"
+    "format" "esm"
+  }}
+  {{- with . | js.Build $opts }}
+    {{- if hugo.IsDevelopment }}
+      <script src="{{ .RelPermalink }}"></script>
+    {{- else }}
+      {{- with . | fingerprint }}
+        <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
