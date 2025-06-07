@@ -19,14 +19,14 @@ Renders a menu for the given menu ID.
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+          {{- partial "inline/menu-bootstrap/walk.html" (dict "page" $page "menuEntries" .) }}
         </ul>
       </div>
     </div>
   </nav>
 {{- end }}
 
-{{- define "_partials/inline/menu/walk.html" }}
+{{- define "_partials/inline/menu-bootstrap/walk.html" }}
   {{- $page := .page }}
   {{- range .menuEntries }}
     {{- $attrs := dict "href" .URL "class" "nav-link" }}
@@ -41,7 +41,7 @@ Renders a menu for the given menu ID.
         {{- $name = . }}
       {{- end }}
     {{- end }}
-    <li>
+    <li class="nav-item">
       <a
         {{- range $k, $v := $attrs }}
           {{- with $v }}
@@ -51,7 +51,7 @@ Renders a menu for the given menu ID.
       >{{ $name }}</a>
       {{- with .Children }}
         <ul>
-          {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+          {{- partial "inline/menu-bootstrap/walk.html" (dict "page" $page "menuEntries" .) }}
         </ul>
       {{- end }}
     </li>

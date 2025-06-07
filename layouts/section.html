@@ -1,8 +1,17 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
+<article class="content">
+  <header>
+    <h1>{{ .Title }}</h1>
+  </header>
+
   {{ .Content }}
+
   {{ range .Pages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
+    <ul>
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+      </li>
+    </ul>
   {{ end }}
+</article>
 {{ end }}
