@@ -9,11 +9,18 @@ Renders a menu for the given menu ID.
 
 {{- $page := .page }}
 {{- $menuID := .menuID }}
+{{- $brand := .brand }}
 
 {{- with index site.Menus $menuID }}
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{{ "" | relURL }}">Home</a>
+      <a class="navbar-brand" href="{{ "" | relURL }}">
+      {{- with $brand }}
+        <img src="{{ .RelPermalink }}" width="65" height="65">
+      {{ else }}
+        Home
+      {{- end }}
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
