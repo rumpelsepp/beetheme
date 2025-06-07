@@ -34,6 +34,7 @@ Renders a menu for the given menu ID.
       {{- end }}
     {{- end }}
     <li>
+      {{ .Pre }}
       <a
         {{- range $k, $v := $attrs }}
           {{- with $v }}
