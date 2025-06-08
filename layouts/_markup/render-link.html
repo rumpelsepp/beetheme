@@ -1,8 +1,1 @@
-{{ $isExternal := strings.HasPrefix .Destination "http" | and (not (strings.HasPrefix .Destination site.BaseURL)) }}
-
-{{ if $isExternal }}
-  <i class="bi bi-box-arrow-up-right"></i>
-{{ end }}
-<a href="{{ .Destination | safeURL }}" {{ if $isExternal }}target="_blank" rel="noopener noreferrer"{{ end }}>
-  {{ .Text }}
-</a>
+{{- $isExternal := strings.HasPrefix .Destination "http" | and (not (strings.HasPrefix .Destination site.BaseURL)) -}}<a href="{{ .Destination | safeURL }}"{{ if $isExternal }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ if $isExternal }}<i class="bi bi-box-arrow-up-right"></i> {{ end }}{{ .Text }}</a>
