@@ -1,3 +1,6 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css"; 
+
 /* Overwrite Bootstrap container widths */
 @media (min-width: 1200px) {
     .container,

@@ -1,0 +1,22 @@
+{{- $woff := resources.Match "*.woff" }}
+{{- $woff2 := resources.Match "*.woff2" }}
+{{- $fonts := slice }}
+{{- with $woff }}{{ $fonts = $fonts | append . }}{{- end }}
+{{- with $woff2 }}{{ $fonts = $fonts | append . }}{{- end }}
+
+{{- with $fonts }}
+  {{- range . }}
+    <!-- Media type detection does not work in Hugo, so we have to do it manually. -->
+    {{- $type := "application/octet-stream" -}}
+    {{- $filename := lower .Name -}}
+
+    {{- if strings.HasSuffix $filename ".woff2" -}}
+      {{- $type = "font/woff2" -}}
+    {{- else if strings.HasSuffix $filename ".woff" -}}
+      {{- $type = "font/woff" -}}
+    {{- else if strings.HasSuffix $filename ".ttf" -}}
+      {{- $type = "font/ttf" -}}
+    {{- end }}
+    <link rel="preload" as="font" href="{{ .RelPermalink }}" type="{{ $type }}" crossorigin="anonymous">
+  {{- end }}
+{{- end }}

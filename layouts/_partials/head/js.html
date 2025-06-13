@@ -1,18 +1,9 @@
-{{- with resources.Get "js/main.ts" }}
-  {{- $opts := dict
-    "sourceMap" (cond hugo.IsDevelopment "external" "")
-    "targetPath" "js/main.js"
-    "format" "esm"
-  }}
-  {{- with . | js.Build $opts }}
+{{- with resources.Match "*.js" }}
+  {{- range . }}
     {{- if hugo.IsDevelopment }}
-      <script type="module" src="{{ .RelPermalink }}"></script>
-    {{- else }}
-      <!-- TODO: How can this be used in production? -->
-      <!-- {{/*- with . | fingerprint */}} -->
-      {{- with .  }}
-        <script type="module" src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
-      {{- end }}
+        <script type="module" src="{{ .RelPermalink }}" defer></script>
+      {{- else }}
+        <script type="module" src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
     {{- end }}
   {{- end }}
 {{- end }}
