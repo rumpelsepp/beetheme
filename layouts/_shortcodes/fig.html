@@ -1,37 +1,49 @@
 {{ $imgOrig := .Page.Resources.GetMatch (.Get "src") }}
-{{ $img := $imgOrig }}
-{{ $size :=  .Get "size" }}
-{{- if not $size -}}
-    {{ $size = "800x800 webp" }}
-{{- end }}
 
+{{ $sizes := slice "400x" "800x" "1200x" }}
+{{ $images := dict }}
 {{ $hasExif := false }}
 
-{{ with $img.Exif }}
-    {{ $hasExif = true }}
-
-    {{ $orientation := .Tags.Orientation }}
-    {{ $img = $img.Fit $size }}
-
-    {{ if (eq $orientation 6) }}
-        {{ $img = $img.Resize (printf "%dx%d r270" $img.Height $img.Width) }}
-    {{ else if (eq $orientation 8) }}
-        {{ $img = $img.Resize (printf "%dx%d r90" $img.Height $img.Width) }}
-    {{ end }}
-{{ else }}
-    {{ $img = $img.Fit $size }}
+{{ with $imgOrig.Exif }}
+  {{ $hasExif = true }}
 {{ end }}
 
+{{ range $s := $sizes }}
+  {{ $img := $imgOrig.Resize (print $s " webp") }}
+  {{ if $hasExif }}
+    {{ $orientation := $imgOrig.Exif.Tags.Orientation }}
+    {{ if eq $orientation 6 }}
+      {{ $img = $img.Resize (printf "%dx%d r270" $img.Height $img.Width) }}
+    {{ else if eq $orientation 8 }}
+      {{ $img = $img.Resize (printf "%dx%d r90" $img.Height $img.Width) }}
+    {{ end }}
+  {{ end }}
 
-<!-- https://github.com/gohugoio/hugo/blob/master/tpl/tplimpl/embedded/templates/shortcodes/figure.html -->
+  {{ $pair := dict $s $img }}
+  {{ $images = merge $images $pair }}
+{{ end }}
+
+{{ $imgDefault := index $images "1200x" }}
 
 <div class="d-flex justify-content-center">
-    <figure class="figure {{ with .Get "class" }} {{ . }}{{ end }}">
-        <a href="{{ $imgOrig.Permalink }}"><img class="figure-img img-fluid rounded" src="{{ $img.Permalink }}"{{- if or (.Get "alt") (.Get "caption") }} alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ .Get "caption" | markdownify | plainify }}{{ end }}" {{- end -}} {{- with .Get "loading" }} loading="{{ . }}"{{ else }} loading="lazy"{{ end -}}></a>
-        {{- if (.Get "caption") -}}
-            <figcaption class="figure-caption text-center">
-                {{- if .Get "caption" -}}{{- .Get "caption" | markdownify -}}{{- end }}
-            </figcaption>
-        {{- end }}
-    </figure>
+  <figure class="figure {{ with .Get "class" }}{{ . }}{{ end }}">
+    <a href="{{ $imgOrig.Permalink }}">
+      <img
+        class="figure-img img-fluid rounded"
+        src="{{ $imgDefault.RelPermalink }}"
+        srcset="
+          {{ (index $images "400x").RelPermalink }} 400w,
+          {{ (index $images "800x").RelPermalink }} 800w,
+          {{ (index $images "1200x").RelPermalink }} 1200w
+        "
+        sizes="(max-width: 768px) 100vw, 800px"
+        alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ .Get "caption" | markdownify | plainify }}{{ end }}"
+        {{ with .Get "loading" }}loading="{{ . }}"{{ else }}loading="lazy"{{ end }}>
+    </a>
+    {{ with .Get "caption" }}
+      <figcaption class="figure-caption text-center">
+        {{ . | markdownify }}
+      </figcaption>
+    {{ end }}
+  </figure>
 </div>
