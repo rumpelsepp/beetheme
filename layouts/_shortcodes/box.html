@@ -1,0 +1,11 @@
+<section class="card mb-3">
+    {{ with .Get "header" }}
+    <div class="card-header h5">
+        {{ . }}
+    </div>
+    {{ end }}
+
+    <div class="card-body">
+        {{ .Inner | markdownify }}
+    </div>
+</section>
