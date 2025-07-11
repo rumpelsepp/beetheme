@@ -2,7 +2,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+{{- with or .Description .Summary site.Params.description | plainify | htmlUnescape }}
+  <meta name="description" content="{{ trim . "\n\r\t " }}">
+{{- end }}
 
 {{ with $favicon := resources.Get "favicon.png" }}
   <link rel="icon" type="image/png" sizes="16x16" href="{{ ( $favicon.Fill "16x16" ).RelPermalink }}">

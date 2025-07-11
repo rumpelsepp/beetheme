@@ -1,11 +1,14 @@
 <section class="card mb-3">
     {{ with .Get "header" }}
-    <div class="card-header h5">
-        {{ . }}
-    </div>
+        <div class="card-header h5">{{ . }}</div>
+    {{ end }}
+    {{ with .Get "title" }}
+        <div class="card-title h5">{{ . }}</div>
     {{ end }}
 
     <div class="card-body">
-        {{ .Inner | markdownify }}
+        {{ $raw := .Inner | strings.TrimSpace | .Page.RenderString }}
+        {{ $processed := $raw | replaceRE `(?i)<p([^>]*)>` `<p class="card-text"$1>` }}
+        {{ $processed | safeHTML }}
     </div>
 </section>
