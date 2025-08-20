@@ -53,6 +53,12 @@ header#site-header {
             object-fit: cover;
         }
     }
+    
+    nav .nav-item a:hover,
+    nav .nav-item a:focus, 
+    nav .nav-item .active {
+        text-decoration: underline;
+    }
 }
 
 footer#site-footer {
