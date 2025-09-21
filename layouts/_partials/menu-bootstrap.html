@@ -1,10 +1,12 @@
 {{- /*
-Renders a menu for the given menu ID.
+Renders a Bootstrap navbar for the given Hugo menu.
 
-@context {page} page The current page.
+@context {page}   page   The current page.
 @context {string} menuID The menu ID.
+@context {image}  brand  (optional) A brand logo image resource.
 
-@example: {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+Usage:
+  {{ partial "menu.html" (dict "menuID" "main" "page" . "brand" $brand) }}
 */}}
 
 {{- $page := .page }}
@@ -12,53 +14,115 @@ Renders a menu for the given menu ID.
 {{- $brand := .brand }}
 
 {{- with index site.Menus $menuID }}
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{{ "" | relURL }}">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+
+    {{/* --- Brand / Home Link --- */}}
+    <a class="navbar-brand" href="{{ "" | relURL }}">
       {{- with $brand }}
-        <img src="{{ .RelPermalink }}" width="65" height="65">
-      {{ else }}
+        <img src="{{ .RelPermalink }}" width="65" height="65" alt="Brand Logo">
+      {{- else }}
         Home
       {{- end }}
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          {{- partial "inline/menu-bootstrap/walk.html" (dict "page" $page "menuEntries" .) }}
-        </ul>
-      </div>
+    </a>
+
+    {{/* --- Responsive Toggle --- */}}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    {{/* --- Main Menu --- */}}
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        {{- partial "inline/menu-bootstrap/walk.html" (dict
+            "isDropdown"   false
+            "page"         $page
+            "menuEntries"  .
+        ) }}
+      </ul>
     </div>
-  </nav>
+
+  </div>
+</nav>
 {{- end }}
 
+
+{{/* ------------------------------------------------------------------ */}}
+{{/*  Recursive Menu Walker (Bootstrap-aware, external link safe)       */}}
+{{/* ------------------------------------------------------------------ */}}
 {{- define "_partials/inline/menu-bootstrap/walk.html" }}
+
   {{- $page := .page }}
+  {{- $isDropdown := .isDropdown }}
+
   {{- range .menuEntries }}
+    {{/* --- Default attributes --- */}}
     {{- $attrs := dict "href" .URL "class" "nav-link" }}
+
+    {{/* Active / Ancestor highlighting */}}
     {{- if $page.IsMenuCurrent .Menu . }}
       {{- $attrs = merge $attrs (dict "class" "active nav-link" "aria-current" "page") }}
-    {{- else if $page.HasMenuCurrent .Menu .}}
+    {{- else if $page.HasMenuCurrent .Menu . }}
       {{- $attrs = merge $attrs (dict "class" "ancestor nav-link" "aria-current" "true") }}
     {{- end }}
-    {{- $name := .Name }}
-    {{- with .Identifier }}
-      {{- with T . }}
-        {{- $name = . }}
-      {{- end }}
+
+    {{/* Optional title attribute */}}
+    {{- with .Title }}
+      {{- $attrs = merge $attrs (dict "title" .) }}
     {{- end }}
-    <li class="nav-item">
-      <a
-        {{- range $k, $v := $attrs }}
-          {{- with $v }}
-            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
-          {{- end }}
-        {{- end -}}
-      >{{ $name }}</a>
+
+    {{/* Handle external links (http/https) */}}
+    {{- if or (hasPrefix .URL "http://") (hasPrefix .URL "https://") }}
+      {{- $attrs = merge $attrs (dict
+          "target" "_blank"
+          "rel"    "noopener noreferrer"
+      ) }}
+    {{- end }}
+
+    {{/* Label handling: Name with i18n override */}}
+    {{- $label := .Name }}
+    {{- with .Identifier }}
+      {{- with T . }}{{- $label = . }}{{- end }}
+    {{- end }}
+
+    {{/* List item wrapper */}}
+    {{- if .Children }}
+      <li class="nav-item dropdown">
+    {{- else if $isDropdown }}
+      <li>
+    {{- else }}
+      <li class="nav-item">
+    {{- end }}
+
+      {{/* Dropdown attributes */}}
+      {{- if .Children }}
+        {{- $attrs = merge $attrs (dict
+            "class"          (printf "%s dropdown-toggle" ($attrs.class))
+            "role"           "button"
+            "data-bs-toggle" "dropdown"
+            "aria-expanded"  "false"
+        ) }}
+      {{- end }}
+
+      {{- if $isDropdown }}
+        {{- $attrs = merge $attrs (dict "class" (printf "%s dropdown-item" ($attrs.class))) }}
+      {{- end }}
+
+      {{/* --- Render link --- */}}
+      <a{{- range $k, $v := $attrs }}{{- with $v }} {{ printf "%s=%q" $k $v | safeHTMLAttr }}{{- end }}{{- end }}>
+        {{- .Pre }}{{ $label }}{{ .Post -}}
+      </a>
+
+      {{/* --- Nested children --- */}}
       {{- with .Children }}
-        <ul>
-          {{- partial "inline/menu-bootstrap/walk.html" (dict "page" $page "menuEntries" .) }}
+        <ul class="dropdown-menu">
+          {{- partial "inline/menu-bootstrap/walk.html" (dict
+              "isDropdown"   true
+              "page"         $page
+              "menuEntries"  .
+          ) }}
         </ul>
       {{- end }}
     </li>
