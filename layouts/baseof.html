@@ -10,7 +10,12 @@
     </header>
 
     <main>
-      {{ block "main" . }}{{ end }}
+      {{ block "main" . }}
+        <article class="content">
+            <header><h1>{{ .Title }}</h1></header>
+            {{ block "content" . }}{{ end }}
+        </article>
+      {{ end }}
     </main>
 
     <footer id="site-footer" class="text-center">

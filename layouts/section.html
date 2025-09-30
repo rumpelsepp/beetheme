@@ -1,17 +1,11 @@
-{{ define "main" }}
-<article class="content">
-  <header>
-    <h1>{{ .Title }}</h1>
-  </header>
-
+{{ define "content" }}
   {{ .Content }}
 
+  <ul>
   {{ range .Pages }}
-    <ul>
       <li>
         <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
       </li>
-    </ul>
-  {{ end }}
-</article>
+      {{ end }}
+  </ul>
 {{ end }}

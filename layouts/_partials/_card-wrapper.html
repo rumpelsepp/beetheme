@@ -1,0 +1,10 @@
+{{ $context := dict
+    "cardClass" ((.Get "card_class") | default "mb-3")
+    "header" (.Get "header")
+    "image" (.Get "image")
+    "title" (.Get "title")
+    "subtitle" (.Get "subtitle")
+    "content" (.Inner | markdownify)
+    "footer" (.Get "footer")
+}}
+{{ partial "card.html" $context }}

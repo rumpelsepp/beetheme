@@ -1,0 +1,31 @@
+{{ $cardClass := "" }}
+{{ with .cardClass }}
+    {{ $cardClass = . }}
+{{ end }}
+
+<section class="card {{ $cardClass }}">
+    {{ with .header }}
+        <div class="card-header h5">{{ . }}</div>
+    {{ end }}
+
+    {{ with .image }}
+        <img src="{{ . }}" class="card-img-top" loading="lazy">
+    {{ end }}
+
+    <div class="card-body">
+        {{ with .title }}
+            <h5 class="card-title">{{ . }}</h5>
+        {{ end }}
+        {{ with .subtitle }}
+            <h6 class="card-subtitle mb-2 text-secondary">{{ . }}</h6>
+        {{ end }}
+
+        {{ $raw := .content | strings.TrimSpace }}
+        {{ $processed := $raw | replaceRE `(?i)<p([^>]*)>` `<p class="card-text"$1>` }}
+        {{ $processed | safeHTML }}
+    </div>
+
+    {{ with .footer }}
+        <div class="card-footer text-secondary">{{ . }}</div>
+    {{ end }}
+</section>
