@@ -69,7 +69,7 @@ Usage:
     {{- end }}
     
     {{- if not $isDropdown }}
-      {{- $attrs = merge $attrs (dict "class" "nav-link") }}
+      {{- $attrs = merge $attrs (dict "class" (printf "%s nav-link" ($attrs.class))) }}
     {{- end }}
 
     {{/* Optional title attribute */}}

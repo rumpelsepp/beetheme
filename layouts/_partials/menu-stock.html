@@ -12,7 +12,7 @@ Renders a menu for the given menu ID.
 
 {{- with index site.Menus $menuID }}
   <nav>
-    <ul>
+    <ul class="list-unstyled">
       {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
     </ul>
   </nav>
@@ -33,15 +33,22 @@ Renders a menu for the given menu ID.
         {{- $name = . }}
       {{- end }}
     {{- end }}
-    <li>
-      {{ .Pre }}
+
+    {{/* Handle external links (http/https) */}}
+    {{- if or (hasPrefix .URL "http://") (hasPrefix .URL "https://") }}
+      {{- $attrs = merge $attrs (dict
+          "target" "_blank"
+          "rel"    "noopener noreferrer"
+      ) }}
+    {{- end }}
+    <li class="mb-2">
       <a
         {{- range $k, $v := $attrs }}
           {{- with $v }}
             {{- printf " %s=%q" $k $v | safeHTMLAttr }}
           {{- end }}
         {{- end -}}
-      >{{ $name }}</a>
+      >{{ .Pre }} {{ $name }}</a>
       {{- with .Children }}
         <ul>
           {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}

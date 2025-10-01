@@ -62,37 +62,26 @@ header#site-header {
 }
 
 footer#site-footer {
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 1rem;
-    padding-top: 1rem;
+    
+    padding: 1rem;
     font-size: 0.8rem;
     opacity: 0.8;
+    
+    background-color: var(--bs-gray-100);
 
-    ul {
-        li {
-            display: inline;
+    a,
+    a:visited {
+        color: inherit;
+    }
 
-            &::after {
-                content: " · ";
-            }
+    a.active {
+        font-weight: bold;
+    }
 
-            &:last-child:after {
-                content: "";
-            }
-
-            a,
-            a:visited {
-                color: inherit;
-            }
-
-            a.active {
-                font-weight: bold;
-            }
-
-            a:hover {
-                color: black;
-            }
-        }
+    a:hover {
+        color: black;
     }
 }
 
