@@ -1,8 +1,9 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import "bootstrap-icons/font/bootstrap-icons.css"; 
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 /* Overwrite Bootstrap container widths */
 @media (min-width: 1200px) {
+
     .container,
     .container-lg,
     .container-md,
@@ -15,7 +16,7 @@
 header#site-header {
     margin-top: 1rem;
     margin-bottom: 2rem;
-    
+
     .banner-container {
         position: relative;
         /* No idea why this is needed… The container is always 4px too large. */
@@ -53,9 +54,9 @@ header#site-header {
             object-fit: cover;
         }
     }
-    
+
     nav .nav-item a:hover,
-    nav .nav-item a:focus, 
+    nav .nav-item a:focus,
     nav .nav-item .active {
         text-decoration: underline;
     }
@@ -64,11 +65,11 @@ header#site-header {
 footer#site-footer {
     margin-top: 2rem;
     margin-bottom: 1rem;
-    
+
     padding: 1rem;
     font-size: 0.8rem;
     opacity: 0.8;
-    
+
     background-color: var(--bs-gray-100);
 
     a,
@@ -93,6 +94,10 @@ article.content {
         margin-bottom: 2rem;
     }
 
+    .draft::before {
+        content: "✍️ ";
+    }
+
     .figure {
         margin-left: auto;
         margin-right: auto;
@@ -113,6 +118,7 @@ article.content {
     h5,
     h6,
     hgroup {
+
         a,
         a:visited {
             color: inherit;
@@ -126,5 +132,11 @@ article.content {
 
     :target {
         background-color: var(--bs-yellow);
+    }
+
+    .footnotes {
+        font-size: 0.8rem;
+        text-align: left;
+        hyphens: none;
     }
 }
