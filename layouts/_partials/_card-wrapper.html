@@ -6,5 +6,6 @@
     "subtitle" (.Get "subtitle")
     "content" (.Inner | markdownify)
     "footer" (.Get "footer")
+    "url" (.Get "url")
 }}
 {{ partial "card.html" $context }}

@@ -1,3 +1,15 @@
+{{ define "_partials/inline/wrap-link.html" }}
+    {{ with .url }}
+        <a href="{{ . }}">
+    {{ end }}
+        {{ .content }}
+    {{ with .url }}
+        </a>
+    {{ end }}
+{{ end }}
+
+{{ $context := . }}
+
 {{ $cardClass := "" }}
 {{ with .cardClass }}
     {{ $cardClass = . }}
@@ -9,12 +21,15 @@
     {{ end }}
 
     {{ with .image }}
-        <img src="{{ . }}" class="card-img-top" loading="lazy">
+        {{ $img := printf `<img src="%s" class="card-img-top" loading="lazy">` . | safeHTML }}
+        {{ partial "inline/wrap-link.html" (dict "content" $img "url" $context.url) }}
     {{ end }}
 
     <div class="card-body">
         {{ with .title }}
-            <h5 class="card-title">{{ . }}</h5>
+            <h5 class="card-title">
+                {{ partial "inline/wrap-link.html" (dict "content" . "url" $context.url) }}
+            </h5>
         {{ end }}
         {{ with .subtitle }}
             <h6 class="card-subtitle mb-2 text-secondary">{{ . }}</h6>
