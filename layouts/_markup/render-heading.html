@@ -2,4 +2,4 @@
 {{- range $key, $val := .Attributes }}
     {{- printf " %s=%q" $key $val | safeHTMLAttr }}
   {{- end }}
-><a href="#{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</a></h{{ .Level }}>
+><a class="anchor" href="#{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</a></h{{ .Level }}>

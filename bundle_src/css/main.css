@@ -13,6 +13,7 @@
     }
 }
 
+/* TODO: Is this still needed? */
 header#site-header {
     margin-top: 1rem;
     margin-bottom: 2rem;
@@ -118,15 +119,29 @@ article.content {
     h5,
     h6,
     hgroup {
-
-        a,
-        a:visited {
+        a.anchor,
+        a.anchor:visited {
             color: inherit;
             text-decoration: none;
         }
 
-        a:hover {
+        a.anchor:hover {
             text-decoration: underline;
+        }
+    }
+
+    .card {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hgroup {
+            a,
+            a:visited {
+                color: inherit;
+            }
         }
     }
 
