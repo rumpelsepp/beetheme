@@ -1,3 +1,9 @@
 {{ define "content" }}
+    {{ if and (.Params.toc) (ne .TableOfContents "") }}
+      <nav class="table-of-contents">
+        {{ .TableOfContents }}
+      </nav>
+      <hr>
+    {{ end }}
     {{ .Content }}
 {{ end }}
