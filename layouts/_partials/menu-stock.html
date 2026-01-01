@@ -9,17 +9,30 @@ Renders a menu for the given menu ID.
 
 {{- $page := .page }}
 {{- $menuID := .menuID }}
+{{- $inline := default false .inline }}
+{{- $cssClass := .cssClass }}
 
 {{- with index site.Menus $menuID }}
-  <nav>
+  {{- with $.cssClass }}
+    <nav class="{{ . }}">
+  {{ else }}
+    <nav>
+  {{- end }}
+
+  {{- if $.inline }}
+    <ul class="list-inline">
+      {{- partial "inline/menu/walk.html" (dict "inline" true "page" $page "menuEntries" .) }}
+  {{ else }}
     <ul class="list-unstyled">
       {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+  {{- end }}
     </ul>
   </nav>
 {{- end }}
 
 {{- define "_partials/inline/menu/walk.html" }}
   {{- $page := .page }}
+  {{- $inline := .inline }}
   {{- range .menuEntries }}
     {{- $attrs := dict "href" .URL }}
     {{- if $page.IsMenuCurrent .Menu . }}
@@ -41,7 +54,11 @@ Renders a menu for the given menu ID.
           "rel"    "noopener noreferrer"
       ) }}
     {{- end }}
+    {{- if $.inline }}
+    <li class="list-inline-item">
+    {{ else }}
     <li class="mb-2">
+    {{- end }}
       <a
         {{- range $k, $v := $attrs }}
           {{- with $v }}
