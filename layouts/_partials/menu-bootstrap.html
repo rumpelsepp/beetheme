@@ -1,19 +1,19 @@
 {{- /*
-FIXME: printf is broken: <a class="%!s(<nil>) nav-link" href="/ueber-uns/" title="Über uns">Über uns</a>
-
 Renders a Bootstrap navbar for the given Hugo menu.
 
-@context {page}   page   The current page.
-@context {string} menuID The menu ID.
-@context {image}  brand  (optional) A brand logo image resource.
+@context {page}   page      The current page.
+@context {string} menuID    The menu ID.
+@context {image}  brand     (optional) A brand logo image resource.
+@context {string} brandText (optional) A wordmark shown next to (or instead of) the logo.
 
 Usage:
-  {{ partial "menu.html" (dict "menuID" "main" "page" . "brand" $brand) }}
+  {{ partial "menu.html" (dict "menuID" "main" "page" . "brand" $brand "brandText" "bienensteff") }}
 */}}
 
 {{- $page := .page }}
 {{- $menuID := .menuID }}
 {{- $brand := .brand }}
+{{- $brandText := .brandText }}
 
 {{- with index site.Menus $menuID }}
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -22,16 +22,19 @@ Usage:
     {{/* --- Brand / Home Link --- */}}
     <a class="navbar-brand" href="{{ "" | relURL }}">
       {{- with $brand }}
-        <img src="{{ .RelPermalink }}" width="65" height="65" alt="Brand Logo">
+        <img src="{{ .RelPermalink }}" width="44" height="44" alt="" class="navbar-brand-logo">
+      {{- end }}
+      {{- with $brandText }}
+        <span class="navbar-brand-text">{{ . }}</span>
       {{- else }}
-        Startseite
+        {{- if not $brand }}Startseite{{ end }}
       {{- end }}
     </a>
 
     {{/* --- Responsive Toggle --- */}}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav"
-            aria-expanded="false" aria-label="Toggle navigation">
+            aria-expanded="false" aria-label="Menü umschalten">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -61,7 +64,7 @@ Usage:
 
   {{- range .menuEntries }}
     {{/* --- Default attributes --- */}}
-    {{- $attrs := dict "href" .URL }}
+    {{- $attrs := dict "href" .URL "class" "" }}
 
     {{/* Active / Ancestor highlighting */}}
     {{- if $page.IsMenuCurrent .Menu . }}
@@ -103,8 +106,11 @@ Usage:
     {{- end }}
 
       {{/* Dropdown attributes */}}
+      {{- $toggleID := "" }}
       {{- if .Children }}
+        {{- $toggleID = printf "navdd-%s" (anchorize (.Identifier | default $label)) }}
         {{- $attrs = merge $attrs (dict
+            "id"             $toggleID
             "class"          (printf "%s dropdown-toggle" ($attrs.class))
             "role"           "button"
             "data-bs-toggle" "dropdown"
@@ -123,7 +129,7 @@ Usage:
 
       {{/* --- Nested children --- */}}
       {{- with .Children }}
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" aria-labelledby="{{ $toggleID }}">
           {{- partial "inline/menu-bootstrap/walk.html" (dict
               "isDropdown"   true
               "page"         $page

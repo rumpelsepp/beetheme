@@ -1,117 +1,438 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-/* Overwrite Bootstrap container widths */
-@media (min-width: 1200px) {
+/* ==========================================================================
+   beetheme — design system
+   ==========================================================================
+   Generic structural/typographic layer for the theme. Bootstrap stays the
+   functional foundation (grid, forms, navbar/dropdown/tab JS behaviour —
+   content files and shortcodes rely on its classes directly), this file
+   restyles it into a distinct look. Brand colors live in the site's own
+   style.css as CSS custom-property overrides; the defaults below are
+   deliberately neutral so the theme works standalone too.
+   ========================================================================== */
 
-    .container,
-    .container-lg,
-    .container-md,
-    .container-sm,
-    .container-xl {
-        max-width: var(--bs-breakpoint-lg);
-    }
+:root {
+  /* --- design tokens (generic defaults, override per-site) --- */
+  --color-bg: #faf8f4;
+  --color-surface: #ffffff;
+  --color-ink: #26231d;
+  --color-ink-muted: #6b6154;
+  --color-border: rgba(38, 35, 29, 0.12);
+  --color-primary: var(--bs-primary, #6c757d);
+  --color-primary-ink: #ffffff;
+  --color-accent: #4b6b3a;
+
+  /* One system-font stack for everything — no serif/sans mix, no
+     webfont downloads (privacy: nothing loaded from a third party).
+     This is Bootstrap's own font stack (--bs-font-sans-serif), reused
+     here as the single source of truth for both body and headings. */
+  --font-body: var(--bs-font-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  --font-display: var(--font-body);
+
+  --radius-sm: 0.2rem;
+  --radius-md: 0.35rem;
+  --radius-lg: 0.5rem;
+
+  --shadow-sm: 0 1px 2px rgba(38, 35, 29, 0.06), 0 1px 1px rgba(38, 35, 29, 0.04);
+  --shadow-md: 0 12px 28px -12px rgba(38, 35, 29, 0.22);
+
+  --container-max: 1120px;
+
+  color-scheme: light;
 }
 
-/* TODO: Is this still needed? */
-header#site-header {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-
-    .banner-container {
-        position: relative;
-        /* No idea why this is needed… The container is always 4px too large. */
-        max-height: 230px;
-
-        .overlay {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            height: 100%;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            background: rgba(38, 38, 38, 0.4);
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            #logo {
-                filter: saturate(55%);
-            }
-
-            #logo-text {
-                color: white;
-                font-weight: bold;
-                margin-top: 1rem;
-                font-size: 1.2rem;
-            }
-        }
-
-        #banner {
-            /* height: 10rem; */
-            max-width: 100%;
-            object-fit: cover;
-        }
-    }
-
-    nav .nav-item a:hover,
-    nav .nav-item a:focus,
-    nav .nav-item .active {
-        text-decoration: underline;
-    }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-footer#site-footer {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
 
-    padding: 1rem;
-    font-size: 0.8rem;
-    opacity: 0.8;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 
-    background-color: var(--bs-gray-100);
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
-    a,
-    a:visited {
-        color: inherit;
-    }
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
 
-    a.active {
-        font-weight: bold;
-    }
+.site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-    a:hover {
-        color: black;
-    }
+#main-content {
+  flex: 1 1 auto;
+}
+
+/* Bootstrap container: keep a readable max width, let the header/hero and
+   footer break out of it independently. */
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  max-width: var(--container-max);
+}
+
+#main-content > .container {
+  padding-top: 2.25rem;
+  padding-bottom: 4rem;
+}
+
+/* --------------------------------------------------------------------
+   Accessibility
+   -------------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 1rem;
+  z-index: 1100;
+  padding: 0.6rem 1rem;
+  background: var(--color-ink);
+  color: #fff;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------
+   Navigation
+   -------------------------------------------------------------------- */
+
+.site-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-nav-bar .navbar {
+  --bs-navbar-padding-y: 0.6rem;
+  background: transparent !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.site-nav-bar .container-fluid {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--color-ink) !important;
+}
+
+.navbar-brand-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.navbar-brand-text {
+  letter-spacing: 0.01em;
+}
+
+.navbar-nav {
+  gap: 0.15rem;
+}
+
+.navbar .nav-link {
+  color: var(--color-ink-muted);
+  font-weight: 500;
+  padding-inline: 0.75rem;
+  border-radius: var(--radius-sm);
+  position: relative;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link[aria-current="page"] {
+  /* --bs-link-color is deliberately darker than --color-primary so this
+     text keeps 4.5:1+ contrast on the (near-white) navbar background;
+     --color-primary alone was measured at ~3.6:1, failing WCAG AA. */
+  color: var(--bs-link-color, var(--color-primary));
+  font-weight: 600;
+}
+
+.navbar .nav-item.dropdown > .nav-link.ancestor,
+.navbar .nav-link.ancestor {
+  color: var(--color-ink);
+}
+
+.navbar .dropdown-menu {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.navbar .dropdown-item {
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+}
+
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.navbar .dropdown-item.active {
+  /* Route through Bootstrap's own active-bg variable (which style.css
+     tunes to a darker shade) instead of the raw --color-primary: white
+     text on --color-primary alone measured ~3.85:1, failing WCAG AA. */
+  background: var(--bs-dropdown-link-active-bg, var(--color-primary));
+  color: var(--color-primary-ink);
+}
+
+.navbar-toggler {
+  border: 1px solid var(--color-border);
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+/* --------------------------------------------------------------------
+   Hero (front page)
+   -------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(60vh, 26rem);
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Two layers instead of a text box: a left-to-right gradient darkens
+     the side the text actually sits on (fading out toward the photo on
+     the right), plus the usual bottom-up gradient for overall depth. */
+  background:
+    linear-gradient(90deg, rgba(15, 13, 8, 0.45) 0%, rgba(15, 13, 8, 0.16) 42%, rgba(15, 13, 8, 0) 65%),
+    linear-gradient(180deg, rgba(20, 17, 10, 0.15) 0%, rgba(20, 17, 10, 0.26) 55%, rgba(20, 17, 10, 0.55) 100%);
+}
+
+.hero-inner {
+  padding-block: 3rem 2.75rem;
+  color: #fff;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw + 1rem, 3.25rem);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.85),
+    0 4px 14px rgba(0, 0, 0, 0.55);
+}
+
+.hero-tagline {
+  font-size: clamp(1rem, 0.5vw + 0.9rem, 1.25rem);
+  max-width: 42rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 1.5rem;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn-hero-primary,
+.btn-hero-secondary {
+  border-radius: 999px;
+  font-weight: 600;
+  padding-inline: 1.5rem;
+}
+
+.btn-hero-primary {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary-ink);
+}
+
+.btn-hero-primary:hover,
+.btn-hero-primary:focus {
+  background: color-mix(in srgb, var(--color-primary) 85%, black);
+  border-color: color-mix(in srgb, var(--color-primary) 85%, black);
+  color: var(--color-primary-ink);
+}
+
+.btn-hero-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.btn-hero-secondary:hover,
+.btn-hero-secondary:focus {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------
+   Page content
+   -------------------------------------------------------------------- */
+
+.content-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.content-header h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-bottom: 0;
 }
 
 article.content {
-    text-align: justify;
-    hyphens: auto;
+  text-align: justify;
+  hyphens: auto;
+  line-height: 1.7;
 
-    header {
-        margin-bottom: 2rem;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  hgroup {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-align: left;
+    hyphens: none;
+    margin-top: 2.25rem;
+    margin-bottom: 1rem;
+
+    a.anchor,
+    a.anchor:visited {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .draft::before {
-        content: "✍️ ";
+    a.anchor:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--color-primary);
     }
+  }
 
-    .figure {
-        margin-left: auto;
-        margin-right: auto;
-    }
+  > header:first-child,
+  h1:first-child,
+  h2:first-child {
+    margin-top: 0;
+  }
 
-    table tbody tr.dimmed {
-        opacity: 0.5;
-    }
+  p.lead,
+  .lead {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--color-ink-muted);
+    line-height: 1.6;
+  }
 
-    table tbody tr.line-through {
-        text-decoration: line-through;
-    }
+  a:not(.btn) {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
 
+  .draft::before {
+    content: "✍️ ";
+  }
+
+  .figure {
+    margin-left: auto;
+    margin-right: auto;
+    margin-block: 1.75rem;
+  }
+
+  .figure .figure-img {
+    box-shadow: var(--shadow-md);
+  }
+
+  .figure-caption {
+    text-align: center;
+    color: var(--color-ink-muted);
+  }
+
+  table {
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  table tbody tr.dimmed {
+    opacity: 0.5;
+  }
+
+  table tbody tr.line-through {
+    text-decoration: line-through;
+  }
+
+  .card {
     h1,
     h2,
     h3,
@@ -119,39 +440,263 @@ article.content {
     h5,
     h6,
     hgroup {
-        a.anchor,
-        a.anchor:visited {
-            color: inherit;
-            text-decoration: none;
-        }
+      margin-top: 0;
+      text-align: left;
+      hyphens: none;
 
-        a.anchor:hover {
-            text-decoration: underline;
-        }
+      a,
+      a:visited {
+        color: inherit;
+      }
     }
+  }
 
-    .card {
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        hgroup {
-            a,
-            a:visited {
-                color: inherit;
-            }
-        }
-    }
+  :target {
+    background-color: color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border-radius: var(--radius-sm);
+  }
 
-    :target {
-        background-color: var(--bs-yellow);
-    }
+  .footnotes {
+    font-size: 0.85rem;
+    text-align: left;
+    hyphens: none;
+    color: var(--color-ink-muted);
+    margin-top: 2rem;
+  }
 
-    .footnotes {
-        font-size: 0.8rem;
-        text-align: left;
-        hyphens: none;
-    }
+  /* Goldmark already emits an <hr> before the footnote list — style that
+     instead of adding our own border, so there's only ever one line. */
+  .footnotes hr {
+    margin: 0 0 1rem;
+    border: none;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
+
+  .table-of-contents {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    hyphens: none;
+  }
+
+  .table-of-contents ul {
+    margin-bottom: 0;
+  }
+}
+
+/* --------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------- */
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.card-header {
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.card-footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.card-img-top {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------
+   Buttons &amp; forms
+   -------------------------------------------------------------------- */
+
+.btn {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.btn-sm {
+  border-radius: 999px;
+}
+
+/* --------------------------------------------------------------------
+   Tables
+   -------------------------------------------------------------------- */
+
+.table {
+  /* A pale, low-opacity mix of --color-primary lands on almost exactly
+     the same warm near-white as the page background (both are "faint
+     honey tint over white"), so odd/even rows used to read as "white"
+     vs. "invisible" instead of a proper zebra. Mixing in enough
+     --color-primary to stay clearly on-brand, but tempering it with
+     --color-ink and pushing the opacity up, keeps the stripe warm
+     *and* visibly darker/more saturated than the page background. */
+  --bs-table-striped-bg: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--color-primary) 60%, var(--color-ink) 40%) 11%,
+    var(--color-surface)
+  );
+}
+
+.table > :not(caption) > * > th {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------
+   Blockquotes
+   -------------------------------------------------------------------- */
+
+.blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding: 0.75rem 1.25rem;
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+.blockquote-footer {
+  margin-left: 1.5rem;
+  color: var(--color-ink-muted);
+}
+
+/* --------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------- */
+
+#site-footer {
+  margin-top: 5rem;
+  background: var(--color-ink);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-inner {
+  padding-block: 3rem 2rem;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 2.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.footer-tagline {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-col h6 {
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.9rem;
+}
+
+.footer-col address {
+  font-style: normal;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.footer-col li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-col a,
+.footer-col a:visited,
+.footer-col address a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-col a:hover,
+.footer-col address a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer-col a.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-seals {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding-block: 2rem;
+}
+
+.footer-seal {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.88;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.footer-seal:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+/* Line-art logos with real transparent gaps between shapes (like the
+   Grüngürtel mark) turn into a clean white silhouette. The GQB seal
+   stays in its original colors (see comment in footer.html). */
+.footer-seal--mono img {
+  filter: brightness(0) invert(1);
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+  .hero-inner {
+    padding-block: 2rem 2rem;
+  }
+
+  .footer-seals {
+    gap: 1.5rem;
+  }
+
+  .footer-seals img {
+    height: 60px !important;
+  }
 }

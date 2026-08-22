@@ -4,18 +4,24 @@
   {{ partial "head.html" . }}
 </head>
 <body>
-  <div class="container">
+  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+
+  <div class="site">
     <header id="site-header">
       {{ partial "header.html" . }}
     </header>
 
-    <main>
-      {{ block "main" . }}
-        <article class="content">
-            <header><h1>{{ .Title }}</h1></header>
-            {{ block "content" . }}{{ end }}
-        </article>
-      {{ end }}
+    <main id="main-content">
+      <div class="container">
+        {{ block "main" . }}
+          <article class="content">
+              {{ if not .IsHome }}
+                <header class="content-header"><h1>{{ .Title }}</h1></header>
+              {{ end }}
+              {{ block "content" . }}{{ end }}
+          </article>
+        {{ end }}
+      </div>
     </main>
 
     <footer id="site-footer">

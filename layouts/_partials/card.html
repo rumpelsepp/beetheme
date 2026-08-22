@@ -21,7 +21,7 @@
     {{ end }}
 
     {{ with .image }}
-        {{ $img := printf `<img src="%s" class="card-img-top" loading="lazy">` . | safeHTML }}
+        {{ $img := printf `<img src="%s" class="card-img-top" loading="lazy" alt="">` . | safeHTML }}
         {{ partial "inline/wrap-link.html" (dict "content" $img "url" $context.url) }}
     {{ end }}
 
