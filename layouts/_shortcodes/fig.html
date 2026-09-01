@@ -15,9 +15,16 @@
 
   {{ $imgDefault := index $images "1200x" }}
 
+  {{/* Target for the "view large" link — a downscaled copy, not the multi-MB original. */}}
+  {{ $linkWidth := int (site.Params.imageLinkWidth | default 2000) }}
+  {{ $full := $img }}
+  {{ if gt $img.Width $linkWidth }}
+    {{ $full = $img.Resize (printf "%dx %s" $linkWidth $fmt) }}
+  {{ end }}
+
   <div class="d-flex justify-content-center">
     <figure class="figure {{ with $.Get "class" }}{{ . }}{{ end }}">
-      <a href="{{ $imgOrig.Permalink }}">
+      <a href="{{ $full.RelPermalink }}">
         <img
           class="figure-img img-fluid rounded"
           src="{{ $imgDefault.RelPermalink }}"
