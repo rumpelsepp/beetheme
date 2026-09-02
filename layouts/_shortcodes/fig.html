@@ -15,16 +15,15 @@
 
   {{ $imgDefault := index $images "1200x" }}
 
-  {{/* Target for the "view large" link — a downscaled copy, not the multi-MB original. */}}
-  {{ $linkWidth := int (site.Params.imageLinkWidth | default 2000) }}
-  {{ $full := $img }}
-  {{ if gt $img.Width $linkWidth }}
-    {{ $full = $img.Resize (printf "%dx %s" $linkWidth $fmt) }}
-  {{ end }}
+  {{/* The link wraps only the image; give it an accessible name so it isn't
+       announced as a nameless link when the image has no alt/caption. */}}
+  {{ $label := "Bild" }}
+  {{ with $.Get "alt" }}{{ $label = . }}
+  {{ else }}{{ with $.Get "caption" }}{{ $label = . | markdownify | plainify }}{{ end }}{{ end }}
 
   <div class="d-flex justify-content-center">
     <figure class="figure {{ with $.Get "class" }}{{ . }}{{ end }}">
-      <a href="{{ $full.RelPermalink }}">
+      <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
         <img
           class="figure-img img-fluid rounded"
           src="{{ $imgDefault.RelPermalink }}"
