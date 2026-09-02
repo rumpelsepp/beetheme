@@ -399,6 +399,22 @@ article.content {
     text-underline-offset: 0.15em;
   }
 
+  /* External links: render-link.html tags them with rel="external"; append a
+     small "leaves this site" glyph. content:"" keeps it out of the a11y tree —
+     the meaning is carried by the visually-hidden note in the markup. */
+  a[rel~="external"]::after {
+    content: "";
+    display: inline-block;
+    width: 0.72em;
+    height: 0.72em;
+    margin-inline-start: 0.2em;
+    vertical-align: -0.05em;
+    background-color: currentColor;
+    --icon: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%3E%3Cpath%20fill-rule='evenodd'%20d='M8.636%203.5a.5.5%200%200%200-.5-.5H1.5A1.5%201.5%200%200%200%200%204.5v10A1.5%201.5%200%200%200%201.5%2016h10a1.5%201.5%200%200%200%201.5-1.5V7.864a.5.5%200%200%200-1%200V14.5a.5.5%200%200%201-.5.5h-10a.5.5%200%200%201-.5-.5v-10a.5.5%200%200%201%20.5-.5h6.636a.5.5%200%200%200%20.5-.5'/%3E%3Cpath%20fill-rule='evenodd'%20d='M16%20.5a.5.5%200%200%200-.5-.5h-5a.5.5%200%200%200%200%201h3.793L6.146%209.146a.5.5%200%201%200%20.708.708L15%201.707V5.5a.5.5%200%200%200%201%200z'/%3E%3C/svg%3E");
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
   .draft::before {
     content: "✍️ ";
   }
@@ -589,13 +605,19 @@ article.content {
    Blockquotes
    -------------------------------------------------------------------- */
 
-.blockquote {
-  border-left: 4px solid var(--color-primary);
-  padding: 0.75rem 1.25rem;
-  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  font-family: var(--font-display);
-  font-style: italic;
+/* Goldmark emits a bare <blockquote> (no Bootstrap .blockquote class), so
+   style the element. Kept readable — no italics — since the quotes here are
+   mostly long encyclopedic excerpts. */
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.6rem 1.25rem;
+  border-left: 3px solid var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface));
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
 }
 
 .blockquote-footer {

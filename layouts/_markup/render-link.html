@@ -1,1 +1,4 @@
-{{- $isExternal := strings.HasPrefix .Destination "http" | and (not (strings.HasPrefix .Destination site.BaseURL)) -}}<a href="{{ .Destination | safeURL }}"{{ if $isExternal }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ if $isExternal }}<i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>&nbsp;{{ end }}{{ .Text }}{{ if $isExternal }}<span class="visually-hidden"> (öffnet in neuem Tab)</span>{{ end }}</a>
+{{- /* External links carry rel="external" as the CSS styling hook — see
+       main.css: a[rel~="external"]::after paints the "leaves the site" icon. */ -}}
+{{- $isExternal := strings.HasPrefix .Destination "http" | and (not (strings.HasPrefix .Destination site.BaseURL)) -}}
+<a href="{{ .Destination | safeURL }}"{{ if $isExternal }} rel="external noopener noreferrer" target="_blank"{{ end }}>{{ .Text }}{{- if $isExternal }}<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span>{{ end -}}</a>
