@@ -1,2 +1,11 @@
-<script type="module" src="/base_bundle.js" defer></script>
-<script type="module" src="/bundle.js" defer></script>
+{{- /*
+  JS bundles built by esbuild into assets/gen/, fingerprinted + published
+  with an integrity hash. Empty bundles (a site with no own JS) are skipped.
+  Match order is alphabetical: base_bundle.js before bundle.js.
+*/ -}}
+{{- range resources.Match "gen/*.js" }}
+	{{- if .Content }}
+		{{- $js := . | fingerprint }}
+		<script type="module" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
+	{{- end }}
+{{- end }}

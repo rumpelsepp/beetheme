@@ -1,5 +1,18 @@
-<link rel="stylesheet" href="/base_style.css">
-<link rel="stylesheet" href="/style.css">
+{{- /*
+  CSS bundles are built by esbuild (from npm deps) into assets/gen/ and
+  fingerprinted + published here, so their URLs change on every content
+  change (cache-busting) and carry a Subresource Integrity hash.
+  Match order is alphabetical: base_style.css before style.css.
+*/ -}}
+{{- range resources.Match "gen/*.css" }}
+	{{- $css := . | fingerprint }}
+	<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+{{- end }}
+
+{{- /* Sibling files referenced by the bundled CSS (icon-font faces). */ -}}
+{{- range resources.Match "gen/*.woff*" }}
+	{{- .Publish }}
+{{- end }}
 
 {{- if templates.Exists "_partials/head/extra-css.html" }}
 {{ partial "head/extra-css.html" . }}
