@@ -21,6 +21,20 @@
   {{ with $.Get "alt" }}{{ $label = . }}
   {{ else }}{{ with $.Get "caption" }}{{ $label = . | markdownify | plainify }}{{ end }}{{ end }}
 
+  {{/* Optional geotag under the image, linked to OpenStreetMap. Toggle via
+       site config: params.imageGeotags (default off). Requires GPS to be kept
+       in [imaging.meta].fields (Hugo excludes it by default). */}}
+  {{ $lat := 0.0 }}
+  {{ $lng := 0.0 }}
+  {{ if and (site.Params.imageGeotags | default false) (reflect.IsImageResourceWithMeta $imgOrig) }}
+    {{ with $imgOrig.Meta }}
+      {{ $lat = .Lat }}
+      {{ $lng = .Long }}
+    {{ end }}
+  {{ end }}
+  {{/* eq $x $x is false for NaN — some cameras write unparseable GPS rationals. */}}
+  {{ $hasGeo := and (eq $lat $lat) (eq $lng $lng) (ne $lat 0.0) (ne $lng 0.0) }}
+
   <div class="d-flex justify-content-center">
     <figure class="figure {{ with $.Get "class" }}{{ . }}{{ end }}">
       <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
@@ -36,11 +50,18 @@
           alt="{{ with $.Get "alt" }}{{ . }}{{ else }}{{ $.Get "caption" | markdownify | plainify }}{{ end }}"
           {{ with $.Get "loading" }}loading="{{ . }}"{{ else }}loading="lazy"{{ end }}>
       </a>
-      {{ with $.Get "caption" }}
+      {{ $caption := $.Get "caption" }}
+      {{- if or $caption $hasGeo }}
         <figcaption class="figure-caption text-center">
-          {{ . | markdownify }}
+          {{- with $caption }}{{ . | markdownify }}{{ end -}}
+          {{- if $hasGeo }}
+            {{- $osm := printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng }}
+            {{- /* rel without "external": the pin icon is already the marker,
+                   the generic ↗ glyph on top would just be noise. */ -}}
+            <a class="figure-geo" href="{{ $osm | safeURL }}" rel="noopener noreferrer" target="_blank"><i class="bi bi-geo-alt" aria-hidden="true"></i> {{ printf "%.5f, %.5f" $lat $lng }}</a>
+          {{- end }}
         </figcaption>
-      {{ end }}
+      {{- end }}
     </figure>
   </div>
 {{ else if $imgOrig }}

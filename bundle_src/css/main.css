@@ -419,6 +419,22 @@ article.content {
     color: var(--color-ink-muted);
   }
 
+  /* Optional geotag line under an image (fig shortcode, params.imageGeotags). */
+  .figure-geo {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.85em;
+    color: var(--color-ink-muted);
+    text-decoration: none;
+  }
+
+  .figure-geo:hover,
+  .figure-geo:focus-visible {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
   table {
     box-shadow: var(--shadow-sm);
     border-radius: var(--radius-md);
