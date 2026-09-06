@@ -56,9 +56,7 @@
           {{- with $caption }}{{ . | markdownify }}{{ end -}}
           {{- if $hasGeo }}
             {{- $osm := printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng }}
-            {{- /* rel without "external": the pin icon is already the marker,
-                   the generic ↗ glyph on top would just be noise. */ -}}
-            <a class="figure-geo" href="{{ $osm | safeURL }}" rel="noopener noreferrer" target="_blank"><i class="bi bi-geo-alt" aria-hidden="true"></i> {{ printf "%.5f, %.5f" $lat $lng }}</a>
+            <a class="figure-geo" href="{{ $osm | safeURL }}" rel="external noopener noreferrer" target="_blank"><i class="bi bi-geo-alt" aria-hidden="true"></i> {{ printf "%.5f, %.5f" $lat $lng }}<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span></a>
           {{- end }}
         </figcaption>
       {{- end }}
