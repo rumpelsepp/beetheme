@@ -418,8 +418,13 @@ article.content {
      centres and sizes like one and has no inline descender gap. */
   .figure video.figure-img {
     display: block;
+    width: auto;
     max-width: 100%;
     height: auto;
+    /* Portrait clips would otherwise fill the full column width and tower over
+       the running text — cap their height. Landscape stays width-bound (its
+       height never reaches this) and is unaffected. */
+    max-height: 70vh;
   }
 
   .figure-caption {
