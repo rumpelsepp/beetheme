@@ -1,0 +1,51 @@
+{{- /*
+  Self-hosted video from a page bundle, following the scripts/vidpre.py naming
+  convention. For {{< video src="froad-fail" >}} it looks for:
+      froad-fail.webm         (optional, AV1/Opus — offered first)
+      froad-fail.mp4          (required, H.264/AAC)
+      froad-fail-poster.jpg   (optional poster frame)
+
+  Params:
+    src / id  stem of the bundle files (with or without .mp4/.webm); also
+              accepted positionally: {{< video froad-fail >}}
+    caption   optional, markdownified
+    class     optional extra class on the <figure>
+    autoplay  true  -> autoplay + implies muted + loop (silent ambient clips)
+    loop      true  -> loop
+    muted     true  -> start muted
+    preload   none | metadata | auto   (default: none if a poster exists, else metadata)
+*/ -}}
+{{- $raw := or (.Get "src") (.Get "id") (.Get 0) -}}
+{{- $stem := strings.TrimSuffix ".mp4" (strings.TrimSuffix ".webm" $raw) -}}
+{{- $mp4 := .Page.Resources.GetMatch (printf "%s.mp4" $stem) -}}
+{{- $webm := .Page.Resources.GetMatch (printf "%s.webm" $stem) -}}
+{{- $poster := .Page.Resources.GetMatch (printf "%s-poster.*" $stem) -}}
+
+{{- if $mp4 -}}
+  {{- $autoplay := eq (.Get "autoplay" | string) "true" -}}
+  {{- $loop := or $autoplay (eq (.Get "loop" | string) "true") -}}
+  {{- $muted := or $autoplay (eq (.Get "muted" | string) "true") -}}
+  {{- $preload := .Get "preload" | default (cond (ne $poster nil) "none" "metadata") -}}
+  {{- $caption := .Get "caption" -}}
+
+  <div class="d-flex justify-content-center">
+    <figure class="figure {{ with .Get "class" }}{{ . }}{{ end }}">
+      <video class="figure-img img-fluid rounded" controls playsinline
+        preload="{{ $preload }}"
+        {{- with $poster }} poster="{{ .RelPermalink }}"{{ end }}
+        {{- with $poster }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}
+        {{- if $loop }} loop{{ end }}{{ if $muted }} muted{{ end }}{{ if $autoplay }} autoplay{{ end }}>
+        {{- with $webm }}
+        <source src="{{ .RelPermalink }}" type="video/webm">
+        {{- end }}
+        <source src="{{ $mp4.RelPermalink }}" type="video/mp4">
+        <p>Dein Browser kann dieses Video nicht abspielen. <a href="{{ $mp4.RelPermalink }}">Video herunterladen</a>.</p>
+      </video>
+      {{- with $caption }}
+      <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>
+      {{- end }}
+    </figure>
+  </div>
+{{- else -}}
+  {{- warnf "shortcode video: no %q.mp4 resource in %s" $stem $.Page.Path -}}
+{{- end -}}

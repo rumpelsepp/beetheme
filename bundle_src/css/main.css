@@ -414,6 +414,14 @@ article.content {
     box-shadow: var(--shadow-md);
   }
 
+  /* <video> shares .figure-img with images (video shortcode) — block it so it
+     centres and sizes like one and has no inline descender gap. */
+  .figure video.figure-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
   .figure-caption {
     text-align: center;
     color: var(--color-ink-muted);
