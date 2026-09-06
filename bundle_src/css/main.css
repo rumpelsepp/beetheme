@@ -419,11 +419,13 @@ article.content {
   .figure video.figure-img {
     display: block;
     width: auto;
-    max-width: 100%;
     height: auto;
-    /* Portrait clips would otherwise fill the full column width and tower over
-       the running text — cap their height. Landscape stays width-bound (its
-       height never reaches this) and is unaffected. */
+    /* Match the on-screen size of images: fig.html renders them with
+       sizes="…800px", so a landscape image never displays wider than 800px.
+       Without this a 1280px-wide clip would stretch to the full column. */
+    max-width: min(100%, 800px);
+    /* Portrait clips would otherwise tower over the running text — cap their
+       height. Landscape height never reaches this, so it stays width-bound. */
     max-height: 70vh;
   }
 
