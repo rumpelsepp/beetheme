@@ -418,6 +418,9 @@ article.content {
      centres and sizes like one and has no inline descender gap. */
   .figure video.figure-img {
     display: block;
+    /* The figure keeps the clip's full intrinsic width as its box, so centre
+       the (narrower) video inside it rather than relying on the flex parent. */
+    margin-inline: auto;
     width: auto;
     height: auto;
     /* Match the on-screen size of images: fig.html renders them with
