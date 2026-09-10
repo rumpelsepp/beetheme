@@ -1,4 +1,13 @@
-{{- /* External links carry rel="external" as the CSS styling hook — see
-       main.css: a[rel~="external"]::after paints the "leaves the site" icon. */ -}}
+{{- /* Outbound links open in a new tab and carry a trailing "external link"
+       icon (Bootstrap Icons). A non-breaking space sits between the link text
+       and the icon (so the icon never wraps onto its own line); a negative
+       right margin on the icon pulls whatever follows the link — a space, or
+       a sentence-ending period — back tight against the glyph. The icon is
+       aria-hidden; the meaning is carried by the visually-hidden note.
+
+       No trailing newline / whitespace below: a render hook emits the
+       template verbatim, so a stray newline would surface as a space after
+       every link (e.g. before a sentence-ending period). */ -}}
 {{- $isExternal := strings.HasPrefix .Destination "http" | and (not (strings.HasPrefix .Destination site.BaseURL)) -}}
-<a href="{{ .Destination | safeURL }}"{{ if $isExternal }} rel="external noopener noreferrer" target="_blank"{{ end }}>{{ .Text }}{{- if $isExternal }}<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span>{{ end -}}</a>
+<a href="{{ .Destination | safeURL }}"{{ if $isExternal }} rel="noopener noreferrer" target="_blank"{{ end }}>{{ .Text }}{{- if $isExternal }}&nbsp;<i class="bi bi-box-arrow-up-right external-link-icon" aria-hidden="true"></i><span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span>{{ end -}}</a>
+{{- "" -}}
