@@ -9,3 +9,13 @@
 		<script type="module" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
 	{{- end }}
 {{- end }}
+{{- /*
+  Code-split chunks (esbuild `splitting`), imported by the bundles above via
+  relative paths (./chunks/...), statically or with a lazy import(). Their
+  names already carry esbuild's content hash, so they're published as-is
+  (fingerprinting would break those paths) and get no <script> tag of
+  their own.
+*/ -}}
+{{- range resources.Match "gen/chunks/*.js" }}
+	{{- .Publish }}
+{{- end }}
