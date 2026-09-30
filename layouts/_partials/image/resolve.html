@@ -1,0 +1,21 @@
+{{- /*
+  Returns the image resource for "src": an image resource as-is, otherwise a
+  path looked up first among the page's own resources (page bundle), then
+  among the global assets (assets/). Returns "" if nothing matches.
+
+  Params (dict):
+    src   image resource or path string
+    page  page whose bundle to search (optional)
+*/ -}}
+{{- $res := "" }}
+{{- if reflect.IsImageResource .src }}
+  {{- $res = .src }}
+{{- else if .src }}
+  {{- with .page }}
+    {{- with .Resources.GetMatch $.src }}{{ $res = . }}{{ end }}
+  {{- end }}
+  {{- if not $res }}
+    {{- with resources.Get $.src }}{{ $res = . }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- return $res }}

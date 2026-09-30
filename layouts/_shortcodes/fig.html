@@ -1,69 +1,23 @@
+{{- /*
+  Responsive figure for an image from the page bundle, see
+  _partials/image/figure.html. Params: src (required), alt, caption, class,
+  loading, width (max. display width in px, default 800; e.g. width="400"
+  for a smaller figure).
+*/ -}}
 {{ $src := .Get "src" }}
 {{ $imgOrig := .Page.Resources.GetMatch $src }}
 
 {{ if and $imgOrig (reflect.IsImageResourceProcessable $imgOrig) }}
-  {{ $fmt := site.Params.imageFormat | default "webp" }}
-  {{ $sizes := slice "400x" "800x" "1200x" }}
-  {{ $images := dict }}
-
-  {{ $img := $imgOrig.Filter images.AutoOrient }}
-
-  {{ range $s := $sizes }}
-    {{ $resized := $img.Resize (printf "%s %s" $s $fmt) }}
-    {{ $images = merge $images (dict $s $resized) }}
-  {{ end }}
-
-  {{ $imgDefault := index $images "1200x" }}
-
-  {{/* The link wraps only the image; give it an accessible name so it isn't
-       announced as a nameless link when the image has no alt/caption. */}}
-  {{ $label := "Bild" }}
-  {{ with $.Get "alt" }}{{ $label = . }}
-  {{ else }}{{ with $.Get "caption" }}{{ $label = . | markdownify | plainify }}{{ end }}{{ end }}
-
-  {{/* Optional geotag under the image, linked to OpenStreetMap. Toggle via
-       site config: params.imageGeotags (default off). Requires GPS to be kept
-       in [imaging.meta].fields (Hugo excludes it by default). */}}
-  {{ $lat := 0.0 }}
-  {{ $lng := 0.0 }}
-  {{ if and (site.Params.imageGeotags | default false) (reflect.IsImageResourceWithMeta $imgOrig) }}
-    {{ with $imgOrig.Meta }}
-      {{ $lat = .Lat }}
-      {{ $lng = .Long }}
-    {{ end }}
-  {{ end }}
-  {{/* eq $x $x is false for NaN — some cameras write unparseable GPS rationals. */}}
-  {{ $hasGeo := and (eq $lat $lat) (eq $lng $lng) (ne $lat 0.0) (ne $lng 0.0) }}
-
-  <div class="d-flex justify-content-center">
-    <figure class="figure {{ with $.Get "class" }}{{ . }}{{ end }}">
-      <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
-        <img
-          class="figure-img img-fluid rounded"
-          src="{{ $imgDefault.RelPermalink }}"
-          srcset="
-            {{ (index $images "400x").RelPermalink }} 400w,
-            {{ (index $images "800x").RelPermalink }} 800w,
-            {{ (index $images "1200x").RelPermalink }} 1200w
-          "
-          sizes="(max-width: 768px) 100vw, 800px"
-          alt="{{ with $.Get "alt" }}{{ . }}{{ else }}{{ $.Get "caption" | markdownify | plainify }}{{ end }}"
-          {{ with $.Get "loading" }}loading="{{ . }}"{{ else }}loading="lazy"{{ end }}>
-      </a>
-      {{ $caption := $.Get "caption" }}
-      {{- if or $caption $hasGeo }}
-        <figcaption class="figure-caption text-center">
-          {{- with $caption }}{{ . | markdownify }}{{ end -}}
-          {{- if $hasGeo }}
-            {{- $osm := printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng }}
-            <a class="figure-geo" href="{{ $osm | safeURL }}" rel="external noopener noreferrer" target="_blank"><i class="bi bi-geo-alt" aria-hidden="true"></i> {{ printf "%.5f, %.5f" $lat $lng }}<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span></a>
-          {{- end }}
-        </figcaption>
-      {{- end }}
-    </figure>
-  </div>
+  {{ partial "image/figure.html" (dict
+    "image" $imgOrig
+    "alt" (.Get "alt")
+    "caption" (.Get "caption")
+    "class" (.Get "class")
+    "loading" (.Get "loading")
+    "width" (.Get "width")
+  ) }}
 {{ else if $imgOrig }}
-  {{ warnf "shortcode fig: %q in %s is not a processable image resource" $src $.Page.Path }}
+  {{ warnf "shortcode fig: %q in %s is not a processable image resource" $src .Page.Path }}
 {{ else }}
-  {{ warnf "shortcode fig: no image resource matching %q in %s" $src $.Page.Path }}
+  {{ warnf "shortcode fig: no image resource matching %q in %s" $src .Page.Path }}
 {{ end }}

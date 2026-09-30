@@ -1,0 +1,69 @@
+{{- /*
+  Centered figure with a responsive image (see image/img.html) linking to
+  the original in full size, an optional caption and, if enabled, a geotag.
+  Used by the fig shortcode and by layouts that show a single image.
+
+  Params (dict):
+    image    image resource (required)
+    alt      alt text (default: the caption as plain text)
+    caption  caption, markdown (optional)
+    class    extra classes for the <figure> (optional)
+    loading  "lazy" (default) or "eager"
+    width    max. display width in px (default: 800); smaller images are
+             shown at their own width, never upscaled
+*/ -}}
+{{ $imgOrig := .image }}
+
+{{/* The figure itself gets the display width; the image fills it
+     (img-fluid) and its width/height attributes only fix the aspect ratio,
+     see image/img.html. "sizes" tells the browser the same width, so it
+     picks a matching srcset candidate. */}}
+{{ $width := int (.width | default 800) }}
+{{ if reflect.IsImageResourceProcessable $imgOrig }}
+  {{ $own := ($imgOrig.Filter images.AutoOrient).Width }}
+  {{ if lt $own $width }}{{ $width = $own }}{{ end }}
+{{ end }}
+{{ $sizes := printf "(max-width: %dpx) 100vw, %dpx" $width $width }}
+{{ $caption := .caption }}
+{{ $alt := .alt | default ($caption | markdownify | plainify) }}
+
+{{/* The link wraps only the image; give it an accessible name so it isn't
+     announced as a nameless link when the image has no alt/caption. */}}
+{{ $label := $alt | default "Bild" }}
+
+{{/* Optional geotag under the image, linked to OpenStreetMap. Toggle via
+     site config: params.imageGeotags (default off). Requires GPS to be kept
+     in [imaging.meta].fields (Hugo excludes it by default). */}}
+{{ $lat := 0.0 }}
+{{ $lng := 0.0 }}
+{{ if and (site.Params.imageGeotags | default false) (reflect.IsImageResourceWithMeta $imgOrig) }}
+  {{ with $imgOrig.Meta }}
+    {{ $lat = .Lat }}
+    {{ $lng = .Long }}
+  {{ end }}
+{{ end }}
+{{/* eq $x $x is false for NaN — some cameras write unparseable GPS rationals. */}}
+{{ $hasGeo := and (eq $lat $lat) (eq $lng $lng) (ne $lat 0.0) (ne $lng 0.0) }}
+
+<div class="d-flex justify-content-center">
+  <figure class="figure {{ with .class }}{{ . }}{{ end }}" style="width: 100%; max-width: {{ $width }}px">
+    <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
+      {{ partial "image/img.html" (dict
+        "image" $imgOrig
+        "class" "figure-img img-fluid rounded"
+        "alt" $alt
+        "loading" .loading
+        "sizes" $sizes
+      ) }}
+    </a>
+    {{- if or $caption $hasGeo }}
+      <figcaption class="figure-caption text-center">
+        {{- with $caption }}{{ . | markdownify }}{{ end -}}
+        {{- if $hasGeo }}
+          {{- $osm := printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng }}
+          <a class="figure-geo" href="{{ $osm | safeURL }}" rel="external noopener noreferrer" target="_blank"><i class="bi bi-geo-alt" aria-hidden="true"></i> {{ printf "%.5f, %.5f" $lat $lng }}<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span></a>
+        {{- end }}
+      </figcaption>
+    {{- end }}
+  </figure>
+</div>

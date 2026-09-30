@@ -20,8 +20,21 @@
         <div class="card-header h5">{{ . }}</div>
     {{ end }}
 
+    {{/* .image: an image resource or a path (page bundle of .page, else
+         assets/), rendered responsively via image/img.html; anything that
+         doesn't resolve (e.g. an external URL) is used as a plain src. */}}
     {{ with .image }}
-        {{ $img := printf `<img src="%s" class="card-img-top" loading="lazy" alt="">` . | safeHTML }}
+        {{ $res := partial "image/resolve.html" (dict "src" . "page" $context.page) }}
+        {{ $img := "" }}
+        {{ with $res }}
+            {{ $img = partial "image/img.html" (dict
+                "image" .
+                "class" "card-img-top img-fluid"
+                "sizes" "(max-width: 576px) 100vw, (max-width: 768px) 50vw, 440px"
+            ) }}
+        {{ else }}
+            {{ $img = printf `<img src="%s" class="card-img-top" loading="lazy" alt="">` . | safeHTML }}
+        {{ end }}
         {{ partial "inline/wrap-link.html" (dict "content" $img "url" $context.url) }}
     {{ end }}
 

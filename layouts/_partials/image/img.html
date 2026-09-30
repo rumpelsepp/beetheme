@@ -1,0 +1,65 @@
+{{- /*
+  Responsive <img> for an image resource: resized copies in
+  site.Params.imageFormat (default webp) at the given widths, offered via
+  srcset, so the browser downloads only the size it actually needs. Widths
+  above the original's are skipped (no upscaling). The largest remaining
+  copy is the fallback src and gives width/height, so the browser reserves
+  the right space before the image loads and the layout doesn't jump.
+
+  width/height also act as the image's preferred size, so the rendered
+  size must come from CSS/the surrounding element: a figure with a
+  max-width (image/figure.html), 100% width (cards, hero), plus
+  img-fluid/height:auto to keep the aspect ratio. "sizes" should describe
+  that same rendered width.
+
+  Non-processable images (e.g. SVG) are emitted as-is.
+
+  Params (dict):
+    image          image resource (required)
+    widths         slice of target widths in px (default: 400 800 1200)
+    sizes          "sizes" attribute (default: "(max-width: 768px) 100vw, 800px")
+    class          class attribute
+    alt            alt text (default: "")
+    loading        "lazy" (default) or "eager"
+    fetchpriority  e.g. "high" for the LCP image (optional)
+*/ -}}
+{{- $orig := .image }}
+{{- $attrs := dict
+  "class" .class
+  "alt" (.alt | default "")
+  "loading" (.loading | default "lazy")
+  "fetchpriority" .fetchpriority
+}}
+
+{{- if reflect.IsImageResourceProcessable $orig }}
+  {{- $fmt := site.Params.imageFormat | default "webp" }}
+  {{- $img := $orig.Filter images.AutoOrient }}
+  {{- $widths := slice }}
+  {{- range .widths | default (slice 400 800 1200) }}
+    {{- if le . $img.Width }}{{ $widths = $widths | append . }}{{ end }}
+  {{- end }}
+  {{- if not $widths }}{{ $widths = slice $img.Width }}{{ end }}
+
+  {{- $srcset := slice }}
+  {{- $default := "" }}
+  {{- range $widths }}
+    {{- $default = $img.Resize (printf "%dx %s" . $fmt) }}
+    {{- $srcset = $srcset | append (printf "%s %dw" $default.RelPermalink .) }}
+  {{- end }}
+  <img
+    {{- with $attrs.class }} class="{{ . }}"{{ end }}
+    src="{{ $default.RelPermalink }}"
+    srcset="{{ delimit $srcset ", " }}"
+    sizes="{{ .sizes | default "(max-width: 768px) 100vw, 800px" }}"
+    width="{{ $default.Width }}" height="{{ $default.Height }}"
+    alt="{{ $attrs.alt }}"
+    loading="{{ $attrs.loading }}"
+    {{- with $attrs.fetchpriority }} fetchpriority="{{ . }}"{{ end }}>
+{{- else }}
+  <img
+    {{- with $attrs.class }} class="{{ . }}"{{ end }}
+    src="{{ $orig.RelPermalink }}"
+    alt="{{ $attrs.alt }}"
+    loading="{{ $attrs.loading }}"
+    {{- with $attrs.fetchpriority }} fetchpriority="{{ . }}"{{ end }}>
+{{- end }}
