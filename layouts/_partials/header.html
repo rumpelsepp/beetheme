@@ -1,1 +1,6 @@
-{{ partial "menu-bootstrap.html" (dict "menuID" "main" "page" .) }}
+{{/* .site-nav-bar limits the navbar content to the width of the page content
+     (--container-max), so the menu lines up with the text below instead of
+     sticking to the left edge of the viewport. */}}
+<div class="site-nav-bar">
+  {{ partial "menu-bootstrap.html" (dict "menuID" "main" "page" .) }}
+</div>
