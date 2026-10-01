@@ -1,0 +1,30 @@
+{{- /*
+  Returns the preview image for link previews (Open Graph & co.) made from
+  an image resource, in the shape _funcs/get-page-images.html hands out:
+  a dict with Image, RelPermalink and Permalink.
+
+  Messengers fetch the preview image on the sender's phone and silently
+  drop it when it is too heavy -- WhatsApp shows no picture at all for a
+  multi-megabyte original. So the image is scaled down and always
+  published as JPEG, the one format every client renders (no WebP).
+
+  Photos are cropped to the Open Graph reference size 1200x630; an image
+  too small for that, or one that must stay whole ("crop" false, e.g. a
+  logo), is only fitted into 1200x1200. Nothing is upscaled.
+
+  Non-processable images (e.g. SVG) are returned as-is.
+
+  Params (dict):
+    image  image resource (required)
+    crop   crop to 1200x630 (default: true)
+*/ -}}
+{{- $img := .image }}
+{{- if reflect.IsImageResourceProcessable $img }}
+  {{- $img = $img.Filter images.AutoOrient }}
+  {{- if and (.crop | default true) (ge $img.Width 1200) (ge $img.Height 630) }}
+    {{- $img = $img.Process "fill 1200x630 jpg q80" }}
+  {{- else }}
+    {{- $img = $img.Process "fit 1200x1200 jpg q80" }}
+  {{- end }}
+{{- end }}
+{{- return dict "Image" $img "RelPermalink" $img.RelPermalink "Permalink" $img.Permalink }}

@@ -1,0 +1,17 @@
+{{- /*
+  Returns the site's favicon resource from assets/: site.Params.favicon if
+  set, otherwise the first of favicon.svg / .png / .jpg / .jpeg / .webp.
+  Returns "" if there is none.
+*/ -}}
+{{- $favicon := "" }}
+{{- with site.Params.favicon }}
+  {{- $favicon = resources.Get . }}
+  {{- if not $favicon }}
+    {{- warnf "favicon: params.favicon = %q not found in assets/" . }}
+  {{- end }}
+{{- else }}
+  {{- range slice "favicon.svg" "favicon.png" "favicon.jpg" "favicon.jpeg" "favicon.webp" }}
+    {{- if not $favicon }}{{ $favicon = resources.Get . }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- return $favicon }}

@@ -1,23 +1,12 @@
 {{- /*
-  Favicon links for a source in assets/: site.Params.favicon if set,
-  otherwise the first of favicon.svg / .png / .jpg / .jpeg / .webp.
+  Favicon links for the icon found by _funcs/get-favicon.html.
 
   - SVG is linked as-is, it scales by itself.
   - A raster image is scaled by Hugo to the usual icon sizes (always PNG,
     whatever the source format) plus an apple-touch-icon; sizes larger than
     the source are skipped, so nothing is upscaled.
 */ -}}
-{{- $favicon := "" }}
-{{- with site.Params.favicon }}
-  {{- $favicon = resources.Get . }}
-  {{- if not $favicon }}
-    {{- warnf "favicon: params.favicon = %q not found in assets/" . }}
-  {{- end }}
-{{- else }}
-  {{- range slice "favicon.svg" "favicon.png" "favicon.jpg" "favicon.jpeg" "favicon.webp" }}
-    {{- if not $favicon }}{{ $favicon = resources.Get . }}{{ end }}
-  {{- end }}
-{{- end }}
+{{- $favicon := partialCached "_funcs/get-favicon.html" "favicon" }}
 
 {{- with $favicon }}
   {{- if reflect.IsImageResourceProcessable . }}

@@ -1,0 +1,67 @@
+{{- /*
+  Overrides Hugo's embedded _funcs/get-page-images.html, which Hugo's
+  opengraph.html, twitter_cards.html and schema.html all use to find the
+  images of a page -- so all three pick up what is returned here.
+
+  Unlike the embedded one, this
+  - never hands out an original: every image found among the page's
+    resources or in assets/ goes through image/social.html (scaled down,
+    JPEG), as messengers drop previews that are too heavy;
+  - always finds an image as long as the site has one, so no page is
+    shared without a picture.
+
+  The first of these that yields something wins:
+    1. "images" from the page's front matter (paths or URLs)
+    2. the page's featured image: its "image" parameter -- the one the
+       cards show --, else a page resource named *feature*, *cover* or
+       *thumbnail*
+    3. the first of the site's params.images
+    4. the images of the home page
+    5. the favicon, unless it is an SVG
+*/ -}}
+{{- $page := . }}
+{{- $imgs := slice }}
+{{- $paths := .Params.images }}
+
+{{- if not $paths }}
+  {{- $featured := "" }}
+  {{- with .Params.image }}
+    {{- $featured = partial "image/resolve.html" (dict "src" . "page" $page) }}
+  {{- end }}
+  {{- $resources := .Resources.ByType "image" }}
+  {{- range slice "*feature*" "{*cover*,*thumbnail*}" }}
+    {{- if not $featured }}{{ $featured = $resources.GetMatch . }}{{ end }}
+  {{- end }}
+  {{- with $featured }}
+    {{- $imgs = $imgs | append (partial "image/social.html" (dict "image" .)) }}
+  {{- else }}
+    {{- with site.Params.images }}{{ $paths = first 1 . }}{{ end }}
+  {{- end }}
+{{- end }}
+
+{{- range $paths }}
+  {{- if (urls.Parse .).Scheme }}
+    {{- /* External image */ -}}
+    {{- $imgs = $imgs | append (dict "RelPermalink" . "Permalink" .) }}
+  {{- else }}
+    {{- with partial "image/resolve.html" (dict "src" . "page" $page) }}
+      {{- $imgs = $imgs | append (partial "image/social.html" (dict "image" .)) }}
+    {{- else }}
+      {{- /* Not a resource, e.g. a file in static/ */ -}}
+      {{- $imgs = $imgs | append (dict "RelPermalink" (relURL .) "Permalink" (absURL .)) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if not $imgs }}
+  {{- if not .IsHome }}
+    {{- $imgs = partialCached "_funcs/get-page-images.html" site.Home "home" }}
+  {{- else }}
+    {{- with partialCached "_funcs/get-favicon.html" "favicon" }}
+      {{- if reflect.IsImageResourceProcessable . }}
+        {{- $imgs = $imgs | append (partial "image/social.html" (dict "image" . "crop" false)) }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- return $imgs }}
