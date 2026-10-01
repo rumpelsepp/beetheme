@@ -12,15 +12,7 @@
   <link rel="canonical" href="{{ .Permalink }}">
 {{ end }}
 
-{{ with $favicon := resources.Get "favicon.png" }}
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ ( $favicon.Fill "16x16" ).RelPermalink }}">
-  <link rel="icon" type="image/png" sizes="48x48" href="{{ ( $favicon.Fill "48x48" ).RelPermalink }}">
-  <link rel="icon" type="image/png" sizes="192x192" href="{{ ( $favicon.Fill "192x192" ).RelPermalink }}">
-{{ end -}}
-
-{{ with $favicon := resources.Get "favicon.svg" }}
-  <link rel="icon" href="{{ $favicon.RelPermalink }}">
-{{ end -}}
+{{ partial "head/favicon.html" . }}
 
 {{ partial "opengraph.html" . }}
 {{ partial "schema.html" . }}

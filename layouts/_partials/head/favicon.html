@@ -1,0 +1,37 @@
+{{- /*
+  Favicon links for a source in assets/: site.Params.favicon if set,
+  otherwise the first of favicon.svg / .png / .jpg / .jpeg / .webp.
+
+  - SVG is linked as-is, it scales by itself.
+  - A raster image is scaled by Hugo to the usual icon sizes (always PNG,
+    whatever the source format) plus an apple-touch-icon; sizes larger than
+    the source are skipped, so nothing is upscaled.
+*/ -}}
+{{- $favicon := "" }}
+{{- with site.Params.favicon }}
+  {{- $favicon = resources.Get . }}
+  {{- if not $favicon }}
+    {{- warnf "favicon: params.favicon = %q not found in assets/" . }}
+  {{- end }}
+{{- else }}
+  {{- range slice "favicon.svg" "favicon.png" "favicon.jpg" "favicon.jpeg" "favicon.webp" }}
+    {{- if not $favicon }}{{ $favicon = resources.Get . }}{{ end }}
+  {{- end }}
+{{- end }}
+
+{{- with $favicon }}
+  {{- if reflect.IsImageResourceProcessable . }}
+    {{- $side := math.Min .Width .Height }}
+    {{- range slice 16 32 48 192 }}
+      {{- if le . $side }}
+        {{- $icon := $favicon.Fill (printf "%dx%d png" . .) }}
+        <link rel="icon" type="image/png" sizes="{{ . }}x{{ . }}" href="{{ $icon.RelPermalink }}">
+      {{- end }}
+    {{- end }}
+    {{- if ge $side 180 }}
+      <link rel="apple-touch-icon" href="{{ ($favicon.Fill "180x180 png").RelPermalink }}">
+    {{- end }}
+  {{- else }}
+    <link rel="icon" type="{{ .MediaType.Type }}" href="{{ .RelPermalink }}">
+  {{- end }}
+{{- end }}
