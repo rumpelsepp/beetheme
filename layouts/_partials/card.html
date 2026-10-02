@@ -22,18 +22,24 @@
 
     {{/* .image: an image resource or a path (page bundle of .page, else
          assets/), rendered responsively via image/img.html; anything that
-         doesn't resolve (e.g. an external URL) is used as a plain src. */}}
+         doesn't resolve (e.g. an external URL) is used as a plain src.
+
+         The alt text is .imageAlt, else the card's title: the image is a
+         link of its own when the card has a url, and a link around an image
+         without alt text has no name for screen readers. */}}
     {{ with .image }}
+        {{ $alt := $context.imageAlt | default ($context.title | plainify | htmlUnescape) }}
         {{ $res := partial "image/resolve.html" (dict "src" . "page" $context.page) }}
         {{ $img := "" }}
         {{ with $res }}
             {{ $img = partial "image/img.html" (dict
                 "image" .
                 "class" "card-img-top img-fluid"
+                "alt" $alt
                 "sizes" "(max-width: 576px) 100vw, (max-width: 768px) 50vw, 440px"
             ) }}
         {{ else }}
-            {{ $img = printf `<img src="%s" class="card-img-top" loading="lazy" alt="">` . | safeHTML }}
+            {{ $img = printf `<img src="%s" class="card-img-top" loading="lazy" alt="%s">` . ($alt | default "" | htmlEscape) | safeHTML }}
         {{ end }}
         {{ partial "inline/wrap-link.html" (dict "content" $img "url" $context.url) }}
     {{ end }}
