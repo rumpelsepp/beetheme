@@ -25,7 +25,10 @@
 {{ end }}
 {{ $sizes := printf "(max-width: %dpx) 100vw, %dpx" $width $width }}
 {{ $caption := .caption }}
-{{ $alt := .alt | default ($caption | markdownify | plainify) }}
+{{/* A link in the caption carries a visually hidden note ("externer Link,
+     ...", see _markup/render-link.html) that has no business in an alt
+     text. */}}
+{{ $alt := .alt | default ($caption | markdownify | replaceRE `<span class="visually-hidden">.*?</span>` "" | plainify | htmlUnescape | strings.TrimSpace) }}
 
 {{/* The link wraps only the image; give it an accessible name so it isn't
      announced as a nameless link when the image has no alt/caption. */}}

@@ -5,6 +5,7 @@ Renders a Bootstrap navbar for the given Hugo menu.
 @context {string} menuID    The menu ID.
 @context {image}  brand     (optional) A brand logo image resource.
 @context {string} brandText (optional) A wordmark shown next to (or instead of) the logo.
+@context {string} label     (optional) Name of the navigation landmark for screen readers (default: "Hauptnavigation").
 
 Usage:
   {{ partial "menu.html" (dict "menuID" "main" "page" . "brand" $brand "brandText" "bienensteff") }}
@@ -16,7 +17,7 @@ Usage:
 {{- $brandText := .brandText }}
 
 {{- with index site.Menus $menuID }}
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary" aria-label="{{ $.label | default "Hauptnavigation" }}">
   <div class="container-fluid">
 
     {{/* --- Brand / Home Link --- */}}
@@ -77,11 +78,6 @@ Usage:
       {{- $attrs = merge $attrs (dict "class" (printf "%s nav-link" ($attrs.class))) }}
     {{- end }}
 
-    {{/* Optional title attribute */}}
-    {{- with .Title }}
-      {{- $attrs = merge $attrs (dict "title" .) }}
-    {{- end }}
-
     {{/* Handle external links (http/https) */}}
     {{- if or (hasPrefix .URL "http://") (hasPrefix .URL "https://") }}
       {{- $attrs = merge $attrs (dict
@@ -94,6 +90,15 @@ Usage:
     {{- $label := .Name }}
     {{- with .Identifier }}
       {{- with T . }}{{- $label = . }}{{- end }}
+    {{- end }}
+
+    {{/* Optional title attribute -- only if it says more than the label
+         (Hugo fills in the page title for pageRef entries); a title that
+         repeats the link text is read out twice by some screen readers. */}}
+    {{- with .Title }}
+      {{- if ne . $label }}
+        {{- $attrs = merge $attrs (dict "title" .) }}
+      {{- end }}
     {{- end }}
 
     {{/* List item wrapper */}}

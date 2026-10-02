@@ -381,16 +381,25 @@ article.content {
     margin-top: 2.25rem;
     margin-bottom: 1rem;
 
-    /* Only a link to the heading's own anchor: no underline at rest. */
+    /* "#" behind the heading, a link to the heading's own anchor (see
+       _markup/render-heading.html): only there while the heading is
+       hovered. */
     a.anchor,
     a.anchor:visited {
-      color: inherit;
+      margin-left: 0.35em;
+      color: var(--color-ink-muted);
+      font-weight: 400;
       text-decoration-line: none;
+      opacity: 0;
+      transition: opacity 0.12s ease;
     }
 
-    a.anchor:hover,
-    a.anchor:focus-visible {
-      text-decoration-line: underline;
+    &:hover a.anchor {
+      opacity: 1;
+    }
+
+    a.anchor:hover {
+      color: var(--color-accent);
     }
   }
 

@@ -1,5 +1,14 @@
-<h{{ .Level }} 
-{{- range $key, $val := .Attributes }}
+{{- /*
+  Heading with a "#" behind it that links to the heading itself, shown on
+  hover, for copying a link to the section. It is a convenience for mouse
+  users only: hidden from screen readers and skipped by the tab key, so a
+  page's headings don't all turn up as links.
+
+  No trailing newline below, a render hook emits the template verbatim.
+*/ -}}
+<h{{ .Level }}
+  {{- range $key, $val := .Attributes }}
     {{- printf " %s=%q" $key $val | safeHTMLAttr }}
   {{- end }}
-><a class="anchor" href="#{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</a></h{{ .Level }}>
+>{{ .Text | safeHTML }}<a class="anchor" href="#{{ .Anchor | safeURL }}" aria-hidden="true" tabindex="-1">#</a></h{{ .Level }}>
+{{- "" -}}
