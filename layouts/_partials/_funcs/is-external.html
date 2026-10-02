@@ -3,11 +3,18 @@
   host other than the one of the site's baseURL. Relative URLs, anchors,
   mailto: and tel: are not external.
 
+  Further hosts that belong to the site, e.g. an app on a subdomain, are
+  listed in the site config and count as internal too:
+
+    [params]
+    internalHosts = ['db.example.org']
+
   Context: the URL.
 */ -}}
 {{- $external := false }}
 {{- $u := urls.Parse (string .) }}
 {{- if and $u.Host (in (slice "http" "https") $u.Scheme) }}
-  {{- $external = ne (lower $u.Host) (lower (urls.Parse site.BaseURL).Host) }}
+  {{- $own := slice (urls.Parse site.BaseURL).Host | append (site.Params.internalHosts | default slice) }}
+  {{- $external = not (in (apply $own "lower" ".") (lower $u.Host)) }}
 {{- end }}
 {{- return $external }}
