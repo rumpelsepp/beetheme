@@ -39,6 +39,9 @@
 
   --container-max: 1120px;
 
+  /* Font size of the entries of the main menu, dropdown entries included. */
+  --nav-font-size: 1.2rem;
+
   color-scheme: light;
 }
 
@@ -193,6 +196,7 @@ a:focus-visible {
 
 .navbar .nav-link {
   color: var(--color-ink-muted);
+  font-size: var(--nav-font-size);
   font-weight: 500;
   padding-inline: 0.75rem;
   border-radius: var(--radius-sm);
@@ -229,6 +233,7 @@ a:focus-visible {
 }
 
 .navbar .dropdown-item {
+  font-size: var(--nav-font-size);
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.75rem;
 }
