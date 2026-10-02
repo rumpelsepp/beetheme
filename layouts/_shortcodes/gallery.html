@@ -1,8 +1,8 @@
 {{- /*
   Photo gallery: the images in rows of equal height, each row filling the
-  width (.gallery in main.css). A click leads to the image in large; with
-  lightbox=true it opens in a lightbox instead (bundle_src/js/lightbox.ts),
-  as long as JavaScript runs.
+  width (.gallery in main.css). A click leads to the original, as for a
+  figure; with lightbox=true the image opens in a lightbox instead
+  (bundle_src/js/lightbox.ts), as long as JavaScript runs.
 
   The body of the shortcode lists one image of the page bundle per line,
   optionally followed by its alt text:
@@ -10,8 +10,9 @@
     one.jpeg | What is to be seen on it
     two.jpeg
 
-  The large image is a copy scaled down to 2400px, not the original: those
-  come straight from the camera, at up to 15 MB each.
+  What the lightbox shows is a copy scaled down to 2400px, not the
+  original: those come straight from the camera, at up to 15 MB each. A
+  gallery without the lightbox gets no such copies.
 
   Params:
     caption   caption for the whole gallery, markdown (optional)
@@ -38,13 +39,16 @@
                orients the image itself, and doing it twice turns a photo
                taken in portrait on its side. */}}
           {{- $upright := $img.Filter images.AutoOrient }}
-          {{- $large := $upright.Fit (printf "2400x2400 %s" (site.Params.imageFormat | default "webp")) }}
+          {{- $large := $img }}
+          {{- if $lightbox }}
+            {{- $large = $upright.Fit (printf "2400x2400 %s" (site.Params.imageFormat | default "webp")) }}
+          {{- end }}
           {{- $ratio := div (float $upright.Width) $upright.Height }}
           {{- /* The widest an item gets beyond phones, see .gallery in
                main.css: 1.8 times its width at the row height of 13.5rem. */}}
           {{- $maxWidth := math.Ceil (mul $ratio 216 1.8) }}
     <li class="gallery-item" style="--ratio: {{ printf "%.4f" $ratio }}">
-      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – groß ansehen">
+      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – {{ if $lightbox }}groß ansehen{{ else }}in voller Größe öffnen{{ end }}">
         {{- partial "image/img.html" (dict
           "image" $img
           "alt" $alt
