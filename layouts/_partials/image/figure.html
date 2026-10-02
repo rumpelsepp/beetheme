@@ -1,6 +1,7 @@
 {{- /*
   Centered figure with a responsive image (see image/img.html) linking to
-  the original in full size, an optional caption and, if enabled, a geotag.
+  the original in full size (uncropped, too), an optional caption and, if
+  enabled, a geotag.
   Used by the fig shortcode and by layouts that show a single image.
 
   Params (dict):
@@ -9,21 +10,29 @@
     caption  caption, markdown (optional)
     class    extra classes for the <figure> (optional)
     loading  "lazy" (default) or "eager"
-    width    max. display width in px (default: 800); smaller images are
-             shown at their own width, never upscaled
+    width    max. display width in px (default: 800, a panorama's 1600);
+             smaller images are shown at their own width, never upscaled
+    crop     strips to cut off the sides, see image/crop.html (optional)
+    pano     true for a panorama: it may grow wider than the text column,
+             up to the edges of the window (see .figure-breakout in the CSS)
 */ -}}
 {{ $imgOrig := .image }}
+{{ $pano := .pano | default false }}
 
 {{/* The figure itself gets the display width; the image fills it
      (img-fluid) and its width/height attributes only fix the aspect ratio,
      see image/img.html. "sizes" tells the browser the same width, so it
      picks a matching srcset candidate. */}}
-{{ $width := int (.width | default 800) }}
+{{ $width := int (.width | default (cond $pano 1600 800)) }}
 {{ if reflect.IsImageResourceProcessable $imgOrig }}
-  {{ $own := ($imgOrig.Filter images.AutoOrient).Width }}
-  {{ if lt $own $width }}{{ $width = $own }}{{ end }}
+  {{ $own := $imgOrig.Filter images.AutoOrient }}
+  {{ with .crop }}{{ $own = partial "image/crop.html" (dict "image" $own "crop" .) }}{{ end }}
+  {{ if lt $own.Width $width }}{{ $width = $own.Width }}{{ end }}
 {{ end }}
 {{ $sizes := printf "(max-width: %dpx) 100vw, %dpx" $width $width }}
+{{/* A panorama is displayed wider than the default copies reach, and the
+     more so on a high-density screen. */}}
+{{ $widths := cond $pano (slice 800 1200 1600 2400 3200) (slice 400 800 1200) }}
 {{ $caption := .caption }}
 {{/* A link in the caption carries a visually hidden note ("externer Link,
      ...", see _markup/render-link.html) that has no business in an alt
@@ -48,11 +57,13 @@
 {{/* eq $x $x is false for NaN — some cameras write unparseable GPS rationals. */}}
 {{ $hasGeo := and (eq $lat $lat) (eq $lng $lng) (ne $lat 0.0) (ne $lng 0.0) }}
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center{{ if $pano }} figure-breakout{{ end }}">
   <figure class="figure {{ with .class }}{{ . }}{{ end }}" style="width: 100%; max-width: {{ $width }}px">
     <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
       {{ partial "image/img.html" (dict
         "image" $imgOrig
+        "crop" .crop
+        "widths" $widths
         "class" "figure-img img-fluid rounded"
         "alt" $alt
         "loading" .loading

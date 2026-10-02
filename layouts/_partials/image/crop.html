@@ -1,0 +1,40 @@
+{{- /*
+  Returns the image with a strip cut off its sides. Expects an image that
+  is already auto-oriented, so that the sides are the ones the viewer sees.
+
+  Hugo's Crop only takes a target size and an anchor, so a strip per side
+  takes two passes: the first, anchored bottom right, drops top and left;
+  the second, anchored top left, drops bottom and right. Both are stored at
+  q95, as they are only intermediates of the copies image/img.html resizes.
+
+  Params (dict):
+    image  image resource (required)
+    crop   dict of top, right, bottom, left: the share to cut off that side,
+           in percent of the image's height resp. width ("10" or "10%");
+           sides left out or empty stay as they are
+*/ -}}
+{{- $img := .image }}
+{{- $crop := .crop | default dict }}
+{{- $pct := dict }}
+{{- range slice "top" "right" "bottom" "left" }}
+  {{- $v := float (strings.TrimSuffix "%" (string (index $crop . | default 0))) }}
+  {{- if lt $v 0 }}{{ errorf "image/crop: %s is %v, must not be negative" . $v }}{{ end }}
+  {{- $pct = merge $pct (dict . $v) }}
+{{- end }}
+{{- if or (ge (add $pct.top $pct.bottom) 100) (ge (add $pct.left $pct.right) 100) }}
+  {{- errorf "image/crop: nothing is left of %s, top + bottom and left + right must each stay below 100" $img.Name }}
+{{- else }}
+  {{- $top := int (math.Round (mul $img.Height (div $pct.top 100))) }}
+  {{- $bottom := int (math.Round (mul $img.Height (div $pct.bottom 100))) }}
+  {{- $left := int (math.Round (mul $img.Width (div $pct.left 100))) }}
+  {{- $right := int (math.Round (mul $img.Width (div $pct.right 100))) }}
+  {{- $w := sub $img.Width $left }}
+  {{- $h := sub $img.Height $top }}
+  {{- if or $top $left }}
+    {{- $img = $img.Crop (printf "%dx%d BottomRight q95" $w $h) }}
+  {{- end }}
+  {{- if or $bottom $right }}
+    {{- $img = $img.Crop (printf "%dx%d TopLeft q95" (sub $w $right) (sub $h $bottom)) }}
+  {{- end }}
+{{- end }}
+{{- return $img }}

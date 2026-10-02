@@ -3,6 +3,13 @@
   _partials/image/figure.html. Params: src (required), alt, caption, class,
   loading, width (max. display width in px, default 800; e.g. width="400"
   for a smaller figure).
+
+  crop-top, crop-right, crop-bottom, crop-left cut that many percent off the
+  side, e.g. crop-top="15" to lose some sky. The figure still links to the
+  uncropped original.
+
+  pano=true is for panoramas: the figure may then grow wider than the text
+  column, up to 1600px (or width) and the edges of the window.
 */ -}}
 {{ $src := .Get "src" }}
 {{ $imgOrig := .Page.Resources.GetMatch $src }}
@@ -15,6 +22,13 @@
     "class" (.Get "class")
     "loading" (.Get "loading")
     "width" (.Get "width")
+    "crop" (dict
+      "top" (.Get "crop-top")
+      "right" (.Get "crop-right")
+      "bottom" (.Get "crop-bottom")
+      "left" (.Get "crop-left")
+    )
+    "pano" (eq (print (.Get "pano")) "true")
   ) }}
 {{ else if $imgOrig }}
   {{ warnf "shortcode fig: %q in %s is not a processable image resource" $src .Page.Path }}

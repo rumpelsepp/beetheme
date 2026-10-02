@@ -444,6 +444,34 @@ article.content {
     box-shadow: var(--shadow-md);
   }
 
+  /* Wrapper of a panorama (fig pano=true): as wide as the window less a
+     margin, centred on the text column, so the figure breaks out of the
+     column on both sides. How wide the figure gets within it is up to its
+     own max-width. The margin also keeps it clear of a vertical scrollbar,
+     which 100vw includes. */
+  .figure-breakout {
+    --breakout-width: calc(100vw - 2rem);
+    width: var(--breakout-width);
+    margin-inline: calc((100% - var(--breakout-width)) / 2);
+  }
+
+  /* On a phone the container spans the window, so the gutter is all there
+     is to break out of: the panorama runs from edge to edge, square. */
+  @media (max-width: 575.98px) {
+    .figure-breakout {
+      width: auto;
+      margin-inline: calc(-0.5 * var(--bs-gutter-x, 1.5rem));
+    }
+
+    .figure-breakout .figure-img {
+      border-radius: 0 !important;
+    }
+
+    .figure-breakout .figure-caption {
+      padding-inline: calc(0.5 * var(--bs-gutter-x, 1.5rem));
+    }
+  }
+
   /* <video> shares .figure-img with images (video shortcode) — block it so it
      centres and sizes like one and has no inline descender gap. */
   .figure video.figure-img {

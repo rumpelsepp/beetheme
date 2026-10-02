@@ -16,6 +16,8 @@
 
   Params (dict):
     image          image resource (required)
+    crop           strips to cut off the sides before resizing, see
+                   image/crop.html (optional)
     widths         slice of target widths in px (default: 400 800 1200)
     sizes          "sizes" attribute (default: "(max-width: 768px) 100vw, 800px")
     class          class attribute
@@ -34,6 +36,7 @@
 {{- if reflect.IsImageResourceProcessable $orig }}
   {{- $fmt := site.Params.imageFormat | default "webp" }}
   {{- $img := $orig.Filter images.AutoOrient }}
+  {{- with .crop }}{{ $img = partial "image/crop.html" (dict "image" $img "crop" .) }}{{ end }}
   {{- $widths := slice }}
   {{- range .widths | default (slice 400 800 1200) }}
     {{- if le . $img.Width }}{{ $widths = $widths | append . }}{{ end }}
