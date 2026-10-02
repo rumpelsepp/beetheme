@@ -785,6 +785,163 @@ blockquote > :last-child {
 }
 
 /* --------------------------------------------------------------------
+ Photo gallery (layouts/_shortcodes/gallery.html)
+ -------------------------------------------------------------------- */
+
+.gallery-figure {
+  margin: 2rem 0;
+}
+
+/* Rows of equal height, each filling the width, no picture cropped: an
+ item starts out as wide as its picture is at the target row height and
+ grows in proportion to its aspect ratio (--ratio, width / height), so
+ all items of a row end up with the same height. The factor on the ratio
+ keeps the sum of a row above 1 -- below that, flexbox hands out only
+ part of the free space. */
+.gallery {
+  --row-height: 13.5rem;
+
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+  padding: 0;
+}
+
+.gallery-item {
+  flex: calc(var(--ratio) * 100) 1 calc(var(--ratio) * var(--row-height));
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.gallery-item a {
+  display: block;
+  height: 100%;
+}
+
+.gallery-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.gallery-item a:hover img,
+.gallery-item a:focus-visible img {
+  transform: scale(1.03);
+  filter: brightness(1.06);
+}
+
+.gallery-item a:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-item img {
+    transition: none;
+  }
+}
+
+/* A picture grows to at most 1.8 times the row height: a last row with a
+ single picture left over isn't blown up to the full width. Not on
+ phones, where every picture has a row of its own and should fill it. */
+@media (min-width: 576px) {
+  .gallery-item {
+    max-width: calc(var(--ratio) * var(--row-height) * 1.8);
+  }
+}
+
+/* --------------------------------------------------------------------
+ Lightbox (bundle_src/js/lightbox.ts)
+ -------------------------------------------------------------------- */
+
+.lightbox {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(20, 18, 15, 0.94);
+  color: #fff;
+}
+
+.lightbox[open] {
+  display: grid;
+  place-items: center;
+}
+
+.lightbox::backdrop {
+  background: rgba(20, 18, 15, 0.94);
+}
+
+.lightbox-image {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 5.5rem);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.lightbox button {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.lightbox button:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.lightbox button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.lightbox-close {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-prev {
+  left: 0.75rem;
+}
+
+.lightbox-next {
+  right: 0.75rem;
+}
+
+.lightbox-count {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* --------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------- */
 

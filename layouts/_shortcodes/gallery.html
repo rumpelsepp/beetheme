@@ -1,0 +1,59 @@
+{{- /*
+  Photo gallery: the images in rows of equal height, each row filling the
+  width (.gallery in main.css). A click opens the image large in a
+  lightbox (bundle_src/js/lightbox.ts); without JavaScript, or with
+  lightbox=false, the link simply leads to the large image.
+
+  The body of the shortcode lists one image of the page bundle per line,
+  optionally followed by its alt text:
+
+    one.jpeg | What is to be seen on it
+    two.jpeg
+
+  The large image is a copy scaled down to 2400px, not the original: those
+  come straight from the camera, at up to 15 MB each.
+
+  Params:
+    caption   caption for the whole gallery, markdown (optional)
+    lightbox  false to do without the lightbox (default: true)
+*/ -}}
+{{- $page := .Page -}}
+{{- $lightbox := ne (print (.Get "lightbox")) "false" -}}
+<figure class="gallery-figure">
+  <ul class="gallery" role="list"{{ if $lightbox }} data-lightbox{{ end }}>
+    {{- range split (strings.TrimSpace .Inner) "\n" }}
+      {{- $parts := split . "|" }}
+      {{- $src := strings.TrimSpace (index $parts 0) }}
+      {{- $alt := "" }}
+      {{- if gt (len $parts) 1 }}{{ $alt = strings.TrimSpace (index $parts 1) }}{{ end }}
+      {{- if $src }}
+        {{- $img := $page.Resources.GetMatch $src }}
+        {{- if and $img (reflect.IsImageResourceProcessable $img) }}
+          {{- /* Upright only for the ratio and the large copy: image/img.html
+               orients the image itself, and doing it twice turns a photo
+               taken in portrait on its side. */}}
+          {{- $upright := $img.Filter images.AutoOrient }}
+          {{- $large := $upright.Fit (printf "2400x2400 %s" (site.Params.imageFormat | default "webp")) }}
+          {{- $ratio := div (float $upright.Width) $upright.Height }}
+          {{- /* The widest an item gets beyond phones, see .gallery in
+               main.css: 1.8 times its width at the row height of 13.5rem. */}}
+          {{- $maxWidth := math.Ceil (mul $ratio 216 1.8) }}
+    <li class="gallery-item" style="--ratio: {{ printf "%.4f" $ratio }}">
+      <a href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – groß ansehen">
+        {{- partial "image/img.html" (dict
+          "image" $img
+          "alt" $alt
+          "sizes" (printf "(max-width: 575.98px) 100vw, %.0fpx" $maxWidth)
+        ) -}}
+      </a>
+    </li>
+        {{- else }}
+          {{- warnf "shortcode gallery: no processable image matching %q in %s" $src $page.Path }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  </ul>
+  {{- with .Get "caption" }}
+  <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>
+  {{- end }}
+</figure>
