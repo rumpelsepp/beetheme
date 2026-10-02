@@ -834,6 +834,9 @@ blockquote > :last-child {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
+  /* A row that doesn't fill the width -- its pictures are capped below --
+     sits in the middle instead of hanging on the left. */
+  justify-content: center;
   gap: 0.6rem;
   margin: 0 0 0.75rem;
   padding: 0;
