@@ -612,6 +612,17 @@ article.content {
   font-weight: 600;
 }
 
+/* The line under a card's title: no heading, but set like a small one. */
+.card-subtitle {
+  margin-top: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+  hyphens: none;
+}
+
 .card-footer {
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
@@ -719,7 +730,13 @@ blockquote > :last-child {
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.footer-col h6 {
+/* Title of a footer column: an h2, so the footer's sections can be jumped
+   to by heading, in the look of a small label. */
+.footer-col .footer-title {
+  margin-top: 0;
+  font-family: var(--font-body);
+  font-weight: 500;
+  line-height: 1.2;
   color: rgba(255, 255, 255, 0.55);
   text-transform: uppercase;
   font-size: 0.75rem;

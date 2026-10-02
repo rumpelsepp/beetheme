@@ -1,0 +1,18 @@
+{{- /*
+  Table of contents of a page, if it asks for one (front matter "toc") and
+  has headings: one navigation landmark, named by its title.
+
+  Hugo wraps the list in a <nav id="TableOfContents"> of its own; that is
+  dropped, as two nested navigation landmarks without a name are of no use
+  to a screen reader.
+
+  Context: the page.
+*/ -}}
+{{- if and .Params.toc (ne .TableOfContents "") }}
+  {{- $toc := .TableOfContents | string | replaceRE `(?s)\s*<nav id="TableOfContents">(.*)</nav>\s*` "$1" }}
+  {{- $id := printf "toc-heading-%s" (.File.UniqueID | default "page") }}
+  <nav class="table-of-contents" aria-labelledby="{{ $id }}">
+    <p id="{{ $id }}" class="toc-title">Inhalt</p>
+    {{ $toc | safeHTML }}
+  </nav>
+{{- end }}

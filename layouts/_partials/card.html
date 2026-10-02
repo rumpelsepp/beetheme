@@ -45,13 +45,18 @@
     {{ end }}
 
     <div class="card-body">
+        {{/* The title is a heading of the level the card's place in the
+             page calls for (.level, default 3: a card below an h2); it
+             keeps the look of an h5 whatever the level. The subtitle is no
+             heading but a line of text. */}}
         {{ with .title }}
-            <h5 class="card-title">
+            {{ $level := int ($context.level | default 3) }}
+            <h{{ $level }} class="card-title h5">
                 {{ partial "inline/wrap-link.html" (dict "content" . "url" $context.url) }}
-            </h5>
+            </h{{ $level }}>
         {{ end }}
         {{ with .subtitle }}
-            <h6 class="card-subtitle mb-2 text-secondary">{{ . }}</h6>
+            <p class="card-subtitle mb-2 text-secondary">{{ . }}</p>
         {{ end }}
 
         {{ $raw := .content | strings.TrimSpace }}

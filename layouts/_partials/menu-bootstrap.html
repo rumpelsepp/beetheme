@@ -121,7 +121,18 @@ Usage:
 
       {{/* --- Render link (external entries are marked by link.html) --- */}}
       {{- $text := printf "%s%s%s" .Pre (htmlEscape $label) .Post | safeHTML }}
-      {{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}
+      {{- if and .Children (not .URL) }}
+        {{/* An entry that only opens its dropdown is a button: an <a> without
+             href gets no keyboard focus, so the dropdown couldn't be opened
+             without a mouse. */}}
+        <button type="button"
+          {{- range $k, $v := merge $attrs (dict "role" "") }}
+            {{- with $v }}{{ printf ` %s="%s"` $k (. | string | htmlEscape) | safeHTMLAttr }}{{ end }}
+          {{- end -}}
+        >{{ $text }}</button>
+      {{- else }}
+        {{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}
+      {{- end }}
 
       {{/* --- Nested children --- */}}
       {{- with .Children }}
