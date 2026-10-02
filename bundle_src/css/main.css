@@ -691,6 +691,72 @@ blockquote > :last-child {
 }
 
 /* --------------------------------------------------------------------
+   Embeds
+   Two-click embeds (layouts/_partials/embed.html): the notice shown in
+   place of a third party's content, and the <iframe> that replaces it.
+   -------------------------------------------------------------------- */
+
+.embed-consent {
+  margin: 0 0 1.5rem;
+  padding: 1.75rem 1.25rem;
+  border: 1px dashed var(--color-ink-muted);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  text-align: center;
+  text-wrap: balance;
+  hyphens: none;
+}
+
+.embed-consent > p {
+  max-width: 38rem;
+  margin-inline: auto;
+}
+
+.embed-consent > p .bi {
+  margin-right: 0.3rem;
+  color: var(--color-accent);
+}
+
+/* Button, checkbox and the link to the provider, stacked and centred. */
+.embed-consent-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* As a flex item the link is only as wide as its content, and the
+   negative margin of the external-link icon makes that too narrow for
+   the icon, which would wrap onto a line of its own. */
+.embed-consent-actions > a {
+  white-space: nowrap;
+}
+
+.embed-consent-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-ink-muted);
+  text-align: left;
+  text-wrap: wrap;
+}
+
+.embed-reset {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.embed-frame {
+  display: block;
+  width: 100%;
+  margin: 0 auto 1.5rem;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------- */
 

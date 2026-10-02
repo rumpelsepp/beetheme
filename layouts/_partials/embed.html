@@ -1,0 +1,43 @@
+{{- /*
+  Two-click embed: content of a third party (a map, a video) is not loaded
+  with the page but only once the reader asks for it. Until then nothing
+  is requested from the provider, so neither the reader's IP address goes
+  there nor can the provider set cookies.
+
+  Emits a notice with a button; bundle_src/js/embed.ts swaps it for the
+  <iframe> on click. The checkbox has the provider remembered, so that its
+  embeds load right away from then on (forgotten again by the button of
+  the embed-reset shortcode). Without JS button and checkbox stay hidden
+  and the link to the provider's own page is what is left.
+
+  The notice links to the section #externe-inhalte of the page
+  /datenschutz, if the site has one. That section is the site's to write:
+  it names the providers and holds the embed-reset shortcode.
+
+  Params (dict):
+    src       URL of the page to embed (required)
+    provider  name of the provider as shown to the reader (required)
+    title     says what the embed shows; shown in the notice and set as
+              the title of the <iframe>
+    button    label of the button (default: "Inhalt laden")
+    href      page to open at the provider instead (default: src)
+    height    height of the <iframe> in px (default: 500)
+    width     width of the <iframe> in px (default: full width)
+*/ -}}
+<div class="embed-consent" data-provider="{{ .provider }}" data-src="{{ .src }}" data-title="{{ .title | default (printf "Inhalt von %s" .provider) }}"
+  data-height="{{ .height | default 500 }}"{{ with .width }} data-width="{{ . }}"{{ end }}>
+  <p>
+    <i class="bi bi-shield-lock" aria-hidden="true"></i>
+    Externer Inhalt von <strong>{{ .provider }}</strong>{{ with .title }}: {{ . }}{{ end }}.
+    Beim Laden werden Daten wie die IP-Adresse an {{ .provider }} übertragen
+    {{- with site.GetPage "/datenschutz" }} (<a href="{{ .RelPermalink }}#externe-inhalte">mehr dazu</a>){{ end }}.
+  </p>
+  <div class="embed-consent-actions">
+    <button type="button" class="btn btn-primary" hidden>{{ .button | default "Inhalt laden" }}</button>
+    <label class="embed-consent-remember" hidden>
+      <input type="checkbox"> Inhalte von {{ .provider }} künftig immer laden
+    </label>
+    {{ partial "link.html" (dict "href" (.href | default .src) "text" (printf "Bei %s öffnen" .provider)) }}
+  </div>
+</div>
+{{- "" -}}

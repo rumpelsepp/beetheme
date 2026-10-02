@@ -1,0 +1,23 @@
+{{- /*
+  Embeds a page of a third party, e.g. a map or a video, which is loaded
+  only once the reader asks for it (layouts/_partials/embed.html). Use it
+  instead of a raw <iframe>:
+
+    {{< embed provider="Komoot" src="https://www.komoot.com/…/embed" height="800" >}}
+
+  Params: src and provider (required), title, button, href, height,
+  width — see the partial. A new provider needs an entry in the site's
+  privacy policy.
+*/ -}}
+{{- if not (and (.Get "src") (.Get "provider")) -}}
+  {{- errorf "shortcode embed: src and provider are required in %s" .Page.Path -}}
+{{- end -}}
+{{ partial "embed.html" (dict
+  "src" (.Get "src")
+  "provider" (.Get "provider")
+  "title" (.Get "title")
+  "button" (.Get "button")
+  "href" (.Get "href")
+  "height" (.Get "height")
+  "width" (.Get "width")
+) }}
