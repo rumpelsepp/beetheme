@@ -1,8 +1,8 @@
 {{- /*
   Photo gallery: the images in rows of equal height, each row filling the
-  width (.gallery in main.css). A click opens the image large in a
-  lightbox (bundle_src/js/lightbox.ts); without JavaScript, or with
-  lightbox=false, the link simply leads to the large image.
+  width (.gallery in main.css). A click leads to the image in large; with
+  lightbox=true it opens in a lightbox instead (bundle_src/js/lightbox.ts),
+  as long as JavaScript runs.
 
   The body of the shortcode lists one image of the page bundle per line,
   optionally followed by its alt text:
@@ -15,10 +15,15 @@
 
   Params:
     caption   caption for the whole gallery, markdown (optional)
-    lightbox  false to do without the lightbox (default: true)
+    lightbox  true to open the images in the lightbox (default: false)
+    geotags   true/false: a geotag on the bottom edge of each image that
+              has a position, see image/geotag.html (default: the site's
+              params.imageGeotags, as for figures)
 */ -}}
 {{- $page := .Page -}}
-{{- $lightbox := ne (print (.Get "lightbox")) "false" -}}
+{{- $lightbox := eq (print (.Get "lightbox")) "true" -}}
+{{- $geotags := site.Params.imageGeotags | default false -}}
+{{- with .Get "geotags" }}{{ $geotags = eq (print .) "true" }}{{ end -}}
 <figure class="gallery-figure">
   <ul class="gallery" role="list"{{ if $lightbox }} data-lightbox{{ end }}>
     {{- range split (strings.TrimSpace .Inner) "\n" }}
@@ -39,13 +44,14 @@
                main.css: 1.8 times its width at the row height of 13.5rem. */}}
           {{- $maxWidth := math.Ceil (mul $ratio 216 1.8) }}
     <li class="gallery-item" style="--ratio: {{ printf "%.4f" $ratio }}">
-      <a href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – groß ansehen">
+      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – groß ansehen">
         {{- partial "image/img.html" (dict
           "image" $img
           "alt" $alt
           "sizes" (printf "(max-width: 575.98px) 100vw, %.0fpx" $maxWidth)
         ) -}}
       </a>
+      {{- if $geotags }}{{ partial "image/geotag.html" $img }}{{ end }}
     </li>
         {{- else }}
           {{- warnf "shortcode gallery: no processable image matching %q in %s" $src $page.Path }}

@@ -8,6 +8,9 @@
   side, e.g. crop-top="15" to lose some sky. The figure still links to the
   uncropped original.
 
+  geotags=true/false shows or hides the geotag on this image, whatever the
+  site's params.imageGeotags says.
+
   pano=true is for panoramas: the figure may then grow wider than the text
   column, up to 1600px (or width) and the edges of the window.
 */ -}}
@@ -28,6 +31,7 @@
       "bottom" (.Get "crop-bottom")
       "left" (.Get "crop-left")
     )
+    "geotags" (.Get "geotags")
     "pano" (eq (print (.Get "pano")) "true")
   ) }}
 {{ else if $imgOrig }}

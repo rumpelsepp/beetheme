@@ -13,6 +13,9 @@
     width    max. display width in px (default: 800, a panorama's 1600);
              smaller images are shown at their own width, never upscaled
     crop     strips to cut off the sides, see image/crop.html (optional)
+    geotags  true/false: a geotag on the image's bottom edge, if it has a
+             position, see image/geotag.html (default: the site's
+             params.imageGeotags)
     pano     true for a panorama: it may grow wider than the text column,
              up to the edges of the window (see .figure-breakout in the CSS)
 */ -}}
@@ -43,22 +46,17 @@
      announced as a nameless link when the image has no alt/caption. */}}
 {{ $label := $alt | default "Bild" }}
 
-{{/* Optional geotag under the image, linked to OpenStreetMap. Toggle via
-     site config: params.imageGeotags (default off). Requires GPS to be kept
-     in [imaging.meta].fields (Hugo excludes it by default). */}}
-{{ $lat := 0.0 }}
-{{ $lng := 0.0 }}
-{{ if and (site.Params.imageGeotags | default false) (reflect.IsImageResourceWithMeta $imgOrig) }}
-  {{ with $imgOrig.Meta }}
-    {{ $lat = .Lat }}
-    {{ $lng = .Long }}
-  {{ end }}
-{{ end }}
-{{/* eq $x $x is false for NaN — some cameras write unparseable GPS rationals. */}}
-{{ $hasGeo := and (eq $lat $lat) (eq $lng $lng) (ne $lat 0.0) (ne $lng 0.0) }}
+{{/* Geotag on the image: the site's params.imageGeotags (default off)
+     decides, unless "geotags" says otherwise for this figure. */}}
+{{ $geotags := site.Params.imageGeotags | default false }}
+{{ $flag := printf "%v" .geotags }}
+{{ if in (slice "true" "false") $flag }}{{ $geotags = eq $flag "true" }}{{ end }}
 
 <div class="d-flex justify-content-center{{ if $pano }} figure-breakout{{ end }}">
   <figure class="figure {{ with .class }}{{ . }}{{ end }}" style="width: 100%; max-width: {{ $width }}px">
+    {{/* The box the geotag is positioned in: it lies on the image, beside
+         the link around it. */}}
+    <div class="figure-media">
     <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
       {{ partial "image/img.html" (dict
         "image" $imgOrig
@@ -70,20 +68,10 @@
         "sizes" $sizes
       ) }}
     </a>
-    {{- if or $caption $hasGeo }}
-      <figcaption class="figure-caption text-center">
-        {{- with $caption }}{{ . | markdownify }}{{ end -}}
-        {{- if $hasGeo }}
-          {{- $osm := printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng }}
-          {{ partial "link.html" (dict
-            "href" $osm
-            "class" "figure-geo"
-            "attrs" (dict "rel" "external")
-            "icon" false
-            "text" (printf `<i class="bi bi-geo-alt" aria-hidden="true"></i> %.5f, %.5f` $lat $lng | safeHTML)
-          ) }}
-        {{- end }}
-      </figcaption>
+    {{- if $geotags }}{{ partial "image/geotag.html" $imgOrig }}{{ end }}
+    </div>
+    {{- with $caption }}
+      <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>
     {{- end }}
   </figure>
 </div>

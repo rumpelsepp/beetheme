@@ -3,8 +3,9 @@
 // arrow keys and swipes to page through the gallery. The dialog brings the
 // focus trap, Esc to close and the backdrop along.
 //
-// Only galleries marked data-lightbox take part; with lightbox=false on the
-// shortcode a click simply follows the link to the large image.
+// Only galleries marked data-lightbox take part (lightbox=true on the
+// shortcode); in the others a click simply follows the link to the large
+// image.
 
 const GALLERY = '.gallery[data-lightbox]';
 
@@ -105,7 +106,7 @@ class Lightbox {
 let lightbox: Lightbox | undefined;
 
 for (const gallery of document.querySelectorAll(GALLERY)) {
-  const links = Array.from(gallery.querySelectorAll<HTMLAnchorElement>('a'));
+  const links = Array.from(gallery.querySelectorAll<HTMLAnchorElement>('a.gallery-link'));
   const pictures = links.map((link) => ({
     src: link.href,
     alt: link.querySelector('img')?.alt ?? '',

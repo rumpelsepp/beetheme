@@ -1,0 +1,31 @@
+{{- /*
+  Geotag of an image: a small label with the coordinates it was taken at,
+  from its GPS metadata, linked to that spot on OpenStreetMap. Emits
+  nothing for an image without a usable position.
+
+  The label is laid over the bottom edge of the image (.geotag in
+  main.css), so it has to sit beside the image in a positioned box -- not
+  inside a link around the image.
+
+  Requires GPS to be kept in [imaging.meta].fields (Hugo excludes it by
+  default).
+
+  Param: the image resource
+*/ -}}
+{{- if reflect.IsImageResourceWithMeta . }}
+  {{- with .Meta }}
+    {{- $lat := .Lat }}
+    {{- $lng := .Long }}
+    {{- /* eq $x $x is false for NaN — some cameras write unparseable GPS rationals. */}}
+    {{- if and (eq $lat $lat) (eq $lng $lng) (ne $lat 0.0) (ne $lng 0.0) }}
+      {{- $label := printf "%.5f, %.5f" $lat $lng }}
+      {{- partial "link.html" (dict
+        "href" (printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng)
+        "class" "geotag"
+        "attrs" (dict "rel" "external" "aria-label" (printf "Aufnahmeort auf der Karte: %s" $label))
+        "icon" false
+        "text" (printf `<i class="bi bi-geo-alt" aria-hidden="true"></i> %s` $label | safeHTML)
+      ) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
