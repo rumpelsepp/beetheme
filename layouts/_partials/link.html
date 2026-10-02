@@ -1,0 +1,36 @@
+{{- /*
+  The one place links are built: an <a> that, if it leads away from the
+  site (_funcs/is-external.html), opens in a new tab and is marked as
+  external (link-external-mark.html). Internal links come out plain.
+
+  Markdown links get here through _markup/render-link.html; layouts,
+  partials and shortcodes call it for every link that may be external:
+
+    {{ partial "link.html" (dict "href" .URL "text" .Name) }}
+
+  No whitespace is emitted around the link, so it can sit right before a
+  period.
+
+  Params (dict):
+    href   the URL; without one the <a> has no href, as for a menu entry
+           that only opens a dropdown
+    text   the link's content; a string is escaped, pass HTML via safeHTML
+    class  class attribute (optional)
+    attrs  further attributes as a dict, e.g. aria-current, title; a "rel"
+           is kept and extended for an external link (optional)
+    icon   false leaves the external-link icon out, see
+           link-external-mark.html (default: true)
+*/ -}}
+{{- $external := partial "_funcs/is-external.html" .href }}
+{{- $attrs := merge (dict "class" .class) (.attrs | default dict) }}
+{{- if $external }}
+  {{- $rel := slice "noopener" "noreferrer" }}
+  {{- with index $attrs "rel" }}{{ $rel = split . " " | append $rel | uniq }}{{ end }}
+  {{- $attrs = merge $attrs (dict "rel" (delimit $rel " ") "target" "_blank") }}
+{{- end -}}
+<a{{ with .href }} href="{{ . | safeURL }}"{{ end }}
+  {{- range $k, $v := $attrs }}
+    {{- with $v }}{{ printf ` %s="%s"` $k (. | string | htmlEscape) | safeHTMLAttr }}{{ end }}
+  {{- end -}}
+>{{ .text }}{{ if $external }}{{ partial "link-external-mark.html" (dict "icon" .icon) }}{{ end }}</a>
+{{- "" -}}

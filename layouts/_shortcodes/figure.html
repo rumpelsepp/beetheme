@@ -28,11 +28,12 @@ Only the bootstrap classes have been added to the figure and img tags. -->
       {{- end -}}
       {{- if or (.Get "caption") (.Get "attr") -}}<p>
         {{- .Get "caption" | markdownify -}}
+        {{- $attr := .Get "attr" | markdownify -}}
         {{- with .Get "attrlink" }}
-          <a href="{{ . }}">
-        {{- end -}}
-        {{- .Get "attr" | markdownify -}}
-        {{- if .Get "attrlink" }}</a>{{ end }}</p>
+          {{ partial "link.html" (dict "href" . "text" $attr) }}
+        {{- else }}
+          {{- $attr -}}
+        {{- end }}</p>
       {{- end }}
     </figcaption>
   {{- end }}

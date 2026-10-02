@@ -1,0 +1,20 @@
+{{- /*
+  What marks a link as external, to go at the end of the link's content: a
+  trailing "external link" icon (Bootstrap Icons) and, for screen readers,
+  a note that the link opens in a new tab.
+
+  A non-breaking space sits between the link text and the icon, so the
+  icon never wraps onto a line of its own; a negative right margin on the
+  icon (.external-link-icon) pulls whatever follows the link -- a space, a
+  sentence-ending period -- back tight against the glyph.
+
+  Used by link.html. Call it directly only where a link is not built by a
+  template, e.g. to hand the mark to a script in a <template>.
+
+  Params (dict, optional):
+    icon  false leaves the icon out, for a link around an image or one
+          that brings an icon of its own (default: true)
+*/ -}}
+{{- if ne .icon false }}&nbsp;<i class="bi bi-box-arrow-up-right external-link-icon" aria-hidden="true"></i>{{ end -}}
+<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span>
+{{- "" -}}

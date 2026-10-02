@@ -1,0 +1,13 @@
+{{- /*
+  Returns whether a URL leads away from this site: an http(s) address on a
+  host other than the one of the site's baseURL. Relative URLs, anchors,
+  mailto: and tel: are not external.
+
+  Context: the URL.
+*/ -}}
+{{- $external := false }}
+{{- $u := urls.Parse (string .) }}
+{{- if and $u.Host (in (slice "http" "https") $u.Scheme) }}
+  {{- $external = ne (lower $u.Host) (lower (urls.Parse site.BaseURL).Host) }}
+{{- end }}
+{{- return $external }}

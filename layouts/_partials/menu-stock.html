@@ -3,6 +3,7 @@ Renders a menu for the given menu ID.
 
 @context {page} page The current page.
 @context {string} menuID The menu ID.
+@context {string} label (optional) Name of the navigation landmark for screen readers.
 
 @example: {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
 */}}
@@ -13,11 +14,7 @@ Renders a menu for the given menu ID.
 {{- $cssClass := .cssClass }}
 
 {{- with index site.Menus $menuID }}
-  {{- with $.cssClass }}
-    <nav class="{{ . }}">
-  {{ else }}
-    <nav>
-  {{- end }}
+    <nav{{ with $.cssClass }} class="{{ . }}"{{ end }}{{ with $.label }} aria-label="{{ . }}"{{ end }}>
 
   {{- if $.inline }}
     <ul class="list-inline">
@@ -34,7 +31,7 @@ Renders a menu for the given menu ID.
   {{- $page := .page }}
   {{- $inline := .inline }}
   {{- range .menuEntries }}
-    {{- $attrs := dict "href" .URL }}
+    {{- $attrs := dict }}
     {{- if $page.IsMenuCurrent .Menu . }}
       {{- $attrs = merge $attrs (dict "class" "active" "aria-current" "page") }}
     {{- else if $page.HasMenuCurrent .Menu .}}
@@ -46,26 +43,16 @@ Renders a menu for the given menu ID.
         {{- $name = . }}
       {{- end }}
     {{- end }}
-
-    {{/* Handle external links (http/https) */}}
-    {{- if or (hasPrefix .URL "http://") (hasPrefix .URL "https://") }}
-      {{- $attrs = merge $attrs (dict
-          "target" "_blank"
-          "rel"    "noopener noreferrer"
-      ) }}
-    {{- end }}
     {{- if $.inline }}
     <li class="list-inline-item">
     {{ else }}
     <li class="mb-2">
     {{- end }}
-      <a
-        {{- range $k, $v := $attrs }}
-          {{- with $v }}
-            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
-          {{- end }}
-        {{- end -}}
-      >{{ .Pre }} {{ $name }}</a>
+      {{/* External entries are marked by link.html. */}}
+      {{- $text := htmlEscape $name }}
+      {{- with .Pre }}{{ $text = printf "%s %s" . $text }}{{ end }}
+      {{- with .Post }}{{ $text = printf "%s %s" $text . }}{{ end }}
+      {{ partial "link.html" (dict "href" .URL "text" ($text | safeHTML) "attrs" $attrs) }}
       {{- with .Children }}
         <ul>
           {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}

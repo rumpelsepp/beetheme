@@ -64,7 +64,13 @@
         {{- with $caption }}{{ . | markdownify }}{{ end -}}
         {{- if $hasGeo }}
           {{- $osm := printf "https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=15/%.5f/%.5f" $lat $lng $lat $lng }}
-          <a class="figure-geo" href="{{ $osm | safeURL }}" rel="external noopener noreferrer" target="_blank"><i class="bi bi-geo-alt" aria-hidden="true"></i> {{ printf "%.5f, %.5f" $lat $lng }}<span class="visually-hidden"> (externer Link, öffnet in neuem Tab)</span></a>
+          {{ partial "link.html" (dict
+            "href" $osm
+            "class" "figure-geo"
+            "attrs" (dict "rel" "external")
+            "icon" false
+            "text" (printf `<i class="bi bi-geo-alt" aria-hidden="true"></i> %.5f, %.5f` $lat $lng | safeHTML)
+          ) }}
         {{- end }}
       </figcaption>
     {{- end }}

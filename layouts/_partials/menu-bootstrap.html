@@ -56,7 +56,7 @@ Usage:
 
 
 {{/* ------------------------------------------------------------------ */}}
-{{/*  Recursive Menu Walker (Bootstrap-aware, external link safe)       */}}
+{{/*  Recursive Menu Walker (Bootstrap-aware)                            */}}
 {{/* ------------------------------------------------------------------ */}}
 {{- define "_partials/inline/menu-bootstrap/walk.html" }}
 
@@ -65,7 +65,7 @@ Usage:
 
   {{- range .menuEntries }}
     {{/* --- Default attributes --- */}}
-    {{- $attrs := dict "href" .URL "class" "" }}
+    {{- $attrs := dict "class" "" }}
 
     {{/* Active / Ancestor highlighting */}}
     {{- if $page.IsMenuCurrent .Menu . }}
@@ -76,14 +76,6 @@ Usage:
     
     {{- if not $isDropdown }}
       {{- $attrs = merge $attrs (dict "class" (printf "%s nav-link" ($attrs.class))) }}
-    {{- end }}
-
-    {{/* Handle external links (http/https) */}}
-    {{- if or (hasPrefix .URL "http://") (hasPrefix .URL "https://") }}
-      {{- $attrs = merge $attrs (dict
-          "target" "_blank"
-          "rel"    "noopener noreferrer"
-      ) }}
     {{- end }}
 
     {{/* Label handling: Name with i18n override */}}
@@ -127,10 +119,9 @@ Usage:
         {{- $attrs = merge $attrs (dict "class" (printf "%s dropdown-item" ($attrs.class))) }}
       {{- end }}
 
-      {{/* --- Render link --- */}}
-      <a{{- range $k, $v := $attrs }}{{- with $v }} {{ printf "%s=%q" $k $v | safeHTMLAttr }}{{- end }}{{- end }}>
-        {{- .Pre }}{{ $label }}{{ .Post -}}
-      </a>
+      {{/* --- Render link (external entries are marked by link.html) --- */}}
+      {{- $text := printf "%s%s%s" .Pre (htmlEscape $label) .Post | safeHTML }}
+      {{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}
 
       {{/* --- Nested children --- */}}
       {{- with .Children }}
