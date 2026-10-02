@@ -868,6 +868,12 @@ blockquote > :last-child {
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* Right below the columns the line would sit on their bottom border;
+   a site with .footer-seals in between gets its air from those. */
+.footer-grid + .footer-bottom {
+  padding-top: 1.5rem;
+}
+
 /* --------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------- */
