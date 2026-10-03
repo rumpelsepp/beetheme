@@ -1,0 +1,67 @@
+{{- /*
+  What there is to know about an image, for figures and galleries alike:
+  an "i" in its top right corner that opens a box with the date it was
+  taken, the camera, where it was taken (image/geotag.html) and a link to
+  the original.
+
+  The box is a popover: the browser opens it on the button, lays it over
+  the page and closes it on Esc or a click beside it, without any
+  JavaScript. The button lies on the image (.image-info-button in
+  main.css), so it has to sit beside it in a positioned box -- not inside
+  the link around the image.
+
+  The "i" is switched on for the whole site by params.imageInfo, default
+  off, and for a single figure or gallery by passing true/false here;
+  anything else, such as a shortcode parameter left out, leaves it to the
+  site. An image that can't be processed (e.g. an SVG) gets none.
+
+  Date, camera and place come from the image's metadata, as far as
+  [imaging.meta].fields lets them through -- the place Hugo excludes by
+  default. What is missing is left out of the box.
+
+  Params (dict):
+    image  image resource (required)
+    alt    the image's alt text; tells the buttons of a page apart for
+           screen readers (optional)
+    info   true/false, else the site's params.imageInfo
+*/ -}}
+{{- $img := .image }}
+{{- $info := site.Params.imageInfo | default false }}
+{{- $flag := printf "%v" .info }}
+{{- if in (slice "true" "false") $flag }}{{ $info = eq $flag "true" }}{{ end }}
+
+{{- if and $info (reflect.IsImageResourceProcessable $img) }}
+  {{- $geotag := partial "image/geotag.html" $img | strings.TrimSpace | safeHTML }}
+  {{- $date := "" }}
+  {{- $camera := "" }}
+  {{- if reflect.IsImageResourceWithMeta $img }}
+    {{- with $img.Meta }}
+      {{- if not .Date.IsZero }}{{ $date = .Date }}{{ end }}
+      {{- $make := index .Exif "Make" | default "" | string | strings.TrimSpace }}
+      {{- $model := index .Exif "Model" | default "" | string | strings.TrimSpace }}
+      {{- /* Some cameras repeat the make in the model. */}}
+      {{- $camera = cond (strings.HasPrefix (lower $model) (lower $make)) $model (printf "%s %s" $make $model | strings.TrimSpace) }}
+    {{- end }}
+  {{- end }}
+  {{- $id := printf "image-info-%s" (substr (md5 $img.RelPermalink) 0 8) }}
+<button type="button" class="image-info-button" popovertarget="{{ $id }}" title="Bildinformationen" aria-label="Bildinformationen{{ with .alt }}: {{ . }}{{ end }}">i</button>
+<div class="image-info" id="{{ $id }}" popover>
+  <dl>
+    {{- with $date }}
+    <dt>Aufnahme</dt>
+    <dd><time datetime="{{ .Format "2006-01-02T15:04:05" }}">{{ . | time.Format "2. January 2006, 15:04" }}</time></dd>
+    {{- end }}
+    {{- with $camera }}
+    <dt>Kamera</dt>
+    <dd>{{ . }}</dd>
+    {{- end }}
+    {{- with $geotag }}
+    <dt>Ort</dt>
+    <dd>{{ . }}</dd>
+    {{- end }}
+    <dt>Original</dt>
+    <dd><a class="image-original" href="{{ $img.RelPermalink }}">{{ $img.Width }} × {{ $img.Height }} px</a></dd>
+  </dl>
+  <button type="button" class="image-info-close" popovertarget="{{ $id }}" popovertargetaction="hide" aria-label="Schließen">×</button>
+</div>
+{{- end }}

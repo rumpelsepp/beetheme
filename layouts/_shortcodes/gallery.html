@@ -1,8 +1,9 @@
 {{- /*
   Photo gallery: the images in rows of equal height, each row filling the
-  width (.gallery in main.css). A click leads to the original, as for a
-  figure; with lightbox=true the image opens in a lightbox instead
-  (bundle_src/js/lightbox.ts), as long as JavaScript runs.
+  width (.gallery in main.css). A click leads to a large copy of the image
+  (image/large.html), as for a figure; with lightbox=true that copy opens
+  in a lightbox instead (bundle_src/js/lightbox.ts), as long as JavaScript
+  runs.
 
   The body of the shortcode lists one image of the page bundle per line,
   optionally followed by its alt text:
@@ -10,21 +11,16 @@
     one.jpeg | What is to be seen on it
     two.jpeg
 
-  What the lightbox shows is a copy scaled down to 2400px, not the
-  original: those come straight from the camera, at up to 15 MB each. A
-  gallery without the lightbox gets no such copies.
-
   Params:
     caption   caption for the whole gallery, markdown (optional)
     lightbox  true to open the images in the lightbox (default: false)
-    geotags   true/false: a geotag on the bottom edge of each image that
-              has a position, see image/geotag.html (default: the site's
-              params.imageGeotags, as for figures)
+    info      true/false: an "i" on each image that opens a box of
+              information about it, as for figures, see image/info.html
+              (default: the site's params.imageInfo)
 */ -}}
 {{- $page := .Page -}}
 {{- $lightbox := eq (print (.Get "lightbox")) "true" -}}
-{{- $geotags := site.Params.imageGeotags | default false -}}
-{{- with .Get "geotags" }}{{ $geotags = eq (print .) "true" }}{{ end -}}
+{{- $info := .Get "info" -}}
 <figure class="gallery-figure">
   <ul class="gallery" role="list"{{ if $lightbox }} data-lightbox{{ end }}>
     {{- range split (strings.TrimSpace .Inner) "\n" }}
@@ -35,27 +31,24 @@
       {{- if $src }}
         {{- $img := $page.Resources.GetMatch $src }}
         {{- if and $img (reflect.IsImageResourceProcessable $img) }}
-          {{- /* Upright only for the ratio and the large copy: image/img.html
+          {{- /* Upright only for the ratio: image/img.html
                orients the image itself, and doing it twice turns a photo
                taken in portrait on its side. */}}
           {{- $upright := $img.Filter images.AutoOrient }}
-          {{- $large := $img }}
-          {{- if $lightbox }}
-            {{- $large = $upright.Fit (printf "2400x2400 %s" (site.Params.imageFormat | default "webp")) }}
-          {{- end }}
+          {{- $large := partial "image/large.html" (dict "image" $img) }}
           {{- $ratio := div (float $upright.Width) $upright.Height }}
           {{- /* The widest an item gets beyond phones, see .gallery in
                main.css: 1.8 times its width at the row height of 13.5rem. */}}
           {{- $maxWidth := math.Ceil (mul $ratio 216 1.8) }}
     <li class="gallery-item" style="--ratio: {{ printf "%.4f" $ratio }}">
-      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – {{ if $lightbox }}groß ansehen{{ else }}in voller Größe öffnen{{ end }}">
+      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – groß ansehen">
         {{- partial "image/img.html" (dict
           "image" $img
           "alt" $alt
           "sizes" (printf "(max-width: 575.98px) 100vw, %.0fpx" $maxWidth)
         ) -}}
       </a>
-      {{- if $geotags }}{{ partial "image/geotag.html" $img }}{{ end }}
+      {{- partial "image/info.html" (dict "image" $img "alt" $alt "info" $info) }}
     </li>
         {{- else }}
           {{- warnf "shortcode gallery: no processable image matching %q in %s" $src $page.Path }}

@@ -1,0 +1,20 @@
+{{- /*
+  Returns what a click on an image leads to: a copy in
+  site.Params.imageFormat (default webp), fitted into a square of "max"
+  pixels. The originals come straight from the camera, at up to 15 MB
+  each. An image that already fits, or that can't be processed, is
+  returned as it is.
+
+  Params (dict):
+    image  image resource (required)
+    max    longest side in px (default: 2400)
+*/ -}}
+{{- $img := .image }}
+{{- $max := int (.max | default 2400) }}
+{{- if reflect.IsImageResourceProcessable $img }}
+  {{- $upright := $img.Filter images.AutoOrient }}
+  {{- if gt (math.Max $upright.Width $upright.Height) $max }}
+    {{- $img = $upright.Fit (printf "%dx%d %s" $max $max (site.Params.imageFormat | default "webp")) }}
+  {{- end }}
+{{- end }}
+{{- return $img }}

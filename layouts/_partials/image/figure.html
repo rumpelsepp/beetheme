@@ -1,7 +1,7 @@
 {{- /*
   Centered figure with a responsive image (see image/img.html) linking to
-  the original in full size (uncropped, too), an optional caption and, if
-  enabled, a geotag.
+  a large copy of it (uncropped, see image/large.html), an optional caption
+  and, if enabled, a box of information about it (image/info.html).
   Used by the fig shortcode and by layouts that show a single image.
 
   Params (dict):
@@ -13,9 +13,9 @@
     width    max. display width in px (default: 800, a panorama's 1600);
              smaller images are shown at their own width, never upscaled
     crop     strips to cut off the sides, see image/crop.html (optional)
-    geotags  true/false: a geotag on the image's bottom edge, if it has a
-             position, see image/geotag.html (default: the site's
-             params.imageGeotags)
+    info     true/false: an "i" on the image that opens a box of
+             information about it, see image/info.html (default: the
+             site's params.imageInfo)
     pano     true for a panorama: it may grow wider than the text column,
              up to the edges of the window (see .figure-breakout in the CSS)
 */ -}}
@@ -46,18 +46,16 @@
      announced as a nameless link when the image has no alt/caption. */}}
 {{ $label := $alt | default "Bild" }}
 
-{{/* Geotag on the image: the site's params.imageGeotags (default off)
-     decides, unless "geotags" says otherwise for this figure. */}}
-{{ $geotags := site.Params.imageGeotags | default false }}
-{{ $flag := printf "%v" .geotags }}
-{{ if in (slice "true" "false") $flag }}{{ $geotags = eq $flag "true" }}{{ end }}
+{{/* A panorama is shown at up to 3200px, so its large copy has to go
+     beyond that. */}}
+{{ $large := partial "image/large.html" (dict "image" $imgOrig "max" (cond $pano 4800 2400)) }}
 
 <div class="d-flex justify-content-center{{ if $pano }} figure-breakout{{ end }}">
   <figure class="figure {{ with .class }}{{ . }}{{ end }}" style="width: 100%; max-width: {{ $width }}px">
-    {{/* The box the geotag is positioned in: it lies on the image, beside
-         the link around it. */}}
+    {{/* The box the "i" of image/info.html is positioned in: it lies on
+         the image, beside the link around it. */}}
     <div class="figure-media">
-    <a href="{{ $imgOrig.Permalink }}" aria-label="{{ $label }} – in voller Größe öffnen">
+    <a href="{{ $large.RelPermalink }}" aria-label="{{ $label }} – groß ansehen">
       {{ partial "image/img.html" (dict
         "image" $imgOrig
         "crop" .crop
@@ -68,7 +66,7 @@
         "sizes" $sizes
       ) }}
     </a>
-    {{- if $geotags }}{{ partial "image/geotag.html" $imgOrig }}{{ end }}
+    {{- partial "image/info.html" (dict "image" $imgOrig "alt" $alt "info" .info) }}
     </div>
     {{- with $caption }}
       <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>

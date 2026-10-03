@@ -495,9 +495,9 @@ article.content {
     color: var(--color-ink-muted);
   }
 
-  /* Image and the link around it, as the box a geotag is positioned in
-     (.geotag): it ends flush with the image, so the gap to the caption
-     moves from the image to the box. */
+  /* Image and the link around it, as the box the "i" is positioned in
+     (.image-info-button): it ends flush with the image, so the gap to the
+     caption moves from the image to the box. */
   .figure-media {
     position: relative;
     margin-bottom: 0.5rem;
@@ -784,34 +784,114 @@ blockquote > :last-child {
 }
 
 /* --------------------------------------------------------------------
-   Geotag (layouts/_partials/image/geotag.html): a small label on the
-   bottom edge of an image, in a figure or a gallery. Its box is the
-   positioned element around the image, .figure-media or .gallery-item.
+   Information about an image, in a figure or a gallery
+   (layouts/_partials/image/info.html): an "i" in the top right corner of
+   the image that opens a box. The button's box is the positioned element
+   around the image, .figure-media or .gallery-item; the box it opens is a
+   popover, which the browser lays over the page in the middle of the
+   window.
    -------------------------------------------------------------------- */
 
-.geotag {
+.image-info-button,
+.image-info-close {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.image-info-button {
   position: absolute;
-  left: 0.4rem;
-  bottom: 0.4rem;
-  max-width: calc(100% - 0.8rem);
-  padding: 0.1rem 0.45rem;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
+  top: 0.4rem;
+  right: 0.4rem;
   background: rgba(20, 18, 15, 0.7);
   color: #fff;
-  font-size: 0.7rem;
+  font: italic 700 1rem/1 Georgia, "Times New Roman", serif;
+}
+
+.image-info-button:hover {
+  background: rgba(20, 18, 15, 0.92);
+}
+
+/* Where there is a pointer that hovers (a mouse), the "i" stays out of
+   the picture until that is over the image, or the keyboard focus on the
+   image or the "i". */
+@media (hover: hover) and (pointer: fine) {
+  .image-info-button {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  :is(.figure-media, .gallery-item):is(:hover, :focus-within) .image-info-button {
+    opacity: 1;
+  }
+}
+
+/* A touch screen has no hovering, there it is always shown -- also where
+   there is one beside the mouse (a laptop with a touch screen). */
+@media (any-pointer: coarse) {
+  .image-info-button {
+    opacity: 1;
+  }
+}
+
+.image-info-button:focus-visible,
+.image-info-close:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.image-info {
+  width: max-content;
+  max-width: min(calc(100vw - 2rem), 24rem);
+  padding: 1rem 3rem 1rem 1.25rem;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-md);
+  font-size: 0.9rem;
   line-height: 1.5;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-decoration-line: none;
+  text-align: left;
   hyphens: none;
 }
 
-.geotag:hover,
-.geotag:focus-visible {
-  background: rgba(20, 18, 15, 0.92);
-  color: #fff;
-  text-decoration-line: underline;
+.image-info::backdrop {
+  background: rgba(20, 18, 15, 0.4);
+}
+
+.image-info dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 1rem;
+  margin: 0;
+}
+
+.image-info dt {
+  color: var(--color-ink-muted);
+  font-weight: 400;
+}
+
+.image-info dd {
+  margin: 0;
+}
+
+.image-info-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  color: var(--color-ink-muted);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.image-info-close:hover {
+  color: var(--color-ink);
 }
 
 /* --------------------------------------------------------------------
@@ -860,24 +940,11 @@ blockquote > :last-child {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.25s ease, filter 0.25s ease;
-}
-
-.gallery-link:hover img,
-.gallery-link:focus-visible img {
-  transform: scale(1.03);
-  filter: brightness(1.06);
 }
 
 .gallery-link:focus-visible {
   outline: 3px solid var(--color-accent);
   outline-offset: -3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gallery-item img {
-    transition: none;
-  }
 }
 
 /* A picture grows to at most 1.8 times the row height: a last row with a
@@ -964,14 +1031,24 @@ blockquote > :last-child {
   right: 0.75rem;
 }
 
-.lightbox-count {
+.lightbox-footer {
   position: absolute;
   bottom: 0.6rem;
   left: 0;
   right: 0;
-  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 1rem;
   font-size: 0.875rem;
-  text-align: center;
+}
+
+.lightbox-original {
+  color: #fff;
+}
+
+.lightbox-count {
+  margin: 0;
   color: rgba(255, 255, 255, 0.8);
 }
 

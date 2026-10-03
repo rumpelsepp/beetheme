@@ -1,7 +1,8 @@
 // Lightbox for the galleries rendered by layouts/_shortcodes/gallery.html:
 // a click on a picture shows it large in a modal <dialog>, with buttons,
-// arrow keys and swipes to page through the gallery. The dialog brings the
-// focus trap, Esc to close and the backdrop along.
+// arrow keys and swipes to page through the gallery, and a link to the
+// original where the picture carries one (a.image-original). The dialog
+// brings the focus trap, Esc to close and the backdrop along.
 //
 // Only galleries marked data-lightbox take part (lightbox=true on the
 // shortcode); in the others a click simply follows the link to the large
@@ -12,6 +13,7 @@ const GALLERY = '.gallery[data-lightbox]';
 interface Picture {
   src: string;
   alt: string;
+  original: string | undefined;
   link: HTMLAnchorElement;
 }
 
@@ -31,6 +33,7 @@ class Lightbox {
   private readonly dialog = document.createElement('dialog');
   private readonly image = document.createElement('img');
   private readonly count = document.createElement('p');
+  private readonly original = document.createElement('a');
   private readonly prev = button('lightbox-nav lightbox-prev', 'Vorheriges Bild', 'bi-chevron-left');
   private readonly next = button('lightbox-nav lightbox-next', 'Nächstes Bild', 'bi-chevron-right');
   private pictures: Picture[] = [];
@@ -44,7 +47,12 @@ class Lightbox {
     this.image.className = 'lightbox-image';
     this.count.className = 'lightbox-count';
     this.count.setAttribute('aria-live', 'polite');
-    this.dialog.append(close, this.prev, this.image, this.next, this.count);
+    this.original.className = 'lightbox-original';
+    this.original.textContent = 'Original';
+    const footer = document.createElement('div');
+    footer.className = 'lightbox-footer';
+    footer.append(this.count, this.original);
+    this.dialog.append(close, this.prev, this.image, this.next, footer);
     document.body.append(this.dialog);
 
     close.addEventListener('click', () => this.dialog.close());
@@ -97,6 +105,8 @@ class Lightbox {
     this.image.src = picture.src;
     this.image.alt = picture.alt;
     this.count.textContent = `Bild ${index + 1} von ${this.pictures.length}`;
+    this.original.hidden = !picture.original;
+    this.original.href = picture.original ?? '';
     const single = this.pictures.length < 2;
     this.prev.hidden = single;
     this.next.hidden = single;
@@ -110,6 +120,7 @@ for (const gallery of document.querySelectorAll(GALLERY)) {
   const pictures = links.map((link) => ({
     src: link.href,
     alt: link.querySelector('img')?.alt ?? '',
+    original: link.parentElement?.querySelector<HTMLAnchorElement>('a.image-original')?.href,
     link,
   }));
 

@@ -8,8 +8,9 @@
   side, e.g. crop-top="15" to lose some sky. The figure still links to the
   uncropped original.
 
-  geotags=true/false shows or hides the geotag on this image, whatever the
-  site's params.imageGeotags says.
+  info=true/false shows or hides the "i" on this image, which opens a box
+  of information about it (image/info.html), whatever the site's
+  params.imageInfo says.
 
   pano=true is for panoramas: the figure may then grow wider than the text
   column, up to 1600px (or width) and the edges of the window.
@@ -31,7 +32,7 @@
       "bottom" (.Get "crop-bottom")
       "left" (.Get "crop-left")
     )
-    "geotags" (.Get "geotags")
+    "info" (.Get "info")
     "pano" (eq (print (.Get "pano")) "true")
   ) }}
 {{ else if $imgOrig }}
