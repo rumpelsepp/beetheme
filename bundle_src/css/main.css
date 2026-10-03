@@ -1110,6 +1110,12 @@ blockquote > :last-child {
   font-style: normal;
 }
 
+/* The paragraphs of the contact are as far apart as the entries of the
+   menus in the columns beside it. */
+.footer-col address p {
+  margin-bottom: 0.5rem;
+}
+
 .footer-col ul {
   list-style: none;
   padding-left: 0;
