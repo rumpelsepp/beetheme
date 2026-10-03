@@ -56,7 +56,9 @@
     <dd>{{ . }}</dd>
     {{- end }}
     {{- with $geotag }}
-    <dt>Ort</dt>
+    {{- /* The pin stands with the name of the row, so the coordinates
+         start where the values of the other rows do. */}}
+    <dt>Ort <i class="bi bi-geo-alt" aria-hidden="true"></i></dt>
     <dd>{{ . }}</dd>
     {{- end }}
     <dt>Original</dt>

@@ -1,10 +1,10 @@
 {{- /*
-  Geotag of an image: a small label with the coordinates it was taken at,
-  from its GPS metadata, linked to that spot on OpenStreetMap. Emits
-  nothing for an image without a usable position.
+  Geotag of an image: the coordinates it was taken at, from its GPS
+  metadata, linked to that spot on OpenStreetMap. Emits nothing for an
+  image without a usable position.
 
   It is shown in the box with the image's information, see
-  image/info.html.
+  image/info.html, which puts the pin beside the row's name.
 
   Requires GPS to be kept in [imaging.meta].fields (Hugo excludes it by
   default).
@@ -23,7 +23,7 @@
         "class" "geotag"
         "attrs" (dict "rel" "external" "aria-label" (printf "Aufnahmeort auf der Karte: %s" $label))
         "icon" false
-        "text" (printf `<i class="bi bi-geo-alt" aria-hidden="true"></i> %s` $label | safeHTML)
+        "text" $label
       ) }}
     {{- end }}
   {{- end }}
