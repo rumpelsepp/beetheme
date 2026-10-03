@@ -1,6 +1,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
+{{- /* Dark mode, if the site asks for it (params.darkMode): follows what
+     the system is set to, there is no switch on the page. Inline and
+     first, so the page is never painted light before it turns dark.
+     Without JavaScript the page stays light. See [data-bs-theme="dark"] in
+     main.css. */}}
+{{- if site.Params.darkMode }}
+<script>(()=>{const m=matchMedia('(prefers-color-scheme: dark)'),s=()=>{document.documentElement.dataset.bsTheme=m.matches?'dark':'light'};s();m.addEventListener('change',s)})()</script>
+{{- end }}
+
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
 {{- with or .Description .Summary site.Params.description | plainify | htmlUnescape }}
   <meta name="description" content="{{ trim . "\n\r\t " }}">

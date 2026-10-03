@@ -22,6 +22,8 @@
   --color-primary: var(--bs-primary, #6c757d);
   --color-primary-ink: #ffffff;
   --color-accent: #4b6b3a;
+  /* The footer is dark in either mode. */
+  --color-footer-bg: var(--color-ink);
 
   /* One system-font stack for everything — no serif/sans mix, no
      webfont downloads (privacy: nothing loaded from a third party).
@@ -43,6 +45,47 @@
   --nav-font-size: 1.2rem;
 
   color-scheme: light;
+}
+
+/* Dark mode, for a site that asks for it (params.darkMode): head.html then
+   sets data-bs-theme on <html> to what the system is set to. That is the
+   attribute Bootstrap's own dark mode hangs on, so its components turn
+   dark along with the tokens here. A site that overrides tokens in its
+   style.css has to give its dark values there as well, under the same
+   selector. */
+[data-bs-theme="dark"] {
+  --color-bg: #1b1916;
+  --color-surface: #262320;
+  --color-ink: #ece7df;
+  --color-ink-muted: #b0a696;
+  --color-border: rgba(236, 231, 223, 0.14);
+  --color-accent: #9dc183;
+  --color-footer-bg: #121110;
+
+  /* On a dark page a shadow has to be black to show at all. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 28px -12px rgba(0, 0, 0, 0.75);
+
+  /* Bootstrap's surfaces (cards, dropdowns, tables), text and borders in
+     the theme's warm tones instead of its blue-grey ones. */
+  --bs-body-bg: var(--color-surface);
+  --bs-body-bg-rgb: 38, 35, 32;
+  --bs-body-color: var(--color-ink);
+  --bs-body-color-rgb: 236, 231, 223;
+  --bs-secondary-color: var(--color-ink-muted);
+  --bs-secondary-rgb: 176, 166, 150;
+  --bs-border-color: #4a453d;
+  --bs-border-color-translucent: var(--color-border);
+
+  color-scheme: dark;
+}
+
+/* Bootstrap's primary blue as text is too dark on a dark surface. */
+[data-bs-theme="dark"] .btn-outline-primary {
+  --bs-btn-color: var(--bs-link-color);
+  --bs-btn-border-color: var(--bs-link-color);
+  --bs-btn-disabled-color: var(--bs-link-color);
+  --bs-btn-disabled-border-color: var(--bs-link-color);
 }
 
 *,
@@ -134,14 +177,14 @@ a:focus-visible {
   z-index: 1100;
   padding: 0.6rem 1rem;
   background: var(--color-ink);
-  color: #fff;
+  color: var(--color-surface);
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   transition: top 0.15s ease;
 }
 
 .skip-link:focus {
   top: 0;
-  color: #fff;
+  color: var(--color-surface);
 }
 
 /* --------------------------------------------------------------------
@@ -1058,7 +1101,7 @@ blockquote > :last-child {
 
 #site-footer {
   margin-top: 5rem;
-  background: var(--color-ink);
+  background: var(--color-footer-bg);
   color: rgba(255, 255, 255, 0.85);
 }
 
