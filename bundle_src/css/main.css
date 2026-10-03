@@ -447,7 +447,7 @@ article.content {
     }
 
     a.anchor:hover {
-      color: var(--color-accent);
+      color: var(--bs-link-color);
     }
   }
 
@@ -647,7 +647,7 @@ article.content {
 
   .table-of-contents a:hover,
   .table-of-contents a:focus-visible {
-    color: var(--color-accent);
+    color: var(--bs-link-color);
     text-decoration-line: underline;
   }
 }
@@ -784,7 +784,7 @@ blockquote > :last-child {
 
 .embed-consent > p .bi {
   margin-right: 0.3rem;
-  color: var(--color-accent);
+  color: var(--bs-link-color);
 }
 
 /* Button, checkbox and the link to the provider, stacked and centred. */
@@ -884,7 +884,7 @@ blockquote > :last-child {
 
 .image-info-button:focus-visible,
 .image-info-close:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--bs-link-color);
   outline-offset: 2px;
 }
 
@@ -986,7 +986,7 @@ blockquote > :last-child {
 }
 
 .gallery-link:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--bs-link-color);
   outline-offset: -3px;
 }
 
