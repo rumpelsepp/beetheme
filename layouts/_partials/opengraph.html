@@ -16,8 +16,8 @@
 	<meta property="og:title" content="{{ . }}">
 {{- end }}
 
-{{- with or .Description .Summary site.Params.description | plainify | htmlUnescape }}
-	<meta property="og:description" content="{{ trim . "\n\r\t " }}">
+{{- with partial "_funcs/summary.html" (dict "page" . "limit" 200) }}
+	<meta property="og:description" content="{{ . }}">
 {{- end }}
 
 {{- with or .Params.locale site.Language.Locale }}

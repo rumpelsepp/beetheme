@@ -1,0 +1,27 @@
+{{- /*
+  Hugo's embedded twitter_cards.html, with the description taken from
+  _funcs/summary.html like the other descriptions in the <head>.
+*/ -}}
+{{- $images := partial "_funcs/get-page-images" . }}
+{{- with index $images 0 }}
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="{{ .Permalink }}">
+{{- else }}
+	<meta name="twitter:card" content="summary">
+{{- end }}
+
+{{- with or .Title site.Title site.Params.title | plainify }}
+	<meta name="twitter:title" content="{{ . }}">
+{{- end }}
+
+{{- with partial "_funcs/summary.html" (dict "page" . "limit" 200) }}
+	<meta name="twitter:description" content="{{ . }}">
+{{- end }}
+
+{{- with site.Params.social }}
+	{{- if reflect.IsMap . }}
+		{{- with .twitter }}
+			<meta name="twitter:site" content="@{{ . | strings.TrimPrefix "@" }}">
+		{{- end }}
+	{{- end }}
+{{- end }}
