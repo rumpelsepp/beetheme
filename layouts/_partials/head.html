@@ -10,15 +10,26 @@
 <script>(()=>{const m=matchMedia('(prefers-color-scheme: dark)'),s=()=>{document.documentElement.dataset.bsTheme=m.matches?'dark':'light'};s();m.addEventListener('change',s)})()</script>
 {{- end }}
 
-<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
-{{- with or .Description .Summary site.Params.description | plainify | htmlUnescape }}
-  <meta name="description" content="{{ trim . "\n\r\t " }}">
+{{- /* The page of kind 404 (layouts/404.html) has no title of its own and
+     is served under whatever address was asked for: it gets a title, is
+     kept out of search engines and names no canonical address. */}}
+{{- $notFound := eq .Kind "404" }}
+{{- $title := cond $notFound "Seite nicht gefunden" .Title }}
+
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" $title site.Title }}{{ end }}</title>
+{{- /* 160 characters is about what a search engine shows of it. */}}
+{{- with partial "_funcs/summary.html" (dict "page" . "limit" 160) }}
+  <meta name="description" content="{{ . }}">
 {{- end }}
 
-{{ with .Params.canonicalURL }}
-  <link rel="canonical" href="{{ . }}">
+{{ if $notFound }}
+  <meta name="robots" content="noindex">
 {{ else }}
-  <link rel="canonical" href="{{ .Permalink }}">
+  {{ with .Params.canonicalURL }}
+    <link rel="canonical" href="{{ . }}">
+  {{ else }}
+    <link rel="canonical" href="{{ .Permalink }}">
+  {{ end }}
 {{ end }}
 
 {{ partial "head/favicon.html" . }}

@@ -1,0 +1,34 @@
+{{- /*
+  The text that describes a page in a line or two, as plain text: for the
+  meta description, the preview of a shared link and the teaser of a card.
+
+  That is the description of the front matter, else the beginning of the
+  content, else the description of the site. Taken from the content it is
+  rendered HTML that carries text only the page itself is to show, which
+  goes before the tags are stripped: the "#" behind a heading
+  (_markup/render-heading.html), the mark of an external link
+  (link-external-mark.html) and the notice of a two-click embed
+  (embed.html).
+
+  Params (dict):
+    page   the page (required)
+    limit  number of characters to truncate to, at a word boundary
+           (default: untruncated)
+
+  Returns: string
+*/ -}}
+{{- $text := .page.Description }}
+{{- if not $text }}
+  {{- $text = .page.Summary | string
+    | replaceRE `(?s)<div class="embed-consent".*?</div>\s*</div>` ""
+    | replaceRE `(?s)<a class="anchor".*?</a>` " "
+    | replaceRE `(?s)(&nbsp;|\x{00A0})?<i class="bi bi-box-arrow-up-right.*?</i>` ""
+    | replaceRE `(?s)<span class="visually-hidden">.*?</span>` ""
+  }}
+{{- end }}
+{{- $text = or $text site.Params.description "" | plainify | htmlUnescape
+  | replaceRE `\s+` " " | strings.TrimSpace }}
+{{- with .limit }}
+  {{- $text = strings.Truncate . $text }}
+{{- end }}
+{{- return $text }}

@@ -1,0 +1,15 @@
+{{- /*
+  The page for an address that does not exist. Hugo builds it as /404.html;
+  the web server has to be told to answer with it (and with status 404),
+  e.g. `error_page 404 /404.html;` for nginx or `handle_errors` with a
+  rewrite to /404.html for Caddy. `hugo server` does so by itself.
+
+  The title of the page is set in _partials/head.html.
+*/ -}}
+{{ define "main" }}
+  <article class="content">
+    <header class="content-header"><h1>Seite nicht gefunden</h1></header>
+    <p class="lead">Unter dieser Adresse gibt es hier nichts (Fehler 404). Vielleicht ist die Seite umgezogen oder im Link steckt ein Tippfehler.</p>
+    <p><a class="btn btn-primary" href="{{ site.Home.RelPermalink }}">Zur Startseite</a></p>
+  </article>
+{{ end }}
