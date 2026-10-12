@@ -2,8 +2,8 @@
 // of the site (`node themes/bienensteff/build.mjs`); esbuild and the npm
 // deps of the theme come from the site's node_modules.
 //
+//   --sourcemap  with sourcemaps, for the local preview (`just serve`)
 //   --watch      rebuild on changes, with sourcemaps
-//   --sourcemap  write sourcemaps in a normal build as well
 
 import fs from 'fs';
 import path from 'path';
@@ -51,9 +51,10 @@ async function runBuild() {
       splitting: true,
       chunkNames: 'chunks/[name]-[hash]',
       bundle: true,
-      // Sourcemaps only for local `--watch`, unless the site asks for them;
-      // keep them out of the deployed site otherwise.
-      sourcemap: withSourcemap ? true : isWatchMode ? 'linked' : false,
+      // Sourcemaps only locally; the deployed site goes without. Inline,
+      // because Hugo publishes the bundles under fingerprinted names and
+      // no .map files next to them.
+      sourcemap: withSourcemap || isWatchMode ? 'inline' : false,
       minify: true,
       target: 'es2024',
       format: 'esm',
