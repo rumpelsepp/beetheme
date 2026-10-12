@@ -25,6 +25,14 @@
   /* The footer is dark in either mode. */
   --color-footer-bg: var(--color-ink);
 
+  /* Links: Bootstrap's default blue (#0d6efd) has a contrast of only 4.2:1
+     on the page background, short of the 4.5:1 of WCAG AA. These are
+     Bootstrap's own darker shades of it; the link colour comes to 6.1:1. */
+  --bs-link-color: #0a58ca;
+  --bs-link-color-rgb: 10, 88, 202;
+  --bs-link-hover-color: #084298;
+  --bs-link-hover-color-rgb: 8, 66, 152;
+
   /* One system-font stack for everything — no serif/sans mix, no
      webfont downloads (privacy: nothing loaded from a third party).
      This is Bootstrap's own font stack (--bs-font-sans-serif), reused
@@ -61,6 +69,13 @@
   --color-border: rgba(236, 231, 223, 0.14);
   --color-accent: #9dc183;
   --color-footer-bg: #121110;
+
+  /* Bootstrap's lighter shades of the link blue, 7.5:1 on the dark page
+     background. */
+  --bs-link-color: #6ea8fe;
+  --bs-link-color-rgb: 110, 168, 254;
+  --bs-link-hover-color: #8bb9fe;
+  --bs-link-hover-color-rgb: 139, 185, 254;
 
   /* On a dark page a shadow has to be black to show at all. */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
@@ -1095,6 +1110,13 @@ blockquote > :last-child {
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* Meta line of an entry (date, tags, category), in a header or on a card:
+   the muted ink, also where it stands in Bootstrap's .text-secondary
+   grey, which has only 4.4:1 on the page background. */
+.entry-meta {
+  color: var(--color-ink-muted);
+}
+
 /* --------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------- */
@@ -1211,6 +1233,12 @@ blockquote > :last-child {
   text-align: center;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* Links in it (imprint, licence) keep its colour; the link blue is too
+   dark on the footer. */
+#site-footer .footer-bottom a {
+  color: inherit;
 }
 
 /* Right below the columns the line would sit on their bottom border;
