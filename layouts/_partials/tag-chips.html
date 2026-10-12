@@ -1,0 +1,11 @@
+{{- /*
+  Terms as a row of links, each with the number of its pages (.tag-chips
+  in main.css).
+
+  Context: the pages of the terms, e.g. what .GetTerms "tags" returns.
+*/ -}}
+<ul class="tag-chips">
+  {{- range . }}
+    <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }} <span class="count">{{ len .Pages }}</span></a></li>
+  {{- end }}
+</ul>

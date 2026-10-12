@@ -1,0 +1,27 @@
+{{- /*
+  Bar above a list that says the list is filtered, with the ways out on
+  the right (.tag-filter in main.css) -- for the page of a term.
+
+  Params (dict):
+    title    what the list is filtered by, e.g. the title of the term
+             (required)
+    count    how much is left, e.g. "12 Rezepte" (optional)
+    allHref  address of the list of all terms (optional)
+    allText  text of the link to it (default: the text "filterAllTags" of
+             i18n/)
+    clear    address of the unfiltered list (optional)
+*/ -}}
+<p class="tag-filter">
+  <span class="tag-filter-text">
+    <i class="bi bi-funnel-fill" aria-hidden="true"></i>
+    {{ T "filteredBy" }} <strong>{{ .title }}</strong>{{ with .count }} – {{ . }}{{ end }}
+  </span>
+  <span class="tag-filter-actions">
+    {{- with .allHref }}
+    <a href="{{ . }}"><i class="bi bi-tags" aria-hidden="true"></i> {{ $.allText | default (T "filterAllTags") }}</a>
+    {{- end }}
+    {{- with .clear }}
+    <a class="tag-filter-clear" href="{{ . }}"><i class="bi bi-x-lg" aria-hidden="true"></i> {{ T "filterClear" }}</a>
+    {{- end }}
+  </span>
+</p>

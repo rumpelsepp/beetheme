@@ -1,6 +1,9 @@
+{{- /*
+  The page of a taxonomy, e.g. /tags/: its terms as a cloud
+  (_partials/tag-cloud.html).
+*/ -}}
 {{ define "content" }}
   {{ .Content }}
-  {{ range .Data.Terms.ByCount }}
-    <h2><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a> ({{ .Count }})</h2>
-  {{ end }}
+
+  {{ partial "tag-cloud.html" (dict "terms" .Data.Terms) }}
 {{ end }}

@@ -1,0 +1,47 @@
+{{- /*
+  The terms of a taxonomy as a cloud: the more pages a term has, the
+  larger it is. --w (0…1, on a logarithmic scale of the number of pages)
+  sets size and colour, see .tag-cloud in main.css; a legend below shows
+  the scale.
+
+  Params (dict):
+    terms  the taxonomy, e.g. .Data.Terms of its page or
+           site.Taxonomies.tags (required)
+    skip   titles of terms to leave out (optional)
+    label  what the numbers count, e.g. "Rezepte" (default: the text
+           "tagCloudEntries" of i18n/)
+*/ -}}
+{{- $skip := .skip | default slice }}
+{{- $label := .label | default (T "tagCloudEntries") }}
+{{- $terms := slice }}
+{{- range .terms.Alphabetical }}
+  {{- if not (in $skip .Page.Title) }}{{ $terms = $terms | append . }}{{ end }}
+{{- end }}
+{{- with $terms }}
+  {{- $min := (index . 0).Count }}
+  {{- $max := $min }}
+  {{- range . }}
+    {{- if lt .Count $min }}{{ $min = .Count }}{{ end }}
+    {{- if gt .Count $max }}{{ $max = .Count }}{{ end }}
+  {{- end }}
+  {{- $lmin := math.Log (math.Max $min 1) }}
+  {{- $lmax := math.Log (math.Max $max 1) }}
+  {{- $span := cond (gt $lmax $lmin) (sub $lmax $lmin) 1.0 }}
+  <ul class="tag-cloud">
+    {{- range . }}
+      {{- $w := div (sub (math.Log (math.Max .Count 1)) $lmin) $span }}
+      <li style="--w:{{ printf "%.3f" $w }}">
+        <a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a>
+        <span class="count">{{ .Count }}</span>
+      </li>
+    {{- end }}
+  </ul>
+  {{- /* What size and colour mean: the numbers the scale stands for at
+       five steps. */}}
+  <ul class="tag-cloud-legend" aria-label="{{ T "tagCloudLegend" (dict "Label" $label) }}">
+    <li>{{ $label }}:</li>
+    {{- range slice 0.0 0.25 0.5 0.75 1.0 }}
+      <li style="--w:{{ . }}">{{ math.Round (math.Pow 2.718281828 (add $lmin (mul . $span))) }}</li>
+    {{- end }}
+  </ul>
+{{- end }}

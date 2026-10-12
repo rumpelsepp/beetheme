@@ -12,6 +12,13 @@ tocTitle = 'Contents'
 closeLabel = 'Close'
 footerContactLink = 'To the contact page'
 
+# Tags: the cloud of a taxonomy and the bar above a filtered list.
+filteredBy = 'Filtered by'
+filterClear = 'Clear filter'
+filterAllTags = 'All tags'
+tagCloudEntries = 'Entries'
+tagCloudLegend = 'Legend: number of {{ .Label }}'
+
 notFoundTitle = 'Page not found'
 notFoundText = 'There is nothing at this address (error 404). The page may have moved, or there is a typo in the link.'
 notFoundHome = 'To the home page'

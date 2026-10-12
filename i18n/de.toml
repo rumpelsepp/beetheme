@@ -12,6 +12,13 @@ tocTitle = 'Inhalt'
 closeLabel = 'Schließen'
 footerContactLink = 'Zur Kontaktseite'
 
+# Tags: the cloud of a taxonomy and the bar above a filtered list.
+filteredBy = 'Gefiltert nach'
+filterClear = 'Filter aufheben'
+filterAllTags = 'Alle Schlagwörter'
+tagCloudEntries = 'Einträge'
+tagCloudLegend = 'Legende: Anzahl der {{ .Label }}'
+
 notFoundTitle = 'Seite nicht gefunden'
 notFoundText = 'Unter dieser Adresse gibt es hier nichts (Fehler 404). Vielleicht ist die Seite umgezogen oder im Link steckt ein Tippfehler.'
 notFoundHome = 'Zur Startseite'
