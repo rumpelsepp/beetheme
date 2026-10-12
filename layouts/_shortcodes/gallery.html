@@ -6,10 +6,13 @@
   runs.
 
   The body of the shortcode lists one image of the page bundle per line,
-  optionally followed by its alt text:
+  optionally followed by its alt text and by a label, which is shown on
+  the image along its lower edge (markdown, e.g. the name of what it
+  shows):
 
     one.jpeg | What is to be seen on it
-    two.jpeg
+    two.jpeg | What is to be seen on it | Its name
+    three.jpeg
 
   Params:
     caption   caption for the whole gallery, markdown (optional)
@@ -28,6 +31,8 @@
       {{- $src := strings.TrimSpace (index $parts 0) }}
       {{- $alt := "" }}
       {{- if gt (len $parts) 1 }}{{ $alt = strings.TrimSpace (index $parts 1) }}{{ end }}
+      {{- $label := "" }}
+      {{- if gt (len $parts) 2 }}{{ $label = strings.TrimSpace (index $parts 2) }}{{ end }}
       {{- if $src }}
         {{- $img := $page.Resources.GetMatch $src }}
         {{- if and $img (reflect.IsImageResourceProcessable $img) }}
@@ -48,6 +53,10 @@
           "sizes" (printf "(max-width: 575.98px) 100vw, %.0fpx" $maxWidth)
         ) -}}
       </a>
+      {{- /* Beside the link, not in it: the label may hold a link itself. */}}
+      {{- with $label }}
+      <span class="gallery-label">{{ . | $page.RenderString (dict "display" "inline") }}</span>
+      {{- end }}
       {{- partial "image/info.html" (dict "image" $img "alt" $alt "info" $info) }}
     </li>
         {{- else }}
