@@ -19,25 +19,28 @@
     provider  name of the provider as shown to the reader (required)
     title     says what the embed shows; shown in the notice and set as
               the title of the <iframe>
-    button    label of the button (default: "Inhalt laden")
+    button    label of the button (default: the text "embedLoad" of i18n/)
     href      page to open at the provider instead (default: src)
     height    height of the <iframe> in px (default: 500)
     width     width of the <iframe> in px (default: full width)
 */ -}}
-<div class="embed-consent" data-provider="{{ .provider }}" data-src="{{ .src }}" data-title="{{ .title | default (printf "Inhalt von %s" .provider) }}"
+<div class="embed-consent" data-provider="{{ .provider }}" data-src="{{ .src }}" data-title="{{ .title | default (T "embedTitle" (dict "Provider" .provider)) }}"
   data-height="{{ .height | default 500 }}"{{ with .width }} data-width="{{ . }}"{{ end }}>
   <p>
     <i class="bi bi-shield-lock" aria-hidden="true"></i>
-    Externer Inhalt von <strong>{{ .provider }}</strong>{{ with .title }}: {{ . }}{{ end }}.
-    Beim Laden werden Daten wie die IP-Adresse an {{ .provider }} übertragen
-    {{- with site.GetPage "/datenschutz" }} (<a href="{{ .RelPermalink }}#externe-inhalte">mehr dazu</a>){{ end }}.
+    {{- /* The texts of the notice may hold HTML, so what goes into them
+         is escaped here. */}}
+    {{- $escaped := dict "Provider" (htmlEscape .provider) "Title" (htmlEscape (.title | default "")) }}
+    {{ T "embedNotice" $escaped | safeHTML }}
+    {{ T "embedDataNote" $escaped | safeHTML }}
+    {{- with site.GetPage "/datenschutz" }} (<a href="{{ .RelPermalink }}#externe-inhalte">{{ T "embedMore" }}</a>){{ end }}.
   </p>
   <div class="embed-consent-actions">
-    <button type="button" class="btn btn-primary" hidden>{{ .button | default "Inhalt laden" }}</button>
+    <button type="button" class="btn btn-primary" hidden>{{ .button | default (T "embedLoad") }}</button>
     <label class="embed-consent-remember" hidden>
-      <input type="checkbox"> Inhalte von {{ .provider }} künftig immer laden
+      <input type="checkbox"> {{ T "embedRemember" (dict "Provider" .provider) }}
     </label>
-    {{ partial "link.html" (dict "href" (.href | default .src) "text" (printf "Bei %s öffnen" .provider)) }}
+    {{ partial "link.html" (dict "href" (.href | default .src) "text" (T "embedOpen" (dict "Provider" .provider))) }}
   </div>
 </div>
 {{- "" -}}

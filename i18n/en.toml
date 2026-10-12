@@ -1,0 +1,47 @@
+# The theme's texts in English. A site changes one of them by defining the
+# same key in an i18n/en.toml of its own.
+#
+# Texts with {curly} placeholders are filled in by the theme's JS
+# (bundle_src/js/i18n.ts), those with {{ .Braces }} by Hugo.
+
+skipToContent = 'Skip to content'
+mainNavigation = 'Main navigation'
+toggleMenu = 'Toggle menu'
+externalLinkNote = 'external link, opens in a new tab'
+tocTitle = 'Contents'
+closeLabel = 'Close'
+
+notFoundTitle = 'Page not found'
+notFoundText = 'There is nothing at this address (error 404). The page may have moved, or there is a typo in the link.'
+notFoundHome = 'To the home page'
+
+# Stands in for the alt text of an image that has none.
+imageLabel = 'Image'
+imageEnlarge = '{{ .Alt }} – view large'
+imageInfo = 'Image information'
+imageInfoTaken = 'Taken'
+# A layout for Hugo's time.Format.
+imageInfoTakenFormat = '2 January 2006, 15:04'
+imageInfoCamera = 'Camera'
+imageInfoPlace = 'Place'
+imageInfoOriginal = 'Original'
+
+lightboxLabel = 'Image view'
+lightboxPrevious = 'Previous image'
+lightboxNext = 'Next image'
+lightboxCount = 'Image {n} of {total}'
+
+videoUnsupported = 'Your browser cannot play this video.'
+videoDownload = 'Download the video'
+
+embedTitle = 'Content from {{ .Provider }}'
+# These two may hold HTML.
+embedNotice = 'External content from <strong>{{ .Provider }}</strong>{{ with .Title }}: {{ . }}{{ end }}.'
+embedDataNote = 'Loading it sends data such as your IP address to {{ .Provider }}'
+embedMore = 'more on this'
+embedLoad = 'Load content'
+embedRemember = 'Always load content from {{ .Provider }} from now on'
+embedOpen = 'Open at {{ .Provider }}'
+embedReset = 'Forget remembered providers'
+embedRemembered = 'Remembered: {providers}'
+embedNoneRemembered = 'Nothing is remembered at the moment.'

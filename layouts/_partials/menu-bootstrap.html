@@ -5,7 +5,7 @@ Renders a Bootstrap navbar for the given Hugo menu.
 @context {string} menuID    The menu ID.
 @context {image}  brand     (optional) A brand logo image resource.
 @context {string} brandText (optional) A wordmark shown next to (or instead of) the logo.
-@context {string} label     (optional) Name of the navigation landmark for screen readers (default: "Hauptnavigation").
+@context {string} label     (optional) Name of the navigation landmark for screen readers (default: the text "mainNavigation" of i18n/).
 
 Usage:
   {{ partial "menu.html" (dict "menuID" "main" "page" . "brand" $brand "brandText" "bienensteff") }}
@@ -17,7 +17,7 @@ Usage:
 {{- $brandText := .brandText }}
 
 {{- with index site.Menus $menuID }}
-<nav class="navbar navbar-expand-lg bg-body-tertiary" aria-label="{{ $.label | default "Hauptnavigation" }}">
+<nav class="navbar navbar-expand-lg bg-body-tertiary" aria-label="{{ $.label | default (T "mainNavigation") }}">
   <div class="container-fluid">
 
     {{/* --- Brand / Home Link --- */}}
@@ -35,7 +35,7 @@ Usage:
     {{/* --- Responsive Toggle --- */}}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav"
-            aria-expanded="false" aria-label="Menü umschalten">
+            aria-expanded="false" aria-label="{{ T "toggleMenu" }}">
       <span class="navbar-toggler-icon"></span>
     </button>
 

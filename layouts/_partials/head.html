@@ -14,7 +14,7 @@
      is served under whatever address was asked for: it gets a title, is
      kept out of search engines and names no canonical address. */}}
 {{- $notFound := eq .Kind "404" }}
-{{- $title := cond $notFound "Seite nicht gefunden" .Title }}
+{{- $title := cond $notFound (T "notFoundTitle") .Title }}
 
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" $title site.Title }}{{ end }}</title>
 {{- /* 160 characters is about what a search engine shows of it. */}}

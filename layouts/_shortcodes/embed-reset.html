@@ -1,6 +1,6 @@
 {{- /*
   Button that forgets the providers a reader has let the embed shortcode
-  remember ("künftig immer laden"), i.e. withdraws that consent; next to
+  remember, i.e. withdraws that consent; next to
   it the providers currently remembered. For the privacy policy:
 
     {{< embed-reset >}}
@@ -9,6 +9,6 @@
   hidden.
 */ -}}
 <p class="embed-reset">
-  <button type="button" class="btn btn-outline-primary" data-embed-reset hidden>Gemerkte Anbieter löschen</button>
+  <button type="button" class="btn btn-outline-primary" data-embed-reset hidden>{{ T "embedReset" }}</button>
   <span role="status"></span>
 </p>

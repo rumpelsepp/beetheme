@@ -41,7 +41,7 @@
                main.css: 1.8 times its width at the row height of 13.5rem. */}}
           {{- $maxWidth := math.Ceil (mul $ratio 216 1.8) }}
     <li class="gallery-item" style="--ratio: {{ printf "%.4f" $ratio }}">
-      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ $alt | default "Bild" }} – groß ansehen">
+      <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ T "imageEnlarge" (dict "Alt" ($alt | default (T "imageLabel"))) }}">
         {{- partial "image/img.html" (dict
           "image" $img
           "alt" $alt

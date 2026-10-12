@@ -12,7 +12,7 @@
   {{- $toc := .TableOfContents | string | replaceRE `(?s)\s*<nav id="TableOfContents">(.*)</nav>\s*` "$1" }}
   {{- $id := printf "toc-heading-%s" (.File.UniqueID | default "page") }}
   <nav class="table-of-contents" aria-labelledby="{{ $id }}">
-    <p id="{{ $id }}" class="toc-title">Inhalt</p>
+    <p id="{{ $id }}" class="toc-title">{{ T "tocTitle" }}</p>
     {{ $toc | safeHTML }}
   </nav>
 {{- end }}

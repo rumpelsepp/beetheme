@@ -39,7 +39,7 @@
         <source src="{{ .RelPermalink }}" type="video/webm">
         {{- end }}
         <source src="{{ $mp4.RelPermalink }}" type="video/mp4">
-        <p>Dein Browser kann dieses Video nicht abspielen. <a href="{{ $mp4.RelPermalink }}">Video herunterladen</a>.</p>
+        <p>{{ T "videoUnsupported" }} <a href="{{ $mp4.RelPermalink }}">{{ T "videoDownload" }}</a>.</p>
       </video>
       {{- with $caption }}
       <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>

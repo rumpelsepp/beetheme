@@ -1,8 +1,10 @@
+import { t } from './i18n';
+
 // Two-click embeds (layouts/_partials/embed.html): the <iframe> of a third
 // party is created only when the reader presses the button, so nothing is
 // requested from the provider before that.
 //
-// A reader who ticks "immer laden" has the provider remembered in
+// A reader who ticks the checkbox has the provider remembered in
 // localStorage; its embeds then load right away on every page. The button
 // of the embed-reset shortcode forgets them again.
 const STORAGE_KEY = 'embed-consent';
@@ -69,7 +71,7 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-embed-r
     const providers = remembered();
     button.disabled = providers.length === 0;
     if (status) {
-      status.textContent = providers.length ? `Gemerkt: ${providers.join(', ')}` : 'Derzeit ist nichts gemerkt.';
+      status.textContent = providers.length ? t('embedRemembered', { providers: providers.join(', ') }) : t('embedNoneRemembered');
     }
   };
 

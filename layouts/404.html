@@ -8,8 +8,8 @@
 */ -}}
 {{ define "main" }}
   <article class="content">
-    <header class="content-header"><h1>Seite nicht gefunden</h1></header>
-    <p class="lead">Unter dieser Adresse gibt es hier nichts (Fehler 404). Vielleicht ist die Seite umgezogen oder im Link steckt ein Tippfehler.</p>
-    <p><a class="btn btn-primary" href="{{ site.Home.RelPermalink }}">Zur Startseite</a></p>
+    <header class="content-header"><h1>{{ T "notFoundTitle" }}</h1></header>
+    <p class="lead">{{ T "notFoundText" }}</p>
+    <p><a class="btn btn-primary" href="{{ site.Home.RelPermalink }}">{{ T "notFoundHome" }}</a></p>
   </article>
 {{ end }}

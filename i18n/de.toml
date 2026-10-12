@@ -1,0 +1,47 @@
+# The theme's texts in German. A site changes one of them by defining the
+# same key in an i18n/de.toml of its own.
+#
+# Texts with {curly} placeholders are filled in by the theme's JS
+# (bundle_src/js/i18n.ts), those with {{ .Braces }} by Hugo.
+
+skipToContent = 'Zum Inhalt springen'
+mainNavigation = 'Hauptnavigation'
+toggleMenu = 'Menü umschalten'
+externalLinkNote = 'externer Link, öffnet in neuem Tab'
+tocTitle = 'Inhalt'
+closeLabel = 'Schließen'
+
+notFoundTitle = 'Seite nicht gefunden'
+notFoundText = 'Unter dieser Adresse gibt es hier nichts (Fehler 404). Vielleicht ist die Seite umgezogen oder im Link steckt ein Tippfehler.'
+notFoundHome = 'Zur Startseite'
+
+# Stands in for the alt text of an image that has none.
+imageLabel = 'Bild'
+imageEnlarge = '{{ .Alt }} – groß ansehen'
+imageInfo = 'Bildinformationen'
+imageInfoTaken = 'Aufnahme'
+# A layout for Hugo's time.Format.
+imageInfoTakenFormat = '2. January 2006, 15:04'
+imageInfoCamera = 'Kamera'
+imageInfoPlace = 'Ort'
+imageInfoOriginal = 'Original'
+
+lightboxLabel = 'Bildansicht'
+lightboxPrevious = 'Vorheriges Bild'
+lightboxNext = 'Nächstes Bild'
+lightboxCount = 'Bild {n} von {total}'
+
+videoUnsupported = 'Dein Browser kann dieses Video nicht abspielen.'
+videoDownload = 'Video herunterladen'
+
+embedTitle = 'Inhalt von {{ .Provider }}'
+# These two may hold HTML.
+embedNotice = 'Externer Inhalt von <strong>{{ .Provider }}</strong>{{ with .Title }}: {{ . }}{{ end }}.'
+embedDataNote = 'Beim Laden werden Daten wie die IP-Adresse an {{ .Provider }} übertragen'
+embedMore = 'mehr dazu'
+embedLoad = 'Inhalt laden'
+embedRemember = 'Inhalte von {{ .Provider }} künftig immer laden'
+embedOpen = 'Bei {{ .Provider }} öffnen'
+embedReset = 'Gemerkte Anbieter löschen'
+embedRemembered = 'Gemerkt: {providers}'
+embedNoneRemembered = 'Derzeit ist nichts gemerkt.'

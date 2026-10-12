@@ -8,6 +8,8 @@
 // shortcode); in the others a click simply follows the link to the large
 // image.
 
+import { t } from './i18n';
+
 const GALLERY = '.gallery[data-lightbox]';
 
 interface Picture {
@@ -34,21 +36,21 @@ class Lightbox {
   private readonly image = document.createElement('img');
   private readonly count = document.createElement('p');
   private readonly original = document.createElement('a');
-  private readonly prev = button('lightbox-nav lightbox-prev', 'Vorheriges Bild', 'bi-chevron-left');
-  private readonly next = button('lightbox-nav lightbox-next', 'Nächstes Bild', 'bi-chevron-right');
+  private readonly prev = button('lightbox-nav lightbox-prev', t('lightboxPrevious'), 'bi-chevron-left');
+  private readonly next = button('lightbox-nav lightbox-next', t('lightboxNext'), 'bi-chevron-right');
   private pictures: Picture[] = [];
   private index = 0;
   private touchX: number | null = null;
 
   constructor() {
-    const close = button('lightbox-close', 'Schließen', 'bi-x-lg');
+    const close = button('lightbox-close', t('closeLabel'), 'bi-x-lg');
     this.dialog.className = 'lightbox';
-    this.dialog.setAttribute('aria-label', 'Bildansicht');
+    this.dialog.setAttribute('aria-label', t('lightboxLabel'));
     this.image.className = 'lightbox-image';
     this.count.className = 'lightbox-count';
     this.count.setAttribute('aria-live', 'polite');
     this.original.className = 'lightbox-original';
-    this.original.textContent = 'Original';
+    this.original.textContent = t('imageInfoOriginal');
     const footer = document.createElement('div');
     footer.className = 'lightbox-footer';
     footer.append(this.count, this.original);
@@ -104,7 +106,7 @@ class Lightbox {
     this.index = index;
     this.image.src = picture.src;
     this.image.alt = picture.alt;
-    this.count.textContent = `Bild ${index + 1} von ${this.pictures.length}`;
+    this.count.textContent = t('lightboxCount', { n: index + 1, total: this.pictures.length });
     this.original.hidden = !picture.original;
     this.original.href = picture.original ?? '';
     const single = this.pictures.length < 2;

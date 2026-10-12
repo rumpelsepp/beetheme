@@ -44,26 +44,26 @@
     {{- end }}
   {{- end }}
   {{- $id := printf "image-info-%s" (substr (md5 $img.RelPermalink) 0 8) }}
-<button type="button" class="image-info-button" popovertarget="{{ $id }}" title="Bildinformationen" aria-label="Bildinformationen{{ with .alt }}: {{ . }}{{ end }}">i</button>
+<button type="button" class="image-info-button" popovertarget="{{ $id }}" title="{{ T "imageInfo" }}" aria-label="{{ T "imageInfo" }}{{ with .alt }}: {{ . }}{{ end }}">i</button>
 <div class="image-info" id="{{ $id }}" popover>
   <dl>
     {{- with $date }}
-    <dt>Aufnahme</dt>
-    <dd><time datetime="{{ .Format "2006-01-02T15:04:05" }}">{{ . | time.Format "2. January 2006, 15:04" }}</time></dd>
+    <dt>{{ T "imageInfoTaken" }}</dt>
+    <dd><time datetime="{{ .Format "2006-01-02T15:04:05" }}">{{ . | time.Format (T "imageInfoTakenFormat") }}</time></dd>
     {{- end }}
     {{- with $camera }}
-    <dt>Kamera</dt>
+    <dt>{{ T "imageInfoCamera" }}</dt>
     <dd>{{ . }}</dd>
     {{- end }}
     {{- with $geotag }}
     {{- /* The pin stands with the name of the row, so the coordinates
          start where the values of the other rows do. */}}
-    <dt>Ort <i class="bi bi-geo-alt" aria-hidden="true"></i></dt>
+    <dt>{{ T "imageInfoPlace" }} <i class="bi bi-geo-alt" aria-hidden="true"></i></dt>
     <dd>{{ . }}</dd>
     {{- end }}
-    <dt>Original</dt>
+    <dt>{{ T "imageInfoOriginal" }}</dt>
     <dd><a class="image-original" href="{{ $img.RelPermalink }}">{{ $img.Width }} × {{ $img.Height }} px</a></dd>
   </dl>
-  <button type="button" class="image-info-close" popovertarget="{{ $id }}" popovertargetaction="hide" aria-label="Schließen">×</button>
+  <button type="button" class="image-info-close" popovertarget="{{ $id }}" popovertargetaction="hide" aria-label="{{ T "closeLabel" }}">×</button>
 </div>
 {{- end }}

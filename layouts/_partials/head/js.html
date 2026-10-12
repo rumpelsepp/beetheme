@@ -2,7 +2,15 @@
   JS bundles built by esbuild into assets/gen/, fingerprinted + published
   with an integrity hash. Empty bundles (a site with no own JS) are skipped.
   Match order is alphabetical: base_bundle.js before bundle.js.
+
+  Before them the texts the theme's JS shows, in the language of the site
+  (i18n/), for bundle_src/js/i18n.ts.
 */ -}}
+{{- $texts := dict }}
+{{- range slice "closeLabel" "lightboxLabel" "lightboxPrevious" "lightboxNext" "lightboxCount" "imageInfoOriginal" "embedRemembered" "embedNoneRemembered" }}
+	{{- $texts = merge $texts (dict . (T .)) }}
+{{- end }}
+<script type="application/json" id="theme-i18n">{{ $texts | jsonify | safeJS }}</script>
 {{- range resources.Match "gen/*.js" }}
 	{{- if .Content }}
 		{{- $js := . | fingerprint }}

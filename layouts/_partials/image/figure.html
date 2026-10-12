@@ -37,14 +37,13 @@
      more so on a high-density screen. */}}
 {{ $widths := cond $pano (slice 800 1200 1600 2400 3200) (slice 400 800 1200) }}
 {{ $caption := .caption }}
-{{/* A link in the caption carries a visually hidden note ("externer Link,
-     ...", see _markup/render-link.html) that has no business in an alt
+{{/* A link in the caption carries a visually hidden note (see _partials/link-external-mark.html) that has no business in an alt
      text. */}}
 {{ $alt := .alt | default ($caption | markdownify | replaceRE `<span class="visually-hidden">.*?</span>` "" | plainify | htmlUnescape | strings.TrimSpace) }}
 
 {{/* The link wraps only the image; give it an accessible name so it isn't
      announced as a nameless link when the image has no alt/caption. */}}
-{{ $label := $alt | default "Bild" }}
+{{ $label := $alt | default (T "imageLabel") }}
 
 {{/* A panorama is shown at up to 3200px, so its large copy has to go
      beyond that. */}}
@@ -55,7 +54,7 @@
     {{/* The box the "i" of image/info.html is positioned in: it lies on
          the image, beside the link around it. */}}
     <div class="figure-media">
-    <a href="{{ $large.RelPermalink }}" aria-label="{{ $label }} – groß ansehen">
+    <a href="{{ $large.RelPermalink }}" aria-label="{{ T "imageEnlarge" (dict "Alt" $label) }}">
       {{ partial "image/img.html" (dict
         "image" $imgOrig
         "crop" .crop
