@@ -10,6 +10,7 @@ toggleMenu = 'Menü umschalten'
 externalLinkNote = 'externer Link, öffnet in neuem Tab'
 tocTitle = 'Inhalt'
 closeLabel = 'Schließen'
+footerContactLink = 'Zur Kontaktseite'
 
 notFoundTitle = 'Seite nicht gefunden'
 notFoundText = 'Unter dieser Adresse gibt es hier nichts (Fehler 404). Vielleicht ist die Seite umgezogen oder im Link steckt ein Tippfehler.'

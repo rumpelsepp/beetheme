@@ -1,1 +1,97 @@
-{{ partial "menu-stock.html" (dict "menuID" "footer" "inline" true "cssClass" "text-center" "page" .) }}
+{{- /*
+  The footer, put together from params.footer of the site's hugo.toml:
+
+    [params.footer]
+    # Title of the site and its params.description as a line on top.
+    brand = true
+    # "© <year> <title of the site>" in the line at the bottom.
+    copyright = true
+    # Markdown for that line, after the copyright.
+    bottom = '[example.org](https://example.org)'
+
+    # A licence to name in that line, linked with rel="license".
+    [params.footer.license]
+    name = 'CC BY-NC 4.0'
+    url = 'https://creativecommons.org/licenses/by-nc/4.0/deed.de'
+
+    # The columns, each with a title and either a menu or the contact.
+    [[params.footer.columns]]
+    title = 'Rechtliches'
+    menu = 'footerLegal'
+
+    [[params.footer.columns]]
+    title = 'Kontakt'
+    # The site's params.contact (Markdown); without it the column is left
+    # out.
+    contact = true
+    # A page to link below it, with a fragment if need be; the text of
+    # the link defaults to "footerContactLink" of i18n/.
+    link = '/kontakt'
+    linkText = 'Zur Kontaktseite'
+
+  A site without columns gets its menu "footer" as one line instead, named
+  for screen readers by params.footer.menuLabel.
+
+  A partial footer-extra.html of the site, if there is one, goes between
+  the columns and the line at the bottom (seals, logos).
+
+  Context: the page.
+*/ -}}
+{{- $page := . }}
+{{- $footer := site.Params.footer | default dict }}
+<div class="footer-inner container">
+  {{- if $footer.brand }}
+  <div class="footer-brand">
+    {{ site.Title }}
+    {{- with site.Params.description }}
+      <span class="footer-tagline">{{ . }}</span>
+    {{- end }}
+  </div>
+  {{- end }}
+
+  {{- with $footer.columns }}
+  <div class="footer-grid">
+    {{- range $column := . }}
+      {{- if .menu }}
+    <div class="footer-col">
+      <h2 class="footer-title">{{ .title }}</h2>
+      {{ partial "menu-stock.html" (dict "menuID" (lower .menu) "label" .title "page" $page) }}
+    </div>
+      {{- else if and .contact site.Params.contact }}
+    <div class="footer-col">
+      <h2 class="footer-title">{{ .title }}</h2>
+      <address>{{ site.Params.contact | markdownify }}</address>
+        {{- with .link }}
+          {{- $parts := split . "#" }}
+          {{- $fragment := cond (gt (len $parts) 1) (printf "#%s" (index $parts 1)) "" }}
+          {{- $text := $column.linkText | default (T "footerContactLink") }}
+          {{- with site.GetPage (index $parts 0) }}
+      <a href="{{ .RelPermalink }}{{ $fragment }}">{{ $text }}</a>
+          {{- end }}
+        {{- end }}
+    </div>
+      {{- end }}
+    {{- end }}
+  </div>
+  {{- else }}
+  {{ partial "menu-stock.html" (dict "menuID" "footer" "inline" true "cssClass" "footer-menu" "label" $footer.menuLabel "page" $page) }}
+  {{- end }}
+
+  {{- if templates.Exists "_partials/footer-extra.html" }}
+  {{ partial "footer-extra.html" $page }}
+  {{- end }}
+
+  {{- $bottom := slice }}
+  {{- if $footer.copyright }}
+    {{- $bottom = $bottom | append (printf "© %d %s" now.Year (htmlEscape site.Title)) }}
+  {{- end }}
+  {{- with $footer.license }}
+    {{- $bottom = $bottom | append (partial "link.html" (dict "href" .url "text" .name "attrs" (dict "rel" "license"))) }}
+  {{- end }}
+  {{- with $footer.bottom }}
+    {{- $bottom = $bottom | append (. | markdownify) }}
+  {{- end }}
+  {{- with $bottom }}
+  <div class="footer-bottom">{{ delimit . " · " | safeHTML }}</div>
+  {{- end }}
+</div>

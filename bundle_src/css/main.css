@@ -1142,6 +1142,19 @@ blockquote > :last-child {
   gap: 0.6rem;
 }
 
+/* The menu "footer" as one line, for a site without columns. */
+#site-footer .footer-menu {
+  text-align: center;
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
 .footer-tagline {
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -1155,6 +1168,13 @@ blockquote > :last-child {
   gap: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Where the columns are the last thing in the footer, the rule between
+   them and the line at the bottom goes. */
+.footer-grid:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 /* Title of a footer column: an h2, so the footer's sections can be jumped

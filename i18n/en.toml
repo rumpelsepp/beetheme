@@ -10,6 +10,7 @@ toggleMenu = 'Toggle menu'
 externalLinkNote = 'external link, opens in a new tab'
 tocTitle = 'Contents'
 closeLabel = 'Close'
+footerContactLink = 'To the contact page'
 
 notFoundTitle = 'Page not found'
 notFoundText = 'There is nothing at this address (error 404). The page may have moved, or there is a typo in the link.'
