@@ -37,11 +37,16 @@
     {{- end }}
   </ul>
   {{- /* What size and colour mean: the numbers the scale stands for at
-       five steps. */}}
+       five steps, less where few numbers leave two steps the same. */}}
   <ul class="tag-cloud-legend" aria-label="{{ T "tagCloudLegend" (dict "Label" $label) }}">
     <li>{{ $label }}:</li>
+    {{- $last := -1.0 }}
     {{- range slice 0.0 0.25 0.5 0.75 1.0 }}
-      <li style="--w:{{ . }}">{{ math.Round (math.Pow 2.718281828 (add $lmin (mul . $span))) }}</li>
+      {{- $n := math.Round (math.Pow 2.718281828 (add $lmin (mul . $span))) }}
+      {{- if ne $n $last }}
+      <li style="--w:{{ . }}">{{ $n }}</li>
+      {{- end }}
+      {{- $last = $n }}
     {{- end }}
   </ul>
 {{- end }}
