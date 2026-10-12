@@ -2,3 +2,14 @@
   [module.hugoVersion]
     extended = false
     min = '0.162.1'
+
+# What the theme's layouts count on: raw HTML in Markdown and attributes
+# on blocks and titles. Hugo takes these over only for a site that says
+#   [markup]
+#   _merge = 'deep'
+# in its hugo.toml.
+[markup.goldmark.renderer]
+  unsafe = true
+[markup.goldmark.parser.attribute]
+  block = true
+  title = true

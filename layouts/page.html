@@ -1,4 +1,14 @@
-{{ define "content" }}
+{{- /*
+  An ordinary page. On a site with params.readingColumn it is read like a
+  column in a paper (.content--reading in main.css); a page says otherwise
+  with "reading" in its front matter.
+*/ -}}
+{{ define "main" }}
+{{- $reading := site.Params.readingColumn | default false }}
+{{- if isset .Params "reading" }}{{ $reading = .Params.reading }}{{ end }}
+<article class="content{{ if $reading }} content--reading{{ end }}">
+    <header class="content-header"><h1>{{ .Title }}</h1></header>
     {{ partial "toc.html" . }}
     {{ .Content }}
+</article>
 {{ end }}
