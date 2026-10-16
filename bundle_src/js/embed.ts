@@ -13,7 +13,7 @@ const STORAGE_KEY = 'embed-consent';
 // ask every time.
 function remembered(): string[] {
   try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
+    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as string[];
     return Array.isArray(value) ? value : [];
   } catch {
     return [];

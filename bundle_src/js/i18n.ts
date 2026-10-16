@@ -4,7 +4,7 @@
 
 function read(): Record<string, string> {
   try {
-    return JSON.parse(document.getElementById('theme-i18n')?.textContent ?? '{}');
+    return JSON.parse(document.getElementById('theme-i18n')?.textContent ?? '{}') as Record<string, string>;
   } catch {
     return {};
   }
