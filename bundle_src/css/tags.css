@@ -1,0 +1,154 @@
+/* --------------------------------------------------------------------
+   Tags
+   -------------------------------------------------------------------- */
+
+/* Terms as a row of links (_partials/tag-chips.html). */
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  hyphens: manual;
+  font-weight: 400;
+
+  a {
+    display: block;
+    padding: 0.1rem 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 0.9rem;
+    text-decoration-line: none;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--bs-link-color);
+      color: var(--bs-link-color);
+    }
+  }
+
+  .count {
+    margin-left: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+  }
+}
+
+/* /tags/ -- tag cloud (_partials/tag-cloud.html). --w (0…1,
+   log-scaled by the number of pages) on each <li> says how many pages
+   a tag has: the more, the larger and heavier the word and the more of
+   the accent colour it takes; rare tags stay small and grey. The number
+   itself follows small, and the legend below shows the scale. */
+.tag-cloud {
+  list-style: none;
+  max-width: 52rem;
+  margin: 2rem auto 0.75rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem 1.25rem;
+  text-align: center;
+  hyphens: none;
+  line-height: 1.15;
+
+  li {
+    white-space: nowrap;
+  }
+
+  a {
+    font-size: calc(0.85rem + var(--w, 0) * 1.65rem);
+    font-weight: calc(400 + var(--w, 0) * 300);
+    letter-spacing: calc(var(--w, 0) * -0.015em);
+    color: color-mix(in oklab, var(--color-accent) calc(var(--w, 0) * 100%), var(--color-ink-muted));
+    text-decoration-line: none;
+    transition: color 0.12s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--bs-link-color);
+      text-decoration-line: underline;
+    }
+  }
+
+  .count {
+    margin-left: 0.1em;
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-muted);
+    vertical-align: super;
+  }
+}
+
+.tag-cloud-legend {
+  list-style: none;
+  margin: 0 0 2.5rem;
+  padding: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.7rem;
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+
+  /* The steps of the scale, drawn like the tags themselves. */
+  li[style] {
+    font-size: calc(0.75rem + var(--w, 0) * 0.75rem);
+    font-weight: calc(400 + var(--w, 0) * 300);
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in oklab, var(--color-accent) calc(var(--w, 0) * 100%), var(--color-ink-muted));
+  }
+}
+
+/* Bar that says a list is filtered (_partials/tag-filter.html), with the
+   ways out on the right. */
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0 0 1.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+  text-align: left;
+  hyphens: none;
+
+  /* The hidden attribute loses against display: flex otherwise. */
+  &[hidden] {
+    display: none;
+  }
+
+  .tag-filter-text .bi {
+    margin-right: 0.3rem;
+    color: var(--color-accent);
+  }
+
+  .tag-filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin-left: auto;
+
+    .bi {
+      margin-right: 0.15rem;
+    }
+
+    .btn-link {
+      vertical-align: baseline;
+    }
+  }
+}
+
+/* Meta line of an entry (date, tags, category), in a header or on a card:
+   the muted ink, also where it stands in Bootstrap's .text-secondary
+   grey, which has only 4.4:1 on the page background. */
+.entry-meta {
+  color: var(--color-ink-muted);
+}

@@ -1,6 +1,6 @@
 {{- /*
   Photo gallery: the images in rows of equal height, each row filling the
-  width (.gallery in main.css). A click leads to a large copy of the image
+  width (.gallery in bundle_src/css/gallery.css). A click leads to a large copy of the image
   (image/large.html), as for a figure; with lightbox=true that copy opens
   in a lightbox instead (bundle_src/js/lightbox.ts), as long as JavaScript
   runs.
@@ -43,7 +43,7 @@
           {{- $large := partial "image/large.html" (dict "image" $img) }}
           {{- $ratio := div (float $upright.Width) $upright.Height }}
           {{- /* The widest an item gets beyond phones, see .gallery in
-               main.css: 1.8 times its width at the row height of 13.5rem. */}}
+               bundle_src/css/gallery.css: 1.8 times its width at the row height of 13.5rem. */}}
           {{- $maxWidth := math.Ceil (mul $ratio 216 1.8) }}
     <li class="gallery-item" style="--ratio: {{ printf "%.4f" $ratio }}">
       <a class="gallery-link" href="{{ $large.RelPermalink }}" aria-label="{{ T "imageEnlarge" (dict "Alt" ($alt | default (T "imageLabel"))) }}">

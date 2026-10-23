@@ -1,0 +1,23 @@
+/* --------------------------------------------------------------------
+   Tables
+   -------------------------------------------------------------------- */
+
+.table {
+  /* A pale, low-opacity mix of --color-primary lands on almost exactly
+     the same warm near-white as the page background (both are "faint
+     honey tint over white"), so odd/even rows used to read as "white"
+     vs. "invisible" instead of a proper zebra. Mixing in enough
+     --color-primary to stay clearly on-brand, but tempering it with
+     --color-ink and pushing the opacity up, keeps the stripe warm
+     *and* visibly darker/more saturated than the page background. */
+  --bs-table-striped-bg: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--color-primary) 60%, var(--color-ink) 40%) 11%,
+    var(--color-surface)
+  );
+}
+
+.table > :not(caption) > * > th {
+  font-family: var(--font-display);
+  font-weight: 600;
+}

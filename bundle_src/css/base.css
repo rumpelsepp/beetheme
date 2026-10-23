@@ -1,0 +1,60 @@
+/* The page as a whole: box model, scrolling, body and the frame of
+   header, content and footer. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#main-content {
+  flex: 1 1 auto;
+}
+
+/* Bootstrap container: keep a readable max width, let the header/hero and
+   footer break out of it independently. */
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  max-width: var(--container-max);
+}
+
+#main-content > .container {
+  padding-top: 2.25rem;
+  padding-bottom: 4rem;
+}

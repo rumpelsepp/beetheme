@@ -1,0 +1,38 @@
+/* --------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------- */
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.card-header {
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* The line under a card's title: no heading, but set like a small one. */
+.card-subtitle {
+  margin-top: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+  hyphens: none;
+}
+
+.card-footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.card-img-top {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}

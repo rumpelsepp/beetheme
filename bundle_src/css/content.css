@@ -1,0 +1,292 @@
+/* --------------------------------------------------------------------
+   Page content
+   -------------------------------------------------------------------- */
+
+.content-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+article.content {
+  text-align: justify;
+  hyphens: auto;
+  line-height: 1.7;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  hgroup {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-align: left;
+    hyphens: none;
+    margin-top: 2.25rem;
+    margin-bottom: 1rem;
+
+    /* "#" behind the heading, a link to the heading's own anchor (see
+       _markup/render-heading.html): only there while the heading is
+       hovered. */
+    a.anchor,
+    a.anchor:visited {
+      margin-left: 0.35em;
+      color: var(--color-ink-muted);
+      font-weight: 400;
+      text-decoration-line: none;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    &:hover a.anchor {
+      opacity: 1;
+    }
+
+    a.anchor:hover {
+      color: var(--bs-link-color);
+    }
+  }
+
+  > header:first-child,
+  h1:first-child,
+  h2:first-child {
+    margin-top: 0;
+  }
+
+  p.lead,
+  .lead {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--color-ink-muted);
+    line-height: 1.6;
+  }
+
+  /* Post meta line (date + tag links) from _partials/subtitle.html — used
+     both in the article header and on the landing-page cards. Its links ride
+     the muted meta colour instead of the blue link colour. */
+  .entry-meta a {
+    color: inherit;
+  }
+
+  .draft::before {
+    content: "✍️ ";
+  }
+
+  .figure {
+    margin-left: auto;
+    margin-right: auto;
+    margin-block: 1.75rem;
+  }
+
+  .figure .figure-img {
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Wrapper of a panorama (fig pano=true): as wide as the window less a
+     margin, centred on the text column, so the figure breaks out of the
+     column on both sides. How wide the figure gets within it is up to its
+     own max-width. The margin also keeps it clear of a vertical scrollbar,
+     which 100vw includes. */
+  .figure-breakout {
+    --breakout-width: calc(100vw - 2rem);
+    width: var(--breakout-width);
+    margin-inline: calc((100% - var(--breakout-width)) / 2);
+  }
+
+  /* On a phone the container spans the window, so the gutter is all there
+     is to break out of: the panorama runs from edge to edge, square. */
+  @media (max-width: 575.98px) {
+    .figure-breakout {
+      width: auto;
+      margin-inline: calc(-0.5 * var(--bs-gutter-x, 1.5rem));
+    }
+
+    .figure-breakout .figure-img {
+      border-radius: 0 !important;
+    }
+
+    .figure-breakout .figure-caption {
+      padding-inline: calc(0.5 * var(--bs-gutter-x, 1.5rem));
+    }
+  }
+
+  /* <video> shares .figure-img with images (video shortcode) — block it so it
+     centres and sizes like one and has no inline descender gap. */
+  .figure video.figure-img {
+    display: block;
+    /* The figure keeps the clip's full intrinsic width as its box, so centre
+       the (narrower) video inside it rather than relying on the flex parent. */
+    margin-inline: auto;
+    width: auto;
+    height: auto;
+    /* Match the on-screen size of images: fig.html renders them with
+       sizes="…800px", so a landscape image never displays wider than 800px.
+       Without this a 1280px-wide clip would stretch to the full column. */
+    max-width: min(100%, 800px);
+    /* Portrait clips would otherwise tower over the running text — cap their
+       height. Landscape height never reaches this, so it stays width-bound. */
+    max-height: 70vh;
+  }
+
+  .figure-caption {
+    text-align: center;
+    color: var(--color-ink-muted);
+  }
+
+  /* Image and the link around it, as the box the "i" is positioned in
+     (.image-info-button): it ends flush with the image, so the gap to the
+     caption moves from the image to the box. */
+  .figure-media {
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  .figure-media > a,
+  .figure-media .figure-img {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  table {
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  table tbody tr.dimmed {
+    opacity: 0.5;
+  }
+
+  table tbody tr.line-through {
+    text-decoration: line-through;
+  }
+
+  .card {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hgroup {
+      /* text-align / hyphens already reset by the article.content heading
+         rule above; only the tighter spacing and link colour differ here. */
+      margin-top: 0;
+
+      a,
+      a:visited {
+        color: inherit;
+      }
+    }
+  }
+
+  :target {
+    background-color: color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border-radius: var(--radius-sm);
+  }
+
+  .footnotes {
+    font-size: 0.85rem;
+    text-align: left;
+    hyphens: none;
+    color: var(--color-ink-muted);
+    margin-top: 2rem;
+  }
+
+  /* Goldmark already emits an <hr> before the footnote list — style that
+     instead of adding our own border, so there's only ever one line. */
+  .footnotes hr {
+    margin: 0 0 1rem;
+    border: none;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
+
+  .table-of-contents {
+    background: color-mix(in srgb, var(--color-surface) 85%, var(--color-bg));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.4rem;
+    margin-block: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: left;
+    hyphens: none;
+  }
+
+  .table-of-contents .toc-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .table-of-contents ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .table-of-contents ul ul {
+    padding-left: 1rem;
+    font-size: 0.95em;
+  }
+
+  .table-of-contents a {
+    display: block;
+    padding: 0.2rem 0;
+    color: var(--color-ink);
+    text-decoration-line: none;
+  }
+
+  .table-of-contents a:hover,
+  .table-of-contents a:focus-visible {
+    color: var(--bs-link-color);
+    text-decoration-line: underline;
+  }
+}
+
+/* .content--reading: a page on a wide screen reads like a column in a
+   paper -- larger text in a column narrow enough to be read without
+   losing the line, centred on the page. It is as wide as a figure (800px,
+   see _partials/image/figure.html), so text and single pictures end
+   flush. Galleries, panoramas, maps and tables keep the full width and
+   stand out beyond the text on both sides. Set by page.html on a site
+   with params.readingColumn. */
+.content--reading {
+  font-size: 1.1rem;
+
+  @media (min-width: 992px) {
+    --text-width: 50rem;
+    font-size: 1.2rem;
+
+    /* The lead has to stay a size above the text it leads into; its size
+       is set on article.content, hence that in front. */
+    article.content& .lead {
+      font-size: 1.35rem;
+    }
+
+    > :not(.d-flex, .gallery-figure, .embed-consent, .embed-frame, table) {
+      max-width: var(--text-width);
+      margin-inline: auto;
+    }
+  }
+}
+
+/* Table of contents that folds away (params.tocCollapsed,
+   _partials/toc.html): its title is the handle. */
+article.content .table-of-contents {
+  summary.toc-title {
+    margin: 0;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  details[open] > summary.toc-title {
+    margin-bottom: 0.6rem;
+  }
+}

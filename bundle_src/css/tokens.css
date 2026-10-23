@@ -1,0 +1,97 @@
+/* Design tokens: the theme's neutral defaults, a site overrides them in
+   its style.css; and their dark values. */
+
+:root {
+  /* --- design tokens (generic defaults, override per-site) --- */
+  --color-bg: #faf8f4;
+  --color-surface: #ffffff;
+  --color-ink: #26231d;
+  --color-ink-muted: #6b6154;
+  --color-border: rgba(38, 35, 29, 0.12);
+  --color-primary: var(--bs-primary, #6c757d);
+  --color-primary-ink: #ffffff;
+  --color-accent: #4b6b3a;
+  /* The footer is dark in either mode. */
+  --color-footer-bg: var(--color-ink);
+
+  /* Links: Bootstrap's default blue (#0d6efd) has a contrast of only 4.2:1
+     on the page background, short of the 4.5:1 of WCAG AA. These are
+     Bootstrap's own darker shades of it; the link colour comes to 6.1:1. */
+  --bs-link-color: #0a58ca;
+  --bs-link-color-rgb: 10, 88, 202;
+  --bs-link-hover-color: #084298;
+  --bs-link-hover-color-rgb: 8, 66, 152;
+
+  /* One system-font stack for everything — no serif/sans mix, no
+     webfont downloads (privacy: nothing loaded from a third party).
+     This is Bootstrap's own font stack (--bs-font-sans-serif), reused
+     here as the single source of truth for both body and headings. */
+  --font-body: var(--bs-font-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  --font-display: var(--font-body);
+
+  --radius-sm: 0.2rem;
+  --radius-md: 0.35rem;
+  --radius-lg: 0.5rem;
+
+  --shadow-sm: 0 1px 2px rgba(38, 35, 29, 0.06), 0 1px 1px rgba(38, 35, 29, 0.04);
+  --shadow-md: 0 12px 28px -12px rgba(38, 35, 29, 0.22);
+
+  --container-max: 1120px;
+
+  /* Font size of the entries of the main menu, dropdown entries included. */
+  --nav-font-size: 1.2rem;
+
+  /* Height of the navigation bar: the logo and the padding around it.
+     A narrow screen opens the menu right below it. */
+  --site-nav-height: 4rem;
+
+  color-scheme: light;
+}
+
+/* Dark mode, for a site that asks for it (params.darkMode): head.html then
+   sets data-bs-theme on <html> to what the system is set to. That is the
+   attribute Bootstrap's own dark mode hangs on, so its components turn
+   dark along with the tokens here. A site that overrides tokens in its
+   style.css has to give its dark values there as well, under the same
+   selector. */
+[data-bs-theme="dark"] {
+  --color-bg: #1b1916;
+  --color-surface: #262320;
+  --color-ink: #ece7df;
+  --color-ink-muted: #b0a696;
+  --color-border: rgba(236, 231, 223, 0.14);
+  --color-accent: #9dc183;
+  --color-footer-bg: #121110;
+
+  /* Bootstrap's lighter shades of the link blue, 7.5:1 on the dark page
+     background. */
+  --bs-link-color: #6ea8fe;
+  --bs-link-color-rgb: 110, 168, 254;
+  --bs-link-hover-color: #8bb9fe;
+  --bs-link-hover-color-rgb: 139, 185, 254;
+
+  /* On a dark page a shadow has to be black to show at all. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 28px -12px rgba(0, 0, 0, 0.75);
+
+  /* Bootstrap's surfaces (cards, dropdowns, tables), text and borders in
+     the theme's warm tones instead of its blue-grey ones. */
+  --bs-body-bg: var(--color-surface);
+  --bs-body-bg-rgb: 38, 35, 32;
+  --bs-body-color: var(--color-ink);
+  --bs-body-color-rgb: 236, 231, 223;
+  --bs-secondary-color: var(--color-ink-muted);
+  --bs-secondary-rgb: 176, 166, 150;
+  --bs-border-color: #4a453d;
+  --bs-border-color-translucent: var(--color-border);
+
+  color-scheme: dark;
+}
+
+/* Bootstrap's primary blue as text is too dark on a dark surface. */
+[data-bs-theme="dark"] .btn-outline-primary {
+  --bs-btn-color: var(--bs-link-color);
+  --bs-btn-border-color: var(--bs-link-color);
+  --bs-btn-disabled-color: var(--bs-link-color);
+  --bs-btn-disabled-border-color: var(--bs-link-color);
+}

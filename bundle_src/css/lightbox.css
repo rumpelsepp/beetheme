@@ -1,0 +1,95 @@
+/* --------------------------------------------------------------------
+   Lightbox (bundle_src/js/lightbox.ts)
+   -------------------------------------------------------------------- */
+
+.lightbox {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(20, 18, 15, 0.94);
+  color: #fff;
+}
+
+.lightbox[open] {
+  display: grid;
+  place-items: center;
+}
+
+.lightbox::backdrop {
+  background: rgba(20, 18, 15, 0.94);
+}
+
+.lightbox-image {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 5.5rem);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.lightbox button {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.lightbox button:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.lightbox button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.lightbox-close {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-prev {
+  left: 0.75rem;
+}
+
+.lightbox-next {
+  right: 0.75rem;
+}
+
+.lightbox-footer {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.lightbox-original {
+  color: #fff;
+}
+
+.lightbox-count {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}

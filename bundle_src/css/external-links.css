@@ -1,0 +1,11 @@
+/* --------------------------------------------------------------------
+   External links
+   -------------------------------------------------------------------- */
+
+/* Trailing "leaves this site" glyph, emitted by _markup/render-link.html.
+   The space before it comes from an &nbsp; in the markup; this negative end
+   margin cancels the glyph's right-side bearing so a following period or
+   space doesn't look detached from the link. */
+.external-link-icon {
+  margin-inline-end: -0.15em;
+}

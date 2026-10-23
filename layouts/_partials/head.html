@@ -5,7 +5,7 @@
      the system is set to, there is no switch on the page. Inline and
      first, so the page is never painted light before it turns dark.
      Without JavaScript the page stays light. See [data-bs-theme="dark"] in
-     main.css. */}}
+     bundle_src/css/tokens.css. */}}
 {{- if site.Params.darkMode }}
 <script>(()=>{const m=matchMedia('(prefers-color-scheme: dark)'),s=()=>{document.documentElement.dataset.bsTheme=m.matches?'dark':'light'};s();m.addEventListener('change',s)})()</script>
 {{- end }}

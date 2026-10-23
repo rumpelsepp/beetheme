@@ -1,0 +1,19 @@
+/* --------------------------------------------------------------------
+   Links
+   -------------------------------------------------------------------- */
+
+/* One underline for every link, wherever it sits: a thin line in the
+   colour of the text that gets thicker on hover/focus. Links that only
+   show their underline on hover (heading anchors, table of contents) get
+   the thick one right away. The rules further down therefore only switch
+   text-decoration-line -- the text-decoration shorthand would reset the
+   thickness set here. */
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration-thickness: 2px;
+}

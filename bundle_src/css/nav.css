@@ -1,0 +1,211 @@
+/* --------------------------------------------------------------------
+   Navigation (layouts/_partials/nav.html)
+   -------------------------------------------------------------------- */
+
+.site-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--container-max);
+  min-height: var(--site-nav-height);
+  margin-inline: auto;
+  padding: 0.6rem 1rem;
+
+  /* The look of a menu entry, in the bar and in a dropdown. */
+  a,
+  summary {
+    color: var(--color-ink-muted);
+    font-size: var(--nav-font-size);
+    font-weight: 500;
+    text-decoration-line: none;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-ink);
+      background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    }
+  }
+
+  /* --bs-link-color is deliberately darker than --color-primary so this
+     text keeps 4.5:1+ contrast on the (near-white) bar; --color-primary
+     alone was measured at ~3.6:1, failing WCAG AA. */
+  [aria-current="page"] {
+    color: var(--bs-link-color, var(--color-primary));
+    font-weight: 600;
+  }
+
+  .ancestor {
+    color: var(--color-ink);
+  }
+}
+
+.site-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-inline-end: 1rem;
+  font-family: var(--font-display);
+
+  /* Wins over the look of a menu entry above. */
+  .site-nav & {
+    color: var(--color-ink);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    &:hover,
+    &:focus-visible {
+      background: none;
+    }
+  }
+}
+
+.site-nav-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.site-nav-wordmark {
+  letter-spacing: 0.01em;
+}
+
+.site-nav-toggle {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-ink-muted);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+}
+
+.site-nav-menu,
+.site-nav-submenu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+}
+
+/* An entry with children: its <summary> with a caret instead of the
+   browser's marker. */
+.site-nav-sub > summary {
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: "";
+    display: inline-block;
+    margin-inline-start: 0.255em;
+    vertical-align: 0.255em;
+    border-top: 0.3em solid;
+    border-inline: 0.3em solid transparent;
+  }
+}
+
+.site-nav-submenu {
+  min-width: 10rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.site-nav-sublink {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+
+  .site-nav & {
+    color: var(--color-ink);
+  }
+
+  /* White text on --color-primary alone measured ~3.85:1, failing WCAG
+     AA; a site sets a darker --nav-active-bg. */
+  .site-nav &[aria-current="page"] {
+    background: var(--nav-active-bg, var(--color-primary));
+    color: var(--color-primary-ink);
+  }
+}
+
+/* Narrow: the entries open below the bar as a popover, over the page. */
+@media (width < 992px) {
+  .site-nav-menu:popover-open {
+    position: fixed;
+    inset: calc(var(--site-nav-height) + 1px) 0 auto;
+    width: auto;
+    max-height: calc(100dvh - var(--site-nav-height) - 1px);
+    margin: 0;
+    padding: 0.5rem 1rem 1rem;
+    overflow-y: auto;
+    color: inherit;
+    background: var(--color-surface);
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Wide: the entries in the bar, the popover not needed. */
+@media (width >= 992px) {
+  .site-nav-toggle {
+    display: none;
+  }
+
+  /* Overrides what the browser gives a popover: hidden while it's closed,
+     fixed in the middle of the screen while it's open. */
+  /* Right after the brand, as Bootstrap's navbar had them. */
+  .site-nav-menu {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    gap: 0.15rem;
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    color: inherit;
+    background: none;
+    border: 0;
+  }
+
+  .site-nav-sub {
+    position: relative;
+  }
+
+  .site-nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+  }
+}

@@ -1,0 +1,23 @@
+/* --------------------------------------------------------------------
+   Blockquotes
+   -------------------------------------------------------------------- */
+
+/* Goldmark emits a bare <blockquote> (no Bootstrap .blockquote class), so
+   style the element. Kept readable — no italics — since the quotes here are
+   mostly long encyclopedic excerpts. */
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.6rem 1.25rem;
+  border-left: 3px solid var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface));
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.blockquote-footer {
+  margin-left: 1.5rem;
+  color: var(--color-ink-muted);
+}
