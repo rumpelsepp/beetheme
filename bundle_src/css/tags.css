@@ -2,42 +2,6 @@
    Tags
    -------------------------------------------------------------------- */
 
-/* Terms as a row of links (_partials/tag-chips.html). */
-.tag-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-align: left;
-  hyphens: manual;
-  font-weight: 400;
-
-  a {
-    display: block;
-    padding: 0.1rem 0.65rem;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    background: var(--color-surface);
-    color: var(--color-ink);
-    font-size: 0.9rem;
-    text-decoration-line: none;
-
-    &:hover,
-    &:focus-visible {
-      border-color: var(--bs-link-color);
-      color: var(--bs-link-color);
-    }
-  }
-
-  .count {
-    margin-left: 0.15rem;
-    font-size: 0.75rem;
-    color: var(--color-ink-muted);
-  }
-}
-
 /* /tags/ -- tag cloud (_partials/tag-cloud.html). --w (0…1,
    log-scaled by the number of pages) on each <li> says how many pages
    a tag has: the more, the larger and heavier the word and the more of

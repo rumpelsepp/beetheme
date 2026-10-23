@@ -1,0 +1,70 @@
+/* --------------------------------------------------------------------
+   Pills: a row of links, each in a rounded frame
+   -------------------------------------------------------------------- */
+
+/* A list of links as a row of pills -- in Markdown a list with {.pills}
+   below it. The link is the pill, so all of it can be clicked. Size,
+   gap and shadow are custom properties; .tag-chips (_partials/
+   tag-chips.html) is the small kind, the terms of a page with the
+   number of their pages. */
+:is(.pills, .tag-chips) {
+  --pill-gap: 0.6rem;
+  --pill-padding: 0.4rem 1rem;
+  --pill-font-size: inherit;
+  --pill-shadow: var(--shadow-sm);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pill-gap);
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  hyphens: manual;
+
+  a {
+    display: block;
+    padding: var(--pill-padding);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    box-shadow: var(--pill-shadow);
+    font-size: var(--pill-font-size);
+    text-decoration-line: none;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--bs-link-color);
+    }
+  }
+
+  /* The external-link icon is pulled in by a negative margin; a pill is
+     as wide as its content, so the icon would no longer fit and wrap. */
+  .external-link-icon {
+    margin-inline-end: 0;
+  }
+}
+
+.tag-chips {
+  --pill-gap: 0.4rem;
+  --pill-padding: 0.1rem 0.65rem;
+  --pill-font-size: 0.9rem;
+  --pill-shadow: none;
+
+  margin: 0;
+  font-weight: 400;
+
+  a {
+    color: var(--color-ink);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--bs-link-color);
+    }
+  }
+
+  .count {
+    margin-left: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+  }
+}

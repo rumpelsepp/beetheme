@@ -1,0 +1,57 @@
+/* --------------------------------------------------------------------
+   Folded stretches (<details class="fold-details">)
+   -------------------------------------------------------------------- */
+
+/* A stretch of a page folded away behind a handle: the line of the
+   <summary> stays, the rest is one click away, without JavaScript. A
+   script that draws into a folded stretch has to wait for it to open --
+   while closed, it has no size. */
+.fold-details {
+  margin-bottom: 1.5rem;
+
+  > summary {
+    width: fit-content;
+    color: var(--color-ink-muted);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-ink);
+    }
+  }
+
+  &[open] > summary {
+    margin-bottom: 1rem;
+  }
+}
+
+/* A quote folded away behind the name of its source (blockquote shortcode
+   with a summary): the page says it in its own words, the original
+   wording is one click away. A quieter handle, and a run of them stands
+   close together. */
+.quote-details {
+  margin: 0 0 0.5rem;
+
+  /* The last of a run of them, before the text goes on. */
+  &:not(:has(+ .quote-details)) {
+    margin-bottom: 1.5rem;
+  }
+
+  > summary {
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+
+  &[open] > summary {
+    margin-bottom: 0;
+  }
+
+  figure {
+    margin: 0.5rem 0 1rem;
+  }
+
+  blockquote {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+  }
+}
