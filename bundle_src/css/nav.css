@@ -112,10 +112,6 @@
 
 /* An entry with children: its button, with a caret in place of a
    marker. */
-.site-nav-sub {
-  position: relative;
-}
-
 .site-nav-sub-toggle {
   display: block;
   padding: 0.5rem 0.75rem;
@@ -133,15 +129,21 @@
   }
 }
 
-/* The browser opens it as a popover: above the page, closed by a click
-   outside and on Esc, the focus back with its button. What it lays a
-   popover out as by default -- the middle of the screen -- is not where
-   it belongs: below its button. */
+/* The browser opens the submenu as a popover: above the page, closed by
+   a click outside and on Esc, the focus back with its button. As a
+   popover it lies in the top layer, where the containing block is the
+   window -- "top: 100%" would put it below the fold. Where it belongs,
+   under its button, says anchor positioning: the button names itself
+   as the anchor, the submenu positions itself by it (both in
+   nav.html). A browser without it (Firefox < 147, Safari < 26) shows
+   the panel as a strip below the bar, as wide as the window, instead
+   of in the middle of nowhere where the browser lays a popover out by
+   default. */
 .site-nav-submenu {
-  position: absolute;
+  position: fixed;
   inset: auto;
-  top: 100%;
-  left: 0;
+  top: anchor(bottom);
+  left: anchor(left);
   min-width: 10rem;
   margin: 0.5rem 0 0;
   padding: 0.4rem;
@@ -149,6 +151,13 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
+}
+
+@supports not (anchor-name: --a) {
+  .site-nav-submenu {
+    margin: 0;
+    inset: var(--site-nav-height) var(--page-gutter) auto;
+  }
 }
 
 .site-nav-sublink {
