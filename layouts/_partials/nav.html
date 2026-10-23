@@ -69,7 +69,7 @@
 
     {{- if .Children }}
       {{- $ancestor := $page.HasMenuCurrent .Menu . }}
-      <li class="site-nav-item">
+      <li>
         <details class="site-nav-sub" name="{{ $group }}">
           <summary class="site-nav-link{{ if $ancestor }} ancestor{{ end }}">{{ $text }}</summary>
           <ul class="site-nav-submenu">
@@ -81,7 +81,7 @@
         </details>
       </li>
     {{- else }}
-      <li class="site-nav-item">{{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}</li>
+      <li>{{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}</li>
     {{- end }}
   {{- end }}
 {{- end }}

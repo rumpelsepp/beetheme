@@ -21,7 +21,7 @@
     <a href="{{ . }}">{{ partial "icon.html" "tags" }} {{ $.allText | default (T "filterAllTags") }}</a>
     {{- end }}
     {{- with .clear }}
-    <a class="tag-filter-clear" href="{{ . }}">{{ partial "icon.html" "x-lg" }} {{ T "filterClear" }}</a>
+    <a href="{{ . }}">{{ partial "icon.html" "x-lg" }} {{ T "filterClear" }}</a>
     {{- end }}
   </span>
 </p>
