@@ -22,9 +22,15 @@
   --color-border: rgba(38, 35, 29, 0.12);
   --color-border-solid: #dee2e6;
 
-  /* The colour of the brand: buttons, active states, tints; text on it. */
+  /* The colour of the brand: active states, tints; text on it. */
   --color-primary: #0d6efd;
   --color-primary-ink: #ffffff;
+
+  /* What a filled button, or the current entry of a menu, is filled with,
+     under text in --color-primary-ink: a darker shade of the primary
+     colour where that is too light for white text. Hover and pressed
+     shades are mixed from it. */
+  --color-button: var(--color-primary);
   --color-accent: #4b6b3a;
 
   /* Links. Bootstrap's blue (#0d6efd) as text has only 4.2:1 on the page,

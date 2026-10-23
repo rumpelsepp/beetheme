@@ -24,10 +24,10 @@
   --bs-highlight-bg: var(--color-highlight);
 }
 
-/* Bootstrap's primary blue as text is too dark on a dark surface. */
-[data-theme="dark"] .btn-outline-primary {
-  --bs-btn-color: var(--color-link);
-  --bs-btn-border-color: var(--color-link);
-  --bs-btn-disabled-color: var(--color-link);
-  --bs-btn-disabled-border-color: var(--color-link);
+/* Bootstrap's pressed button comes with a more specific selector
+   (.btn:first-child:active) than the theme's; it gets the theme's values. */
+.btn {
+  --bs-btn-active-color: var(--btn-active-color);
+  --bs-btn-active-bg: var(--btn-active-bg);
+  --bs-btn-active-border-color: var(--btn-active-border);
 }

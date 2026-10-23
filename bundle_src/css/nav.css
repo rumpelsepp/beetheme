@@ -148,10 +148,10 @@
     color: var(--color-ink);
   }
 
-  /* White text on --color-primary alone measured ~3.85:1, failing WCAG
-     AA; a site sets a darker --nav-active-bg. */
+  /* White text on --color-primary alone may fail WCAG AA (~3.85:1 in
+     honey); --color-button is the darker shade a site gives for that. */
   .site-nav &[aria-current="page"] {
-    background: var(--nav-active-bg, var(--color-primary));
+    background: var(--color-button);
     color: var(--color-primary-ink);
   }
 }

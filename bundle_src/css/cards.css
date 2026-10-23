@@ -1,24 +1,49 @@
 /* --------------------------------------------------------------------
-   Cards
+   Cards (_partials/card.html, the card shortcode)
    -------------------------------------------------------------------- */
 
+/* A surface with a head, a body and a foot, each optional. A column of
+   flex boxes: the body takes the room that is left, so the feet of the
+   cards in a row of a .grid line up. The corners clip what is inside, an
+   image on top included. */
 .card {
+  --card-padding: 1rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  color: var(--color-ink);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
 }
 
 .card-header {
+  margin-bottom: 0;
+  padding: 0.5rem var(--card-padding);
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
   border-bottom: 1px solid var(--color-border);
   font-family: var(--font-display);
   font-weight: 600;
 }
 
+.card-body {
+  flex: 1 1 auto;
+  padding: var(--card-padding);
+}
+
+.card-title {
+  margin-bottom: 0.5rem;
+}
+
 /* The line under a card's title: no heading, but set like a small one. */
 .card-subtitle {
   margin-top: 0;
+  margin-bottom: 0;
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 600;
@@ -27,12 +52,18 @@
   hyphens: none;
 }
 
+.card-text:last-child {
+  margin-bottom: 0;
+}
+
 .card-footer {
+  padding: 0.5rem var(--card-padding);
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
 }
 
 .card-img-top {
+  width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }
