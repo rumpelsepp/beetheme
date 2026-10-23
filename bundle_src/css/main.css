@@ -1,31 +1,31 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
-
 /* ==========================================================================
    beetheme — design system
    ==========================================================================
-   Generic structural/typographic layer for the theme. Bootstrap's CSS
-   stays the foundation for now (grid, forms, buttons, cards -- content
-   files and shortcodes rely on its classes directly), the files below
-   restyle it into a distinct look; its JS is gone. Brand colors live in
-   the site's own style.css as CSS custom-property overrides; the defaults
-   in tokens.css are deliberately neutral so the theme works standalone
-   too.
+   The theme's whole CSS, no framework underneath. Everything adjustable
+   is a token (tokens.css) with a neutral default, so the theme works
+   standalone; a site sets its own in its bundle_src/css/, which comes
+   after this and wins.
 
    One file per part of the page, put together here with plain CSS
-   @import, no preprocessor: esbuild (build.mjs) only inlines them into one
-   bundle. The order is the cascade: a later
-   file wins over an earlier one at the same specificity, and a site's
-   style.css over all of them.
+   @import, no preprocessor: esbuild (build.mjs) only inlines them into
+   one bundle. The order is the cascade -- a later file wins over an
+   earlier one at the same specificity:
+   - tokens, the bare elements, the frame of the page;
+   - layout, text classes and the components (buttons, cards, forms,
+     tables) that the parts after them build on;
+   - the parts of the page and of its content;
+   - utilities last, so they win over what they are put on.
    ========================================================================== */
 
 @import "./tokens.css";
-@import "./bootstrap-bridge.css";
 @import "./reboot.css";
 @import "./base.css";
 @import "./layout.css";
 @import "./text.css";
 @import "./buttons.css";
 @import "./cards.css";
+@import "./forms.css";
+@import "./tables.css";
 @import "./links.css";
 @import "./icons.css";
 @import "./accessibility.css";
@@ -33,7 +33,6 @@
 @import "./hero.css";
 @import "./content.css";
 @import "./external-links.css";
-@import "./tables.css";
 @import "./blockquotes.css";
 @import "./embed.css";
 @import "./image-info.css";

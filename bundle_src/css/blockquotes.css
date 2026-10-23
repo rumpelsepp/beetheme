@@ -2,7 +2,7 @@
    Blockquotes
    -------------------------------------------------------------------- */
 
-/* Goldmark emits a bare <blockquote> (no Bootstrap .blockquote class), so
+/* Goldmark emits a bare <blockquote> (no .blockquote class), so
    style the element. Kept readable — no italics — since the quotes here are
    mostly long encyclopedic excerpts. */
 blockquote {

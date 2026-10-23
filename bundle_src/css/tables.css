@@ -2,33 +2,28 @@
    Tables
    -------------------------------------------------------------------- */
 
+/* Every table looks the same, whatever classes it was given once: a
+   card with a head tinted in the primary colour, rows parted by
+   hairlines and striped, no lines between the columns. The markup only
+   says .table. The colours are custom properties, e.g. for print. */
 .table {
-  /* A pale, low-opacity mix of --color-primary lands on almost exactly
-     the same warm near-white as the page background (both are "faint
-     honey tint over white"), so odd/even rows used to read as "white"
-     vs. "invisible" instead of a proper zebra. Mixing in enough
-     --color-primary to stay clearly on-brand, but tempering it with
-     --color-ink and pushing the opacity up, keeps the stripe warm
-     *and* visibly darker/more saturated than the page background. */
-  --bs-table-striped-bg: color-mix(
+  --table-bg: var(--color-surface);
+  --table-head-bg: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
+  --table-border: var(--color-border);
+  /* A pale mix of --color-primary alone lands on almost the page
+     background, so odd and even rows would read as "white" and
+     "invisible"; tempered with --color-ink and a little stronger, the
+     stripe stays warm and visibly darker. */
+  --table-stripe-bg: color-mix(
     in srgb,
     color-mix(in srgb, var(--color-primary) 60%, var(--color-ink) 40%) 11%,
     var(--color-surface)
   );
-}
 
-.table > :not(caption) > * > th {
-  font-family: var(--font-display);
-  font-weight: 600;
-}
-
-/* Every table looks the same, whatever classes it was given once: a
-   card with a head tinted in the primary colour, rows parted by hairlines
-   and striped, no lines between the columns. The markup only says
-   .table. */
-.table {
-  --bs-table-border-color: var(--color-border);
-  --table-head-bg: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
+  width: 100%;
+  margin-bottom: var(--flow-space);
+  vertical-align: top;
+  color: var(--color-ink);
   /* Left-aligned and only broken where the text says so (&shy;): a table
      is squeezed as far as its words allow, and with the hyphenation and
      the justified text of the page that leaves heads cut into syllables
@@ -39,30 +34,34 @@
 
   > :not(caption) > * > * {
     padding: 0.45rem 0.75rem;
-    border-bottom-width: 1px;
+    background-color: var(--table-bg);
+    border-bottom: 1px solid var(--table-border);
+  }
+
+  th {
+    font-family: var(--font-display);
+    font-weight: 600;
   }
 
   > thead > tr > * {
-    --bs-table-bg-type: var(--table-head-bg);
     vertical-align: bottom;
+    background-color: var(--table-head-bg);
     border-bottom: 2px solid color-mix(in srgb, var(--color-primary) 55%, transparent);
   }
 
   > tbody {
+    vertical-align: inherit;
+
     > tr:nth-of-type(even) > * {
-      --bs-table-bg-type: var(--bs-table-striped-bg);
+      background-color: var(--table-stripe-bg);
     }
 
     > tr:last-child > * {
       border-bottom-width: 0;
     }
-
-    > tr > th[scope="row"] {
-      font-weight: 600;
-    }
   }
 
-  /* The title of a table above it, not below as Bootstrap has it. */
+  /* The title of a table above it. */
   > caption {
     caption-side: top;
     padding: 0 0 0.4rem;
@@ -72,12 +71,14 @@
   }
 }
 
-/* A table that scrolls sideways keeps room for the shadow of its card,
-   which the scrolling would cut off otherwise. */
+/* A table wider than the page scrolls sideways in this; it keeps room
+   for the shadow of the table's card, which the scrolling would cut off
+   otherwise. */
 .table-responsive {
+  overflow-x: auto;
   padding: 0 3px 4px;
   margin-inline: -3px;
-  margin-bottom: 1rem;
+  margin-bottom: var(--flow-space);
 
   > .table {
     margin-bottom: 0;

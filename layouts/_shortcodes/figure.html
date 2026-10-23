@@ -1,5 +1,5 @@
 <!-- This is the same as the stock hugo figure shortcode.
-Only the bootstrap classes have been added to the figure and img tags. -->
+Only the classes of the theme's figure (.figure, .figure-img, .figure-caption) have been added to the figure and img tags. -->
 
 <figure{{ with .Get "class" }} class="figure {{ . }}"{{ end }}>
   {{- if .Get "link" -}}

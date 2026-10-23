@@ -110,9 +110,8 @@
   }
 }
 
-/* Meta line of an entry (date, tags, category), in a header or on a card:
-   the muted ink, also where it stands in Bootstrap's .text-secondary
-   grey, which has only 4.4:1 on the page background. */
+/* Meta line of an entry (date, tags, category), in a header or on a
+   card: in the muted ink. */
 .entry-meta {
   color: var(--color-ink-muted);
 }
