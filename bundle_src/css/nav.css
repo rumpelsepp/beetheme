@@ -22,8 +22,7 @@
   padding: 0.6rem 1rem;
 
   /* The look of a menu entry, in the bar and in a dropdown. */
-  a,
-  summary {
+  :is(a, .site-nav-sub-toggle) {
     color: var(--color-ink-muted);
     font-size: var(--nav-font-size);
     font-weight: 500;
@@ -109,15 +108,18 @@
   padding: 0.5rem 0.75rem;
 }
 
-/* An entry with children: its <summary> with a caret instead of the
-   browser's marker. */
-.site-nav-sub > summary {
-  cursor: pointer;
-  list-style: none;
+/* An entry with children: its button, with a caret in place of a
+   marker. */
+.site-nav-sub {
+  position: relative;
+}
 
-  &::-webkit-details-marker {
-    display: none;
-  }
+.site-nav-sub-toggle {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+  background: none;
+  border: 0;
 
   &::after {
     content: "";
@@ -129,9 +131,17 @@
   }
 }
 
+/* The browser opens it as a popover: above the page, closed by a click
+   outside and on Esc, the focus back with its button. What it lays a
+   popover out as by default -- the middle of the screen -- is not where
+   it belongs: below its button. */
 .site-nav-submenu {
+  position: absolute;
+  inset: auto;
+  top: 100%;
+  left: 0;
   min-width: 10rem;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0 0;
   padding: 0.4rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -196,16 +206,5 @@
     color: inherit;
     background: none;
     border: 0;
-  }
-
-  .site-nav-sub {
-    position: relative;
-  }
-
-  .site-nav-submenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
   }
 }

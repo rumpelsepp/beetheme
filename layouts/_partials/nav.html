@@ -6,10 +6,11 @@
   - On a narrow screen the entries sit behind a button that opens them as
     a popover (the popover attribute): the browser brings the opening and
     closing along, Esc and a click outside included.
-  - An entry with children is a <details>; all of one menu share a name,
-    so only one is open at a time. bundle_src/js/nav.ts adds closing on
-    Esc and on a click outside. An entry that has a URL of its own as well
-    comes first among its children.
+  - An entry with children opens them below itself as a popover of its
+    own, nested in the menu's: the browser closes it on Esc and on a
+    click outside, hands the focus back to its button and, through light
+    dismiss, has only one of them open at a time. An entry that has a
+    URL of its own as well comes first among its children.
 
   Usage:
     {{ partial "nav.html" (dict "menuID" "main" "page" . "brand" $logo "brandText" site.Title) }}
@@ -69,16 +70,15 @@
 
     {{- if .Children }}
       {{- $ancestor := $page.HasMenuCurrent .Menu . }}
-      <li>
-        <details class="site-nav-sub" name="{{ $group }}">
-          <summary class="site-nav-link{{ if $ancestor }} ancestor{{ end }}">{{ $text }}</summary>
-          <ul class="site-nav-submenu">
-            {{- with .URL }}
-              <li>{{ partial "link.html" (dict "href" . "text" $text "attrs" $attrs) }}</li>
-            {{- end }}
-            {{- partial "inline/nav/walk.html" (dict "page" $page "entries" .Children "group" $group "sub" true) }}
-          </ul>
-        </details>
+      {{- $subID := printf "%s-%s" $group (anchorize $label) }}
+      <li class="site-nav-sub">
+        <button type="button" class="site-nav-sub-toggle{{ if $ancestor }} ancestor{{ end }}" popovertarget="{{ $subID }}">{{ $text }}</button>
+        <ul class="site-nav-submenu" id="{{ $subID }}" popover>
+          {{- with .URL }}
+            <li>{{ partial "link.html" (dict "href" . "text" $text "attrs" $attrs) }}</li>
+          {{- end }}
+          {{- partial "inline/nav/walk.html" (dict "page" $page "entries" .Children "group" $group "sub" true) }}
+        </ul>
       </li>
     {{- else }}
       <li>{{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}</li>
