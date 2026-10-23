@@ -1,6 +1,7 @@
 {{- /*
-  Heading with a "#" behind it that links to the heading itself, shown on
-  hover, for copying a link to the section. It is a convenience for mouse
+  Heading with a "#" in front of it that links to the heading itself,
+  shown on hover in the margin left of the heading (as MDN has it), for
+  copying a link to the section. It is a convenience for mouse
   users only: hidden from screen readers and skipped by the tab key, so a
   page's headings don't all turn up as links.
 
@@ -10,5 +11,5 @@
   {{- range $key, $val := .Attributes }}
     {{- printf " %s=%q" $key $val | safeHTMLAttr }}
   {{- end }}
->{{ .Text | safeHTML }}<a class="anchor" href="#{{ .Anchor | safeURL }}" aria-hidden="true" tabindex="-1">#</a></h{{ .Level }}>
+><a class="anchor" href="#{{ .Anchor | safeURL }}" aria-hidden="true" tabindex="-1">#</a>{{ .Text | safeHTML }}</h{{ .Level }}>
 {{- "" -}}

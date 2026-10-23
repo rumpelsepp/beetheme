@@ -24,15 +24,20 @@ article.content {
     font-weight: 600;
     text-align: left;
     hyphens: none;
+    position: relative;
     margin-top: 2.25rem;
     margin-bottom: 1rem;
 
-    /* "#" behind the heading, a link to the heading's own anchor (see
-       _markup/render-heading.html): only there while the heading is
-       hovered. */
+    /* "#" in front of the heading, a link to the heading's own anchor (see
+       _markup/render-heading.html): in the margin left of it, so the
+       heading stays flush with the text, and only there while the heading
+       is hovered. Its padding bridges the gap, so the pointer can move
+       over to it without losing the hover. */
     a.anchor,
     a.anchor:visited {
-      margin-left: 0.35em;
+      position: absolute;
+      inset-inline-end: 100%;
+      padding-inline-end: 0.3em;
       color: var(--color-ink-muted);
       font-weight: 400;
       text-decoration-line: none;
