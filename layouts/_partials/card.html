@@ -59,9 +59,10 @@
             <p class="card-subtitle mb-2 text-secondary">{{ . }}</p>
         {{ end }}
 
-        {{ $raw := .content | strings.TrimSpace }}
-        {{ $processed := $raw | replaceRE `(?i)<p([^>]*)>` `<p class="card-text"$1>` }}
-        {{ $processed | safeHTML }}
+        {{/* The body's last child stands on the body's padding instead of
+             a margin of its own (cards.css); anything in .content goes out
+             untouched. */}}
+        {{ .content | strings.TrimSpace | safeHTML }}
     </div>
 
     {{ with .footer }}

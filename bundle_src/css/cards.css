@@ -52,6 +52,10 @@
   hyphens: none;
 }
 
+/* The last of the body's children stands on the body's padding instead
+   of a margin of its own. .card-text is for the places that write it of
+   their own accord. */
+.card-body > :last-child,
 .card-text:last-child {
   margin-bottom: 0;
 }
