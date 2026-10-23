@@ -1,0 +1,33 @@
+{{- /*
+  An icon of Bootstrap Icons (https://icons.getbootstrap.com/, MIT
+  license), written inline as <svg>. build.mjs copies the SVGs from the
+  npm package bootstrap-icons into assets/gen/icons/, so an npm update
+  brings new and corrected icons along; only the icons a page uses end up
+  in its HTML.
+
+  The icon is 1em large and takes the text colour, like a letter; style it
+  through .bi or .bi-<name>. An icon with a label is read out by screen
+  readers and shows the label as a tooltip, one without is hidden from
+  them, as next to a text that says the same.
+
+    {{ partial "icon.html" "geo-alt" }}
+    {{ partial "icon.html" (dict "name" "list-check" "label" "Noch nicht abgeschrieben") }}
+
+  A name that isn't an icon fails the build.
+
+  Params (a string, the name, or a dict):
+    name   name of the icon, without "bi-", e.g. "geo-alt" (required)
+    label  what the icon says, for an icon that stands alone (optional)
+    class  further classes (optional)
+*/ -}}
+{{- $p := . }}
+{{- if not (reflect.IsMap $p) }}{{ $p = dict "name" $p }}{{ end }}
+{{- $svg := partialCached "_funcs/icon-svg.html" $p.name $p.name }}
+{{- $class := slice "bi" (printf "bi-%s" $p.name) }}
+{{- with $p.class }}{{ $class = $class | append . }}{{ end }}
+{{- $a11y := `aria-hidden="true"` }}
+{{- with $p.label }}{{ $a11y = printf `role="img" aria-label="%s"` (htmlEscape .) }}{{ end -}}
+<svg xmlns="http://www.w3.org/2000/svg" class="{{ delimit $class " " }}" width="1em" height="1em" viewBox="{{ $svg.viewBox }}" fill="currentColor" {{ $a11y | safeHTMLAttr }} focusable="false">
+  {{- with $p.label }}<title>{{ . }}</title>{{ end }}{{ $svg.inner | safeHTML -}}
+</svg>
+{{- "" -}}

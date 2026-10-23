@@ -58,7 +58,7 @@
     {{- with $geotag }}
     {{- /* The pin stands with the name of the row, so the coordinates
          start where the values of the other rows do. */}}
-    <dt>{{ T "imageInfoPlace" }} <i class="bi bi-geo-alt" aria-hidden="true"></i></dt>
+    <dt>{{ T "imageInfoPlace" }} {{ partial "icon.html" "geo-alt" }}</dt>
     <dd>{{ . }}</dd>
     {{- end }}
     <dt>{{ T "imageInfoOriginal" }}</dt>

@@ -8,7 +8,11 @@
 // shortcode); in the others a click simply follows the link to the large
 // image.
 
+import chevronLeft from 'bootstrap-icons/icons/chevron-left.svg';
+import chevronRight from 'bootstrap-icons/icons/chevron-right.svg';
+import xLg from 'bootstrap-icons/icons/x-lg.svg';
 import { t } from './i18n';
+import { icon } from './icon';
 
 const GALLERY = '.gallery[data-lightbox]';
 
@@ -19,15 +23,12 @@ interface Picture {
   link: HTMLAnchorElement;
 }
 
-function button(className: string, label: string, icon: string): HTMLButtonElement {
+function button(className: string, label: string, svg: string): HTMLButtonElement {
   const node = document.createElement('button');
   node.type = 'button';
   node.className = className;
   node.setAttribute('aria-label', label);
-  const glyph = document.createElement('i');
-  glyph.className = `bi ${icon}`;
-  glyph.setAttribute('aria-hidden', 'true');
-  node.append(glyph);
+  node.append(icon(svg));
   return node;
 }
 
@@ -36,14 +37,14 @@ class Lightbox {
   private readonly image = document.createElement('img');
   private readonly count = document.createElement('p');
   private readonly original = document.createElement('a');
-  private readonly prev = button('lightbox-nav lightbox-prev', t('lightboxPrevious'), 'bi-chevron-left');
-  private readonly next = button('lightbox-nav lightbox-next', t('lightboxNext'), 'bi-chevron-right');
+  private readonly prev = button('lightbox-nav lightbox-prev', t('lightboxPrevious'), chevronLeft);
+  private readonly next = button('lightbox-nav lightbox-next', t('lightboxNext'), chevronRight);
   private pictures: Picture[] = [];
   private index = 0;
   private touchX: number | null = null;
 
   constructor() {
-    const close = button('lightbox-close', t('closeLabel'), 'bi-x-lg');
+    const close = button('lightbox-close', t('closeLabel'), xLg);
     this.dialog.className = 'lightbox';
     this.dialog.setAttribute('aria-label', t('lightboxLabel'));
     this.image.className = 'lightbox-image';

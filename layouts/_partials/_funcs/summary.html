@@ -22,7 +22,7 @@
   {{- $text = .page.Summary | string
     | replaceRE `(?s)<div class="embed-consent".*?</div>\s*</div>` ""
     | replaceRE `(?s)<a class="anchor".*?</a>` " "
-    | replaceRE `(?s)(&nbsp;|\x{00A0})?<i class="bi bi-box-arrow-up-right.*?</i>` ""
+    | replaceRE `(?s)(&nbsp;|\x{00A0})?<svg [^>]*class="bi bi-box-arrow-up-right.*?</svg>` ""
     | replaceRE `(?s)<span class="visually-hidden">.*?</span>` ""
   }}
 {{- end }}

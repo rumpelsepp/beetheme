@@ -27,7 +27,7 @@
 <div class="embed-consent" data-provider="{{ .provider }}" data-src="{{ .src }}" data-title="{{ .title | default (T "embedTitle" (dict "Provider" .provider)) }}"
   data-height="{{ .height | default 500 }}"{{ with .width }} data-width="{{ . }}"{{ end }}>
   <p>
-    <i class="bi bi-shield-lock" aria-hidden="true"></i>
+    {{ partial "icon.html" "shield-lock" }}
     {{- /* The texts of the notice may hold HTML, so what goes into them
          is escaped here. */}}
     {{- $escaped := dict "Provider" (htmlEscape .provider) "Title" (htmlEscape (.title | default "")) }}

@@ -20,6 +20,9 @@ const themeDir = path.dirname(fileURLToPath(import.meta.url));
 // (cache-busting, SRI). Nothing here is referenced directly by URL.
 const outdir = 'assets/gen';
 
+// Bootstrap Icons, as single SVG files.
+const iconDir = 'node_modules/bootstrap-icons/icons';
+
 // The theme's bundles, and the site's own from bundle_src/ where it has
 // them: css/style.css and js/main.ts.
 const entryPoints = {
@@ -42,6 +45,10 @@ async function runBuild() {
     // layouts/_partials/head/js.html).
     fs.rmSync(outdir, { recursive: true, force: true });
 
+    // The icons for layouts/_partials/icon.html, one SVG each, from the
+    // npm package -- an npm update brings new and corrected ones along.
+    fs.cpSync(iconDir, path.join(outdir, 'icons'), { recursive: true });
+
     const ctx = await esbuild.context({
       entryPoints,
       outdir,
@@ -61,7 +68,9 @@ async function runBuild() {
       logLevel: 'info',
       loader: {
         '.woff': 'file',
-        '.woff2': 'file'
+        '.woff2': 'file',
+        // An imported icon is its SVG markup, see bundle_src/js/icon.ts.
+        '.svg': 'text',
       },
       assetNames: '[name]',
     });

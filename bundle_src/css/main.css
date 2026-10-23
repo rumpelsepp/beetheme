@@ -1,5 +1,4 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import "bootstrap-icons/font/bootstrap-icons.css";
 
 /* ==========================================================================
    beetheme — design system
@@ -179,6 +178,21 @@ a {
 a:hover,
 a:focus-visible {
   text-decoration-thickness: 2px;
+}
+
+/* --------------------------------------------------------------------
+   Icons
+   -------------------------------------------------------------------- */
+
+/* Bootstrap Icons as inline <svg> (layouts/_partials/icon.html,
+   bundle_src/js/icon.ts): as large as a letter and sitting on the line
+   like one -- the same offset the icon font had. */
+.bi {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
 }
 
 /* --------------------------------------------------------------------

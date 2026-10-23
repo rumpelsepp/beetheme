@@ -1,0 +1,20 @@
+{{- /*
+  The parts of an icon's SVG file that icon.html needs, read once per
+  build and icon (it calls this through partialCached).
+
+  Params (string): name of the icon, without "bi-"
+
+  Returns: dict
+    viewBox  the viewBox of the file
+    inner    what stands inside its <svg>, the paths
+*/ -}}
+{{- $file := printf "gen/icons/%s.svg" . }}
+{{- $svg := "" }}
+{{- with resources.Get $file }}
+  {{- $svg = .Content }}
+{{- else }}
+  {{- errorf "icon.html: there is no icon %q (%s missing; did the npm build run?)" . $file }}
+{{- end }}
+{{- $viewBox := index (findRESubmatch `viewBox="([^"]*)"` $svg 1) 0 1 }}
+{{- $inner := $svg | replaceRE `(?s)^.*?<svg[^>]*>|</svg>\s*$` "" | strings.TrimSpace }}
+{{- return dict "viewBox" $viewBox "inner" $inner }}

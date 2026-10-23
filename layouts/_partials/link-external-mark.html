@@ -1,6 +1,6 @@
 {{- /*
   What marks a link as external, to go at the end of the link's content: a
-  trailing "external link" icon (Bootstrap Icons) and, for screen readers,
+  trailing "external link" icon (icon.html) and, for screen readers,
   a note that the link opens in a new tab.
 
   A non-breaking space sits between the link text and the icon, so the
@@ -15,6 +15,6 @@
     icon  false leaves the icon out, for a link around an image or one
           that brings an icon of its own (default: true)
 */ -}}
-{{- if ne .icon false }}&nbsp;<i class="bi bi-box-arrow-up-right external-link-icon" aria-hidden="true"></i>{{ end -}}
+{{- if ne .icon false }}&nbsp;{{ partial "icon.html" (dict "name" "box-arrow-up-right" "class" "external-link-icon") }}{{ end -}}
 <span class="visually-hidden"> ({{ T "externalLinkNote" }})</span>
 {{- "" -}}

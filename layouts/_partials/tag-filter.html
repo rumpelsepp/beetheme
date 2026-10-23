@@ -13,15 +13,15 @@
 */ -}}
 <p class="tag-filter">
   <span class="tag-filter-text">
-    <i class="bi bi-funnel-fill" aria-hidden="true"></i>
+    {{ partial "icon.html" "funnel-fill" }}
     {{ T "filteredBy" }} <strong>{{ .title }}</strong>{{ with .count }} – {{ . }}{{ end }}
   </span>
   <span class="tag-filter-actions">
     {{- with .allHref }}
-    <a href="{{ . }}"><i class="bi bi-tags" aria-hidden="true"></i> {{ $.allText | default (T "filterAllTags") }}</a>
+    <a href="{{ . }}">{{ partial "icon.html" "tags" }} {{ $.allText | default (T "filterAllTags") }}</a>
     {{- end }}
     {{- with .clear }}
-    <a class="tag-filter-clear" href="{{ . }}"><i class="bi bi-x-lg" aria-hidden="true"></i> {{ T "filterClear" }}</a>
+    <a class="tag-filter-clear" href="{{ . }}">{{ partial "icon.html" "x-lg" }} {{ T "filterClear" }}</a>
     {{- end }}
   </span>
 </p>

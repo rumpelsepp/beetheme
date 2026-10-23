@@ -1,0 +1,14 @@
+{{- /*
+  An icon of Bootstrap Icons in the text, see _partials/icon.html:
+
+    {{< icon "envelope" >}} Bestellanfrage per E-Mail
+    {{< icon name="list-check" label="Noch nicht abgeschrieben" >}}
+
+  Params: the name as the only positional parameter, or name, label and
+  class by name.
+*/ -}}
+{{- if .IsNamedParams }}
+  {{- partial "icon.html" .Params }}
+{{- else }}
+  {{- partial "icon.html" (.Get 0) }}
+{{- end -}}
