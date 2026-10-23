@@ -28,9 +28,9 @@
   {{- $preload := .Get "preload" | default (cond (ne $poster nil) "none" "metadata") -}}
   {{- $caption := .Get "caption" -}}
 
-  <div class="d-flex justify-content-center">
+  <div class="figure-frame">
     <figure class="figure {{ with .Get "class" }}{{ . }}{{ end }}">
-      <video class="figure-img img-fluid rounded" controls playsinline
+      <video class="figure-img img-fluid" controls playsinline
         preload="{{ $preload }}"
         {{- with $poster }} poster="{{ .RelPermalink }}"{{ end }}
         {{- with $poster }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}

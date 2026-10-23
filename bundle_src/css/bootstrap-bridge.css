@@ -24,12 +24,6 @@
   --bs-highlight-bg: var(--color-highlight);
 }
 
-/* Bootstrap gives these as "r, g, b" triples, which no token can be
-   turned into; so the class itself takes the token. */
-.text-secondary {
-  color: var(--color-ink-muted) !important;
-}
-
 /* Bootstrap's primary blue as text is too dark on a dark surface. */
 [data-theme="dark"] .btn-outline-primary {
   --bs-btn-color: var(--color-link);

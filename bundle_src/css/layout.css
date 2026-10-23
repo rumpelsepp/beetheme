@@ -1,0 +1,44 @@
+/* --------------------------------------------------------------------
+   Layout: container and grid
+   -------------------------------------------------------------------- */
+
+/* The column the page lives in: as wide as the window less a gutter on
+   either side, at most --container-max. Header, hero and footer bring
+   their own, so they can reach the edges of the window. */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+/* A grid of equal columns, as many as fit: each at least --grid-min
+   wide, at most --grid-max of them side by side. The browser works out
+   how many fit -- no breakpoints. The items are stretched to the height
+   of their row, so cards in a row end flush.
+
+     <div class="grid" style="--grid-max: 2">…</div>
+
+   --grid-min  narrowest a column may get (default 16rem); on a screen
+               narrower than that there is one column, as wide as it
+   --grid-max  most columns side by side (default 3)
+   --grid-gap  space between columns and rows (default 1.5rem) */
+.grid {
+  --grid-min: 16rem;
+  --grid-max: 3;
+  --grid-gap: 1.5rem;
+
+  /* A column is at least the larger of --grid-min and the width that
+     --grid-max columns would have; never more than the whole row. */
+  --grid-column: min(
+    100%,
+    max(var(--grid-min), (100% - (var(--grid-max) - 1) * var(--grid-gap)) / var(--grid-max))
+  );
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-column), 1fr));
+  gap: var(--grid-gap);
+  margin-bottom: var(--flow-space);
+  padding: 0;
+  list-style: none;
+}

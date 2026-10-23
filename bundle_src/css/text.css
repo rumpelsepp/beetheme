@@ -1,0 +1,66 @@
+/* --------------------------------------------------------------------
+   Text classes: lead, heading sizes, lists, images, figures
+   -------------------------------------------------------------------- */
+
+/* The opening paragraph of a page, a step larger ({.lead} in Markdown). */
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.small {
+  font-size: 0.875em;
+}
+
+/* The size of a heading on another element -- e.g. an h2 that should
+   look like an h4: {.h4} in Markdown. */
+.h1 { font-size: var(--font-size-h1); }
+.h2 { font-size: var(--font-size-h2); }
+.h3 { font-size: var(--font-size-h3); }
+.h4 { font-size: var(--font-size-h4); }
+.h5 { font-size: var(--font-size-h5); }
+.h6 { font-size: var(--font-size-h6); }
+
+/* A list without bullets and indent; one in a row. */
+.list-unstyled,
+.list-inline {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-inline-item {
+  display: inline-block;
+
+  &:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+}
+
+/* An image never wider than its container, its height in proportion. */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* A picture with its caption (_partials/image/figure.html). The figure
+   is as wide as its picture; .figure-frame around it centres it in the
+   column. */
+.figure-frame {
+  display: flex;
+  justify-content: center;
+}
+
+.figure {
+  display: inline-block;
+}
+
+.figure-img {
+  margin-bottom: 0.5rem;
+  line-height: 1;
+  border-radius: var(--radius-md);
+}
+
+.figure-caption {
+  font-size: 0.875em;
+  color: var(--color-ink-muted);
+}

@@ -22,6 +22,8 @@
 @import "./bootstrap-bridge.css";
 @import "./reboot.css";
 @import "./base.css";
+@import "./layout.css";
+@import "./text.css";
 @import "./links.css";
 @import "./icons.css";
 @import "./accessibility.css";
@@ -42,3 +44,4 @@
 @import "./details.css";
 @import "./pills.css";
 @import "./split.css";
+@import "./utilities.css";

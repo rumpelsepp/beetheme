@@ -82,8 +82,10 @@
 
   /* --- Layout --- */
 
-  /* Width of the page content, header and footer included. */
+  /* Width of the page content, header and footer included, and the
+     space it keeps from the edges of a narrower window. */
   --container-max: 1120px;
+  --page-gutter: 0.75rem;
 
   /* Font size of the entries of the main menu, dropdown entries included. */
   --nav-font-size: 1.2rem;

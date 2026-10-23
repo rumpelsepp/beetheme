@@ -17,7 +17,21 @@ blockquote > :last-child {
   margin-bottom: 0;
 }
 
+/* The quote of the blockquote shortcode, a step larger, and its source
+   below it. */
+.blockquote {
+  margin-bottom: var(--flow-space);
+  font-size: 1.25rem;
+}
+
 .blockquote-footer {
+  margin-top: calc(-1 * var(--flow-space));
+  margin-bottom: var(--flow-space);
   margin-left: 1.5rem;
+  font-size: 0.875em;
   color: var(--color-ink-muted);
+
+  &::before {
+    content: "— ";
+  }
 }

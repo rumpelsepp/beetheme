@@ -101,7 +101,7 @@ article.content {
   @media (max-width: 575.98px) {
     .figure-breakout {
       width: auto;
-      margin-inline: calc(-0.5 * var(--bs-gutter-x, 1.5rem));
+      margin-inline: calc(-1 * var(--page-gutter));
     }
 
     .figure-breakout .figure-img {
@@ -109,7 +109,7 @@ article.content {
     }
 
     .figure-breakout .figure-caption {
-      padding-inline: calc(0.5 * var(--bs-gutter-x, 1.5rem));
+      padding-inline: var(--page-gutter);
     }
   }
 
@@ -270,7 +270,7 @@ article.content {
       font-size: 1.35rem;
     }
 
-    > :not(.d-flex, .gallery-figure, .embed-consent, .embed-frame, table) {
+    > :not(.figure-frame, .gallery-figure, .embed-consent, .embed-frame, table) {
       max-width: var(--text-width);
       margin-inline: auto;
     }

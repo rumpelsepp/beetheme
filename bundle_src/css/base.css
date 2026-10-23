@@ -44,16 +44,6 @@ body {
   flex: 1 1 auto;
 }
 
-/* Bootstrap container: keep a readable max width, let the header/hero and
-   footer break out of it independently. */
-.container,
-.container-lg,
-.container-md,
-.container-sm,
-.container-xl {
-  max-width: var(--container-max);
-}
-
 #main-content > .container {
   padding-top: 2.25rem;
   padding-bottom: 4rem;
