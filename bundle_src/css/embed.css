@@ -22,7 +22,7 @@
 
 .embed-consent > p .bi {
   margin-right: 0.3rem;
-  color: var(--bs-link-color);
+  color: var(--color-link);
 }
 
 /* Button, checkbox and the link to the provider, stacked and centred. */

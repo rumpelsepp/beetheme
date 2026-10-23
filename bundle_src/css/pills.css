@@ -33,7 +33,7 @@
 
     &:hover,
     &:focus-visible {
-      border-color: var(--bs-link-color);
+      border-color: var(--color-link);
     }
   }
 
@@ -58,7 +58,7 @@
 
     &:hover,
     &:focus-visible {
-      color: var(--bs-link-color);
+      color: var(--color-link);
     }
   }
 

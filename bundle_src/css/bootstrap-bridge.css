@@ -1,0 +1,39 @@
+/* --------------------------------------------------------------------
+   Bootstrap, led by the tokens -- for the time being
+   -------------------------------------------------------------------- */
+
+/* While Bootstrap's CSS is still loaded, its components (buttons, cards,
+   form fields, tables) take their colours and fonts from the theme's
+   tokens through its own variables. :root comes after Bootstrap's blocks
+   at the same specificity, so it wins over its light and its dark values
+   alike. This file goes once Bootstrap goes. */
+:root {
+  --bs-primary: var(--color-primary);
+  --bs-font-sans-serif: var(--font-body);
+  --bs-font-monospace: var(--font-mono);
+  --bs-body-font-family: var(--font-body);
+  --bs-body-bg: var(--color-surface);
+  --bs-body-color: var(--color-ink);
+  --bs-secondary-color: var(--color-ink-muted);
+  --bs-border-color: var(--color-border-solid);
+  --bs-border-color-translucent: var(--color-border);
+  --bs-link-color: var(--color-link);
+  --bs-link-hover-color: var(--color-link-hover);
+  --bs-focus-ring-color: var(--color-focus-ring);
+  --bs-code-color: var(--color-code);
+  --bs-highlight-bg: var(--color-highlight);
+}
+
+/* Bootstrap gives these as "r, g, b" triples, which no token can be
+   turned into; so the class itself takes the token. */
+.text-secondary {
+  color: var(--color-ink-muted) !important;
+}
+
+/* Bootstrap's primary blue as text is too dark on a dark surface. */
+[data-theme="dark"] .btn-outline-primary {
+  --bs-btn-color: var(--color-link);
+  --bs-btn-border-color: var(--color-link);
+  --bs-btn-disabled-color: var(--color-link);
+  --bs-btn-disabled-border-color: var(--color-link);
+}

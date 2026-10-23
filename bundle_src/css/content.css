@@ -45,7 +45,7 @@ article.content {
     }
 
     a.anchor:hover {
-      color: var(--bs-link-color);
+      color: var(--color-link);
     }
   }
 
@@ -245,7 +245,7 @@ article.content {
 
   .table-of-contents a:hover,
   .table-of-contents a:focus-visible {
-    color: var(--bs-link-color);
+    color: var(--color-link);
     text-decoration-line: underline;
   }
 }

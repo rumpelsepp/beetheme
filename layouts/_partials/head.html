@@ -4,10 +4,11 @@
 {{- /* Dark mode, if the site asks for it (params.darkMode): follows what
      the system is set to, there is no switch on the page. Inline and
      first, so the page is never painted light before it turns dark.
-     Without JavaScript the page stays light. See [data-bs-theme="dark"] in
-     bundle_src/css/tokens.css. */}}
+     Without JavaScript the page stays light. See [data-theme="dark"] in
+     bundle_src/css/tokens.css; data-bs-theme is for Bootstrap's components
+     as long as its CSS is loaded. */}}
 {{- if site.Params.darkMode }}
-<script>(()=>{const m=matchMedia('(prefers-color-scheme: dark)'),s=()=>{document.documentElement.dataset.bsTheme=m.matches?'dark':'light'};s();m.addEventListener('change',s)})()</script>
+<script>(()=>{const m=matchMedia('(prefers-color-scheme: dark)'),s=()=>{const d=document.documentElement.dataset;d.theme=d.bsTheme=m.matches?'dark':'light'};s();m.addEventListener('change',s)})()</script>
 {{- end }}
 
 {{- /* The page of kind 404 (layouts/404.html) has no title of its own and

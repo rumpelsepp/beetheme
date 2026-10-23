@@ -69,7 +69,7 @@
 }
 
 .gallery-link:focus-visible {
-  outline: 3px solid var(--bs-link-color);
+  outline: 3px solid var(--color-link);
   outline-offset: -3px;
 }
 

@@ -56,7 +56,7 @@
 
 .image-info-button:focus-visible,
 .image-info-close:focus-visible {
-  outline: 3px solid var(--bs-link-color);
+  outline: 3px solid var(--color-link);
   outline-offset: 2px;
 }
 

@@ -38,11 +38,11 @@
     }
   }
 
-  /* --bs-link-color is deliberately darker than --color-primary so this
-     text keeps 4.5:1+ contrast on the (near-white) bar; --color-primary
-     alone was measured at ~3.6:1, failing WCAG AA. */
+  /* The link colour, not --color-primary: it is darker, so this text
+     keeps 4.5:1+ contrast on the (near-white) bar; --color-primary alone
+     was measured at ~3.6:1, failing WCAG AA. */
   [aria-current="page"] {
-    color: var(--bs-link-color, var(--color-primary));
+    color: var(--color-link);
     font-weight: 600;
   }
 
