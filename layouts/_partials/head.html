@@ -22,9 +22,12 @@
   <meta name="description" content="{{ . }}">
 {{- end }}
 
-{{ if $notFound }}
-  <meta name="robots" content="noindex">
-{{ else }}
+{{- /* A page keeps itself out of search engines with robots: noindex in
+     its front matter. */}}
+{{ with cond $notFound "noindex" .Params.robots }}
+  <meta name="robots" content="{{ . }}">
+{{ end }}
+{{ if not $notFound }}
   {{ with .Params.canonicalURL }}
     <link rel="canonical" href="{{ . }}">
   {{ else }}
