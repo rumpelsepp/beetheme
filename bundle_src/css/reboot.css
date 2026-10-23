@@ -209,7 +209,6 @@ caption {
 
 th {
   text-align: inherit;
-  text-align: -webkit-match-parent;
 }
 
 thead,
@@ -303,7 +302,6 @@ iframe {
 }
 
 summary {
-  display: list-item;
   cursor: pointer;
 }
 
