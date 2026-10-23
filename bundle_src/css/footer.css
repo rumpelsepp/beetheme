@@ -148,12 +148,12 @@
   padding-top: 1.5rem;
 }
 
-@media (max-width: 767.98px) {
+@media (width < 768px) {
   .footer-seals {
     gap: 1.5rem;
   }
 
   .footer-seals img {
-    height: 60px !important;
+    height: 60px;
   }
 }

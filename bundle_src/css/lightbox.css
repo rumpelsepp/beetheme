@@ -10,7 +10,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: rgba(20, 18, 15, 0.94);
+  background: color-mix(in srgb, var(--color-overlay) 94%, transparent);
   color: #fff;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .lightbox::backdrop {
-  background: rgba(20, 18, 15, 0.94);
+  background: color-mix(in srgb, var(--color-overlay) 94%, transparent);
 }
 
 .lightbox-image {

@@ -23,13 +23,13 @@
   position: absolute;
   top: 0.4rem;
   right: 0.4rem;
-  background: rgba(20, 18, 15, 0.7);
+  background: color-mix(in srgb, var(--color-overlay) 70%, transparent);
   color: #fff;
   font: italic 700 1rem/1 Georgia, "Times New Roman", serif;
 }
 
 .image-info-button:hover {
-  background: rgba(20, 18, 15, 0.92);
+  background: color-mix(in srgb, var(--color-overlay) 92%, transparent);
 }
 
 /* Where there is a pointer that hovers (a mouse), the "i" stays out of
@@ -76,7 +76,7 @@
 }
 
 .image-info::backdrop {
-  background: rgba(20, 18, 15, 0.4);
+  background: color-mix(in srgb, var(--color-overlay) 40%, transparent);
 }
 
 .image-info dl {

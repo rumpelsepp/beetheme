@@ -103,14 +103,14 @@ article.content {
 
   /* On a phone the container spans the window, so the gutter is all there
      is to break out of: the panorama runs from edge to edge, square. */
-  @media (max-width: 575.98px) {
+  @media (width < 576px) {
     .figure-breakout {
       width: auto;
       margin-inline: calc(-1 * var(--page-gutter));
     }
 
     .figure-breakout .figure-img {
-      border-radius: 0 !important;
+      border-radius: 0;
     }
 
     .figure-breakout .figure-caption {
@@ -134,11 +134,6 @@ article.content {
     /* Portrait clips would otherwise tower over the running text — cap their
        height. Landscape height never reaches this, so it stays width-bound. */
     max-height: 70vh;
-  }
-
-  .figure-caption {
-    text-align: center;
-    color: var(--color-ink-muted);
   }
 
   /* Image and the link around it, as the box the "i" is positioned in
@@ -265,7 +260,7 @@ article.content {
 .content--reading {
   font-size: 1.1rem;
 
-  @media (min-width: 992px) {
+  @media (width >= 992px) {
     --text-width: 50rem;
     font-size: 1.2rem;
 

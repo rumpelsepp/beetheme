@@ -2,12 +2,6 @@
    Text classes: lead, heading sizes, lists, images, figures
    -------------------------------------------------------------------- */
 
-/* The opening paragraph of a page, a step larger ({.lead} in Markdown). */
-.lead {
-  font-size: 1.25rem;
-  font-weight: 300;
-}
-
 .small {
   font-size: 0.875em;
 }
@@ -63,4 +57,5 @@
 .figure-caption {
   font-size: 0.875em;
   color: var(--color-ink-muted);
+  text-align: center;
 }

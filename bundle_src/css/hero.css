@@ -96,7 +96,7 @@
   color: #fff;
 }
 
-@media (max-width: 767.98px) {
+@media (width < 768px) {
   .hero-inner {
     padding-block: 2rem 2rem;
   }

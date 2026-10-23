@@ -42,7 +42,7 @@
         <p>{{ T "videoUnsupported" }} <a href="{{ $mp4.RelPermalink }}">{{ T "videoDownload" }}</a>.</p>
       </video>
       {{- with $caption }}
-      <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>
+      <figcaption class="figure-caption">{{ . | markdownify }}</figcaption>
       {{- end }}
     </figure>
   </div>

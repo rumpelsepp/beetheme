@@ -68,7 +68,7 @@
     {{- partial "image/info.html" (dict "image" $imgOrig "alt" $alt "info" .info) }}
     </div>
     {{- with $caption }}
-      <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>
+      <figcaption class="figure-caption">{{ . | markdownify }}</figcaption>
     {{- end }}
   </figure>
 </div>

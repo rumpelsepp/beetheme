@@ -49,6 +49,10 @@
   --color-warning-ink: #664d03;
   --color-success-ink: #0a3622;
 
+  /* The near-black over pictures: the "i" on an image, the shade under
+     the label of a gallery item, the lightbox. */
+  --color-overlay: #14120f;
+
   /* The footer is dark in either mode. */
   --color-footer-bg: var(--color-ink);
 
@@ -104,6 +108,11 @@
      A narrow screen opens the menu right below it. */
   --site-nav-height: 4rem;
 
+  /* --- Breakpoints ---
+
+     sm 576px, md 768px, lg 992px. Media queries cannot read a custom
+     property, so they carry the values themselves; the range syntax
+     ("width < 768px", "width >= 768px") is the one convention. */
   color-scheme: light;
 }
 

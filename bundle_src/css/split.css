@@ -27,7 +27,7 @@
   }
 
   /* One below the other, the picture after the text whichever its side. */
-  @media (max-width: 767.98px) {
+  @media (width < 768px) {
     &,
     &.split--media-left {
       grid-template-columns: 1fr;

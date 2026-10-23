@@ -9,7 +9,8 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
+  /* An anchored heading lands below the bar, not under it. */
+  scroll-padding-top: calc(var(--site-nav-height) + 1.5rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

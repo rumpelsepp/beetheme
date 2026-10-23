@@ -50,7 +50,7 @@
         {{- partial "image/img.html" (dict
           "image" $img
           "alt" $alt
-          "sizes" (printf "(max-width: 575.98px) 100vw, %.0fpx" $maxWidth)
+          "sizes" (printf "(width < 576px) 100vw, %.0fpx" $maxWidth)
         ) -}}
       </a>
       {{- /* Beside the link, not in it: the label may hold a link itself. */}}
@@ -66,6 +66,6 @@
     {{- end }}
   </ul>
   {{- with .Get "caption" }}
-  <figcaption class="figure-caption text-center">{{ . | markdownify }}</figcaption>
+  <figcaption class="figure-caption">{{ . | markdownify }}</figcaption>
   {{- end }}
 </figure>
