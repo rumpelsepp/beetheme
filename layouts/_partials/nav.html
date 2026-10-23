@@ -1,0 +1,87 @@
+{{- /*
+  The main navigation of a Hugo menu: brand on the left, the entries on
+  the right, an entry with children opens them below itself. Styled by
+  .site-nav in main.css; works without JavaScript.
+
+  - On a narrow screen the entries sit behind a button that opens them as
+    a popover (the popover attribute): the browser brings the opening and
+    closing along, Esc and a click outside included.
+  - An entry with children is a <details>; all of one menu share a name,
+    so only one is open at a time. bundle_src/js/nav.ts adds closing on
+    Esc and on a click outside. An entry that has a URL of its own as well
+    comes first among its children.
+
+  Usage:
+    {{ partial "nav.html" (dict "menuID" "main" "page" . "brand" $logo "brandText" site.Title) }}
+
+  Params (dict):
+    page       the current page (required)
+    menuID     the menu ID (required)
+    brand      a logo image resource (optional)
+    brandText  a wordmark next to (or instead of) the logo (optional)
+    label      name of the navigation landmark for screen readers
+               (default: the text "mainNavigation" of i18n/)
+*/ -}}
+{{- $menuID := .menuID }}
+{{- with index site.Menus $menuID }}
+{{- $panelID := printf "site-nav-%s" (anchorize $menuID) }}
+<nav class="site-nav" aria-label="{{ $.label | default (T "mainNavigation") }}">
+  <a class="site-nav-brand" href="{{ "" | relURL }}">
+    {{- with $.brand }}
+      <img src="{{ .RelPermalink }}" width="44" height="44" alt="" class="site-nav-logo">
+    {{- end }}
+    {{- with $.brandText }}
+      <span class="site-nav-wordmark">{{ . }}</span>
+    {{- else }}
+      {{- if not $.brand }}{{ T "home" }}{{ end }}
+    {{- end }}
+  </a>
+
+  <button class="site-nav-toggle" type="button" popovertarget="{{ $panelID }}" aria-label="{{ T "toggleMenu" }}">
+    {{- partial "icon.html" "list" -}}
+  </button>
+
+  <ul class="site-nav-menu" id="{{ $panelID }}" popover>
+    {{- partial "inline/nav/walk.html" (dict "page" $.page "entries" . "group" $panelID "sub" false) }}
+  </ul>
+</nav>
+{{- end }}
+
+{{- define "_partials/inline/nav/walk.html" }}
+  {{- $page := .page }}
+  {{- $group := .group }}
+  {{- $sub := .sub }}
+  {{- range .entries }}
+    {{- $attrs := dict "class" (cond $sub "site-nav-sublink" "site-nav-link") }}
+    {{- if $page.IsMenuCurrent .Menu . }}
+      {{- $attrs = merge $attrs (dict "aria-current" "page") }}
+    {{- end }}
+
+    {{- /* Name, unless the i18n/ files have a text under the identifier. */}}
+    {{- $label := .Name }}
+    {{- with .Identifier }}{{ with T . }}{{ $label = . }}{{ end }}{{ end }}
+    {{- $text := printf "%s%s%s" .Pre (htmlEscape $label) .Post | safeHTML }}
+
+    {{- /* A title only where it says more than the label (Hugo fills in
+         the page title for pageRef entries); one that repeats the link
+         text is read out twice by some screen readers. */}}
+    {{- with .Title }}{{ if ne . $label }}{{ $attrs = merge $attrs (dict "title" .) }}{{ end }}{{ end }}
+
+    {{- if .Children }}
+      {{- $ancestor := $page.HasMenuCurrent .Menu . }}
+      <li class="site-nav-item">
+        <details class="site-nav-sub" name="{{ $group }}">
+          <summary class="site-nav-link{{ if $ancestor }} ancestor{{ end }}">{{ $text }}</summary>
+          <ul class="site-nav-submenu">
+            {{- with .URL }}
+              <li>{{ partial "link.html" (dict "href" . "text" $text "attrs" $attrs) }}</li>
+            {{- end }}
+            {{- partial "inline/nav/walk.html" (dict "page" $page "entries" .Children "group" $group "sub" true) }}
+          </ul>
+        </details>
+      </li>
+    {{- else }}
+      <li class="site-nav-item">{{ partial "link.html" (dict "href" .URL "text" $text "attrs" $attrs) }}</li>
+    {{- end }}
+  {{- end }}
+{{- end }}

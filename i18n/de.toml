@@ -7,6 +7,7 @@
 skipToContent = 'Zum Inhalt springen'
 mainNavigation = 'Hauptnavigation'
 toggleMenu = 'Menü umschalten'
+home = 'Startseite'
 externalLinkNote = 'externer Link, öffnet in neuem Tab'
 tocTitle = 'Inhalt'
 closeLabel = 'Schließen'

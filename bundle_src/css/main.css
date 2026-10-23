@@ -3,10 +3,10 @@
 /* ==========================================================================
    beetheme — design system
    ==========================================================================
-   Generic structural/typographic layer for the theme. Bootstrap stays the
-   functional foundation (grid, forms, navbar/dropdown/tab JS behaviour —
-   content files and shortcodes rely on its classes directly), this file
-   restyles it into a distinct look. Brand colors live in the site's own
+   Generic structural/typographic layer for the theme. Bootstrap's CSS
+   stays the foundation for now (grid, forms, buttons, cards -- content
+   files and shortcodes rely on its classes directly), this file restyles
+   it into a distinct look; its JS is gone. Brand colors live in the site's own
    style.css as CSS custom-property overrides; the defaults below are
    deliberately neutral so the theme works standalone too.
    ========================================================================== */
@@ -50,6 +50,10 @@
 
   /* Font size of the entries of the main menu, dropdown entries included. */
   --nav-font-size: 1.2rem;
+
+  /* Height of the navigation bar: the logo and the padding around it.
+     A narrow screen opens the menu right below it. */
+  --site-nav-height: 4rem;
 
   color-scheme: light;
 }
@@ -217,7 +221,7 @@ a:focus-visible {
 }
 
 /* --------------------------------------------------------------------
-   Navigation
+   Navigation (layouts/_partials/nav.html)
    -------------------------------------------------------------------- */
 
 .site-nav-bar {
@@ -229,106 +233,203 @@ a:focus-visible {
   border-bottom: 1px solid var(--color-border);
 }
 
-.site-nav-bar .navbar {
-  --bs-navbar-padding-y: 0.6rem;
-  background: transparent !important;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.site-nav-bar .container-fluid {
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   max-width: var(--container-max);
+  min-height: var(--site-nav-height);
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding: 0.6rem 1rem;
+
+  /* The look of a menu entry, in the bar and in a dropdown. */
+  a,
+  summary {
+    color: var(--color-ink-muted);
+    font-size: var(--nav-font-size);
+    font-weight: 500;
+    text-decoration-line: none;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-ink);
+      background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    }
+  }
+
+  /* --bs-link-color is deliberately darker than --color-primary so this
+     text keeps 4.5:1+ contrast on the (near-white) bar; --color-primary
+     alone was measured at ~3.6:1, failing WCAG AA. */
+  [aria-current="page"] {
+    color: var(--bs-link-color, var(--color-primary));
+    font-weight: 600;
+  }
+
+  .ancestor {
+    color: var(--color-ink);
+  }
 }
 
-.navbar-brand {
+.site-nav-brand {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
+  margin-inline-end: 1rem;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: var(--color-ink) !important;
+
+  /* Wins over the look of a menu entry above. */
+  .site-nav & {
+    color: var(--color-ink);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    &:hover,
+    &:focus-visible {
+      background: none;
+    }
+  }
 }
 
-.navbar-brand-logo {
+.site-nav-logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
 }
 
-.navbar-brand-text {
+.site-nav-wordmark {
   letter-spacing: 0.01em;
 }
 
-.navbar-nav {
-  gap: 0.15rem;
-}
-
-.navbar .nav-link {
+.site-nav-toggle {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  font-size: 1.5rem;
+  line-height: 1;
   color: var(--color-ink-muted);
-  font-size: var(--nav-font-size);
-  font-weight: 500;
-  padding-inline: 0.75rem;
-  border-radius: var(--radius-sm);
-  position: relative;
-  transition: color 0.15s ease, background-color 0.15s ease;
-}
-
-.navbar .nav-link:hover,
-.navbar .nav-link:focus {
-  color: var(--color-ink);
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-}
-
-.navbar .nav-link.active,
-.navbar .nav-link[aria-current="page"] {
-  /* --bs-link-color is deliberately darker than --color-primary so this
-     text keeps 4.5:1+ contrast on the (near-white) navbar background;
-     --color-primary alone was measured at ~3.6:1, failing WCAG AA. */
-  color: var(--bs-link-color, var(--color-primary));
-  font-weight: 600;
-}
-
-.navbar .nav-item.dropdown > .nav-link.ancestor,
-.navbar .nav-link.ancestor {
-  color: var(--color-ink);
-}
-
-.navbar .dropdown-menu {
+  background: none;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  padding: 0.4rem;
-  margin-top: 0.5rem;
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
 }
 
-.navbar .dropdown-item {
-  font-size: var(--nav-font-size);
-  border-radius: var(--radius-sm);
+.site-nav-menu,
+.site-nav-submenu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav-link {
+  display: block;
   padding: 0.5rem 0.75rem;
 }
 
-.navbar .dropdown-item:hover,
-.navbar .dropdown-item:focus {
-  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+/* An entry with children: its <summary> with a caret instead of the
+   browser's marker. */
+.site-nav-sub > summary {
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: "";
+    display: inline-block;
+    margin-inline-start: 0.255em;
+    vertical-align: 0.255em;
+    border-top: 0.3em solid;
+    border-inline: 0.3em solid transparent;
+  }
 }
 
-.navbar .dropdown-item.active {
-  /* Route through Bootstrap's own active-bg variable (which style.css
-     tunes to a darker shade) instead of the raw --color-primary: white
-     text on --color-primary alone measured ~3.85:1, failing WCAG AA. */
-  background: var(--bs-dropdown-link-active-bg, var(--color-primary));
-  color: var(--color-primary-ink);
-}
-
-.navbar-toggler {
+.site-nav-submenu {
+  min-width: 10rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
 }
 
-.navbar-toggler:focus {
-  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+.site-nav-sublink {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+
+  .site-nav & {
+    color: var(--color-ink);
+  }
+
+  /* White text on --color-primary alone measured ~3.85:1, failing WCAG
+     AA; a site sets a darker --nav-active-bg. */
+  .site-nav &[aria-current="page"] {
+    background: var(--nav-active-bg, var(--color-primary));
+    color: var(--color-primary-ink);
+  }
+}
+
+/* Narrow: the entries open below the bar as a popover, over the page. */
+@media (width < 992px) {
+  .site-nav-menu:popover-open {
+    position: fixed;
+    inset: calc(var(--site-nav-height) + 1px) 0 auto;
+    width: auto;
+    max-height: calc(100dvh - var(--site-nav-height) - 1px);
+    margin: 0;
+    padding: 0.5rem 1rem 1rem;
+    overflow-y: auto;
+    color: inherit;
+    background: var(--color-surface);
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Wide: the entries in the bar, the popover not needed. */
+@media (width >= 992px) {
+  .site-nav-toggle {
+    display: none;
+  }
+
+  /* Overrides what the browser gives a popover: hidden while it's closed,
+     fixed in the middle of the screen while it's open. */
+  /* Right after the brand, as Bootstrap's navbar had them. */
+  .site-nav-menu {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    gap: 0.15rem;
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    color: inherit;
+    background: none;
+    border: 0;
+  }
+
+  .site-nav-sub {
+    position: relative;
+  }
+
+  .site-nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+  }
 }
 
 /* --------------------------------------------------------------------

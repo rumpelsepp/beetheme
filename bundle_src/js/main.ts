@@ -1,3 +1,3 @@
-import 'bootstrap';
 import './embed';
 import './lightbox';
+import './nav';

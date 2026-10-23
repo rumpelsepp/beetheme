@@ -7,6 +7,7 @@
 skipToContent = 'Skip to content'
 mainNavigation = 'Main navigation'
 toggleMenu = 'Toggle menu'
+home = 'Home'
 externalLinkNote = 'external link, opens in a new tab'
 tocTitle = 'Contents'
 closeLabel = 'Close'
