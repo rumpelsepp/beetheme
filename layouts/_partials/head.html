@@ -45,4 +45,9 @@
 {{ partial "head/css.html" . }}
 {{ partial "head/js.html" . }}
 
+{{- /* Whatever else a site has to say in the head, e.g. a preload. */ -}}
+{{ if templates.Exists "_partials/head/extra.html" }}
+{{ partial "head/extra.html" . }}
+{{ end }}
+
 {{ hugo.Generator }}
