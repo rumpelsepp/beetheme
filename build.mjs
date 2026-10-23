@@ -72,7 +72,9 @@ async function runBuild() {
         // An imported icon is its SVG markup, see bundle_src/js/icon.ts.
         '.svg': 'text',
       },
-      assetNames: '[name]',
+      // Files the CSS refers to (fonts) keep their name and get a content
+      // hash, so a new version of a font is fetched anew.
+      assetNames: '[name]-[hash]',
     });
 
     if (isWatchMode) {

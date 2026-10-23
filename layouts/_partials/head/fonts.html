@@ -1,22 +1,17 @@
-{{- $woff := resources.Match "*.woff" }}
-{{- $woff2 := resources.Match "*.woff2" }}
-{{- $fonts := slice }}
-{{- with $woff }}{{ $fonts = $fonts | append . }}{{- end }}
-{{- with $woff2 }}{{ $fonts = $fonts | append . }}{{- end }}
+{{- /*
+  Preloads the font files a site names in params.preloadFonts, so the
+  text is set in its font from the first paint instead of switching to it
+  once the CSS has asked for the file. Only the files nearly every page
+  needs belong there -- usually the upright face of the Latin subset:
 
-{{- with $fonts }}
-  {{- range . }}
-    <!-- Media type detection does not work in Hugo, so we have to do it manually. -->
-    {{- $type := "application/octet-stream" -}}
-    {{- $filename := lower .Name -}}
+    [params]
+    preloadFonts = ['noto-sans-latin-wght-normal']
 
-    {{- if strings.HasSuffix $filename ".woff2" -}}
-      {{- $type = "font/woff2" -}}
-    {{- else if strings.HasSuffix $filename ".woff" -}}
-      {{- $type = "font/woff" -}}
-    {{- else if strings.HasSuffix $filename ".ttf" -}}
-      {{- $type = "font/ttf" -}}
-    {{- end }}
-    <link rel="preload" as="font" href="{{ .RelPermalink }}" type="{{ $type }}" crossorigin="anonymous">
+  A name is the start of a file esbuild wrote into assets/gen/ (it adds a
+  hash); head/css.html publishes them.
+*/ -}}
+{{- range site.Params.preloadFonts }}
+  {{- range resources.Match (printf "gen/%s-*.woff2" .) }}
+<link rel="preload" as="font" type="font/woff2" href="{{ .RelPermalink }}" crossorigin="anonymous">
   {{- end }}
 {{- end }}

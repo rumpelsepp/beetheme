@@ -54,9 +54,13 @@
 
   /* --- Type --- */
 
-  /* One system-font stack for everything -- no webfont downloads (privacy:
-     nothing loaded from a third party). Headings take --font-display. */
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* The fonts of the system the page is read on -- nothing to download.
+     A site with a font of its own puts it in front, from its bundle,
+     never from a third party:
+       --font-body: "Noto Sans Variable", var(--font-system);
+     Headings take --font-display. */
+  --font-system: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-body: var(--font-system);
   --font-display: var(--font-body);
   --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
