@@ -56,15 +56,10 @@ hr {
   opacity: 0.25;
 }
 
+/* The dotted underline is the browser's own. */
 abbr[title] {
-  text-decoration: underline dotted;
   cursor: help;
   text-decoration-skip-ink: none;
-}
-
-b,
-strong {
-  font-weight: bolder;
 }
 
 small {
@@ -154,14 +149,12 @@ samp {
 }
 
 pre {
-  display: block;
   overflow: auto;
   font-size: 0.875em;
 
   code {
     font-size: inherit;
     color: inherit;
-    word-break: normal;
   }
 }
 
@@ -196,7 +189,6 @@ svg {
 }
 
 table {
-  caption-side: bottom;
   border-collapse: collapse;
 }
 

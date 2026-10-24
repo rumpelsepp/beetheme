@@ -33,8 +33,7 @@ article.content {
        heading stays flush with the text, and only there while the heading
        is hovered. Its padding bridges the gap, so the pointer can move
        over to it without losing the hover. */
-    a.anchor,
-    a.anchor:visited {
+    a.anchor {
       position: absolute;
       inset-inline-end: 100%;
       padding-inline-end: 0.3em;
@@ -169,8 +168,7 @@ article.content {
          rule above; only the tighter spacing and link colour differ here. */
       margin-top: 0;
 
-      a,
-      a:visited {
+      a {
         color: inherit;
       }
     }
@@ -223,7 +221,6 @@ article.content {
     summary.toc-title {
       margin: 0;
       font-size: 0.8rem;
-      cursor: pointer;
     }
 
     details[open] > summary.toc-title {

@@ -28,7 +28,6 @@
 
   display: inline-block;
   padding: var(--btn-padding-y) var(--btn-padding-x);
-  font-family: inherit;
   font-size: var(--btn-font-size);
   font-weight: 600;
   line-height: 1.5;
@@ -36,7 +35,6 @@
   text-align: center;
   text-decoration: none;
   vertical-align: middle;
-  cursor: pointer;
   user-select: none;
   background-color: var(--btn-bg);
   border: 1px solid var(--btn-border);

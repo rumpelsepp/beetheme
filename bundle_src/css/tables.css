@@ -61,9 +61,8 @@
     }
   }
 
-  /* The title of a table above it. */
+  /* The title of a table, above it as the browser puts it. */
   > caption {
-    caption-side: top;
     padding: 0 0 0.4rem;
     color: var(--color-ink-muted);
     font-size: 0.9em;
