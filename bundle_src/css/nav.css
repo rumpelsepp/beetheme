@@ -1,5 +1,11 @@
 /* --------------------------------------------------------------------
    Navigation (layouts/_partials/nav.html)
+
+   Narrow (< 992px): the entries sit behind the toggle and open below
+   the bar as a popover, over the page; a submenu opens below its entry,
+   as wide as the menu. Wide: the entries in the bar, a submenu as a
+   dropdown under its entry. Bar and entries keep to --page-gutter, the
+   gutter of .container, so they line up with the content below.
    -------------------------------------------------------------------- */
 
 .site-nav-bar {
@@ -21,8 +27,6 @@
   max-width: var(--container-max);
   min-height: var(--site-nav-height);
   margin-inline: auto;
-  /* The gutter of .container, so logo and button line up with the
-     content below the bar. */
   padding: 0.6rem var(--page-gutter);
 
   /* The look of a menu entry, in the bar and in a dropdown. */
@@ -98,13 +102,62 @@
     outline: 0;
     box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
   }
+
+  @media (width >= 992px) {
+    display: none;
+  }
 }
 
-.site-nav-menu,
-.site-nav-submenu {
+.site-nav-menu {
   margin: 0;
   padding: 0;
   list-style: none;
+
+  /* Each entry a row as wide as the window, its text on the gutter, in
+     line with the logo and the content below. */
+  @media (width < 992px) {
+    &:popover-open {
+      position: fixed;
+      inset: calc(var(--site-nav-height) + 1px) 0 auto;
+      width: auto;
+      max-height: calc(100dvh - var(--site-nav-height) - 1px);
+      margin: 0;
+      padding: 0.5rem 0 1rem;
+      overflow-y: auto;
+      color: inherit;
+      background: var(--color-surface);
+      border: 0;
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-md);
+    }
+
+    :is(.site-nav-link, .site-nav-sub-toggle) {
+      padding-inline: var(--page-gutter);
+      border-radius: 0;
+    }
+
+    .site-nav-sub-toggle {
+      width: 100%;
+    }
+  }
+
+  /* Right after the brand, as Bootstrap's navbar had them. Overrides
+     what the browser gives a popover: hidden while it's closed, fixed
+     in the middle of the screen while it's open. */
+  @media (width >= 992px) {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    gap: 0.15rem;
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    color: inherit;
+    background: none;
+    border: 0;
+  }
 }
 
 .site-nav-link {
@@ -149,16 +202,34 @@
   min-width: 10rem;
   margin: 0.5rem 0 0;
   padding: 0.4rem;
+  list-style: none;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-}
 
-@supports not (anchor-name: --a) {
-  .site-nav-submenu {
+  @supports not (anchor-name: --a) {
     margin: 0;
     inset: var(--site-nav-height) var(--page-gutter) auto;
+  }
+
+  /* Narrow: right below its entry and as wide as the menu, so it reads
+     as a continuation of it; the entries indented by a step. */
+  @media (width < 992px) {
+    left: 0;
+    right: 0;
+    /* Not the fit-content a popover gets from the browser. */
+    width: auto;
+    margin: 0;
+    padding: 0 0 0.5rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+
+    .site-nav-sublink {
+      padding-inline: calc(var(--page-gutter) + 1rem) var(--page-gutter);
+      border-radius: 0;
+    }
   }
 }
 
@@ -176,59 +247,5 @@
   .site-nav &[aria-current="page"] {
     background: var(--color-button);
     color: var(--color-primary-ink);
-  }
-}
-
-/* Narrow: the entries open below the bar as a popover, over the page. */
-@media (width < 992px) {
-  .site-nav-menu:popover-open {
-    position: fixed;
-    inset: calc(var(--site-nav-height) + 1px) 0 auto;
-    width: auto;
-    max-height: calc(100dvh - var(--site-nav-height) - 1px);
-    margin: 0;
-    padding: 0.5rem 0 1rem;
-    overflow-y: auto;
-    color: inherit;
-    background: var(--color-surface);
-    border: 0;
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: var(--shadow-md);
-
-    /* Each entry a row as wide as the window, its text on the gutter of
-       .container, in line with the logo and the content below. */
-    :is(.site-nav-link, .site-nav-sub-toggle) {
-      padding-inline: var(--page-gutter);
-      border-radius: 0;
-    }
-
-    .site-nav-sub-toggle {
-      width: 100%;
-    }
-  }
-}
-
-/* Wide: the entries in the bar, the popover not needed. */
-@media (width >= 992px) {
-  .site-nav-toggle {
-    display: none;
-  }
-
-  /* Overrides what the browser gives a popover: hidden while it's closed,
-     fixed in the middle of the screen while it's open. */
-  /* Right after the brand, as Bootstrap's navbar had them. */
-  .site-nav-menu {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    gap: 0.15rem;
-    position: static;
-    inset: auto;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    color: inherit;
-    background: none;
-    border: 0;
   }
 }
