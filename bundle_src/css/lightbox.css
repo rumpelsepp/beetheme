@@ -12,15 +12,40 @@
   border: 0;
   background: color-mix(in srgb, var(--color-overlay) 94%, transparent);
   color: #fff;
-}
 
-.lightbox[open] {
-  display: grid;
-  place-items: center;
-}
+  &[open] {
+    display: grid;
+    place-items: center;
+  }
 
-.lightbox::backdrop {
-  background: color-mix(in srgb, var(--color-overlay) 94%, transparent);
+  &::backdrop {
+    background: color-mix(in srgb, var(--color-overlay) 94%, transparent);
+  }
+
+  button {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
 }
 
 .lightbox-image {
@@ -28,31 +53,6 @@
   max-height: calc(100dvh - 5.5rem);
   object-fit: contain;
   border-radius: var(--radius-sm);
-}
-
-.lightbox button {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: background-color 0.12s ease;
-}
-
-.lightbox button:hover {
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.lightbox button:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
 }
 
 .lightbox-close {

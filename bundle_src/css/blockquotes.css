@@ -11,10 +11,10 @@ blockquote {
   border-left: 3px solid var(--color-primary);
   background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface));
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-}
 
-blockquote > :last-child {
-  margin-bottom: 0;
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 /* The quote of the blockquote shortcode, a step larger, and its source

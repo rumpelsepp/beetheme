@@ -41,9 +41,8 @@ body {
 
 #main-content {
   flex: 1 1 auto;
-}
 
-#main-content > .container {
-  padding-top: 2.25rem;
-  padding-bottom: 4rem;
+  > .container {
+    padding-block: 2.25rem 4rem;
+  }
 }

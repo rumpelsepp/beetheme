@@ -35,6 +35,10 @@
 .hero-inner {
   padding-block: 3rem 2.75rem;
   color: #fff;
+
+  @media (width < 768px) {
+    padding-block: 2rem;
+  }
 }
 
 .hero-title {
@@ -75,29 +79,23 @@
   background: var(--color-button);
   border: 1px solid var(--color-button);
   color: var(--color-primary-ink);
-}
 
-.btn-hero-primary:hover,
-.btn-hero-primary:focus {
-  background: color-mix(in srgb, var(--color-button) 85%, black);
-  border-color: color-mix(in srgb, var(--color-button) 85%, black);
-  color: var(--color-primary-ink);
+  &:hover,
+  &:focus {
+    background: color-mix(in srgb, var(--color-button) 85%, black);
+    border-color: color-mix(in srgb, var(--color-button) 85%, black);
+    color: var(--color-primary-ink);
+  }
 }
 
 .btn-hero-secondary {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.6);
   color: #fff;
-}
 
-.btn-hero-secondary:hover,
-.btn-hero-secondary:focus {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
-}
-
-@media (width < 768px) {
-  .hero-inner {
-    padding-block: 2rem 2rem;
+  &:hover,
+  &:focus {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
   }
 }
