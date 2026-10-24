@@ -156,14 +156,6 @@ article.content {
     overflow: hidden;
   }
 
-  table tbody tr.dimmed {
-    opacity: 0.5;
-  }
-
-  table tbody tr.line-through {
-    text-decoration: line-through;
-  }
-
   .card {
     h1,
     h2,
