@@ -21,7 +21,9 @@
   max-width: var(--container-max);
   min-height: var(--site-nav-height);
   margin-inline: auto;
-  padding: 0.6rem 1rem;
+  /* The gutter of .container, so logo and button line up with the
+     content below the bar. */
+  padding: 0.6rem var(--page-gutter);
 
   /* The look of a menu entry, in the bar and in a dropdown. */
   :is(a, .site-nav-sub-toggle) {
@@ -185,13 +187,24 @@
     width: auto;
     max-height: calc(100dvh - var(--site-nav-height) - 1px);
     margin: 0;
-    padding: 0.5rem 1rem 1rem;
+    padding: 0.5rem 0 1rem;
     overflow-y: auto;
     color: inherit;
     background: var(--color-surface);
     border: 0;
     border-bottom: 1px solid var(--color-border);
     box-shadow: var(--shadow-md);
+
+    /* Each entry a row as wide as the window, its text on the gutter of
+       .container, in line with the logo and the content below. */
+    :is(.site-nav-link, .site-nav-sub-toggle) {
+      padding-inline: var(--page-gutter);
+      border-radius: 0;
+    }
+
+    .site-nav-sub-toggle {
+      width: 100%;
+    }
   }
 }
 
