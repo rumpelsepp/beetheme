@@ -28,7 +28,6 @@
 
   display: inline-block;
   padding: var(--btn-padding-y) var(--btn-padding-x);
-  font-family: inherit;
   font-size: var(--btn-font-size);
   font-weight: 600;
   line-height: 1.5;
@@ -36,7 +35,6 @@
   text-align: center;
   text-decoration: none;
   vertical-align: middle;
-  cursor: pointer;
   user-select: none;
   background-color: var(--btn-bg);
   border: 1px solid var(--btn-border);
@@ -66,8 +64,7 @@
 
   /* Disabled: the resting look, faded. */
   &:disabled,
-  &.disabled,
-  fieldset:disabled & {
+  &.disabled {
     color: var(--btn-color);
     background-color: var(--btn-bg);
     border-color: var(--btn-border);
@@ -96,27 +93,11 @@
   --btn-active-bg: color-mix(in srgb, var(--color-button), #000 15%);
 }
 
-/* A quiet frame in the muted ink. */
-.btn-outline-secondary {
-  --btn-color: var(--color-ink-muted);
-  --btn-border: var(--color-ink-muted);
-  --btn-hover-color: var(--color-surface);
-  --btn-hover-bg: var(--color-ink-muted);
-}
-
 /* A light surface, a shade off the page's own in either mode. */
 .btn-light {
   --btn-bg: color-mix(in srgb, var(--color-ink) 4%, var(--color-surface));
   --btn-hover-bg: color-mix(in srgb, var(--color-ink) 12%, var(--color-surface));
   --btn-active-bg: color-mix(in srgb, var(--color-ink) 18%, var(--color-surface));
-}
-
-/* Looks like a link, acts like a button. */
-.btn-link {
-  --btn-color: var(--color-link);
-  --btn-hover-color: var(--color-link-hover);
-
-  text-decoration: underline;
 }
 
 /* --- Sizes --- */

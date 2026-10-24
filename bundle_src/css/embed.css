@@ -13,16 +13,16 @@
   text-align: center;
   text-wrap: balance;
   hyphens: none;
-}
 
-.embed-consent > p {
-  max-width: 38rem;
-  margin-inline: auto;
-}
+  > p {
+    max-width: 38rem;
+    margin-inline: auto;
 
-.embed-consent > p .bi {
-  margin-right: 0.3rem;
-  color: var(--color-link);
+    .bi {
+      margin-right: 0.3rem;
+      color: var(--color-link);
+    }
+  }
 }
 
 /* Button, checkbox and the link to the provider, stacked and centred. */
@@ -32,13 +32,13 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.9rem;
-}
 
-/* As a flex item the link is only as wide as its content, and the
-   negative margin of the external-link icon makes that too narrow for
-   the icon, which would wrap onto a line of its own. */
-.embed-consent-actions > a {
-  white-space: nowrap;
+  /* As a flex item the link is only as wide as its content, and the
+     negative margin of the external-link icon makes that too narrow for
+     the icon, which would wrap onto a line of its own. */
+  > a {
+    white-space: nowrap;
+  }
 }
 
 .embed-consent-remember {
@@ -61,5 +61,4 @@
   display: block;
   width: 100%;
   margin: 0 auto 1.5rem;
-  border: 0;
 }

@@ -1,10 +1,6 @@
 /* --------------------------------------------------------------------
-   Text classes: lead, heading sizes, lists, images, figures
+   Text classes: heading sizes, lists, images, figures
    -------------------------------------------------------------------- */
-
-.small {
-  font-size: 0.875em;
-}
 
 /* The size of a heading on another element -- e.g. an h2 that should
    look like an h4: {.h4} in Markdown. */

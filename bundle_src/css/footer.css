@@ -6,6 +6,25 @@
   margin-top: 5rem;
   background: var(--color-footer-bg);
   color: rgba(255, 255, 255, 0.85);
+
+  /* The menu "footer" as one line, for a site without columns. */
+  .footer-menu {
+    text-align: center;
+
+    a {
+      color: inherit;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  /* Links in the line at the bottom (imprint, licence) keep its colour;
+     the link blue is too dark on the footer. */
+  .footer-bottom a {
+    color: inherit;
+  }
 }
 
 .footer-inner {
@@ -23,19 +42,6 @@
   gap: 0.6rem;
 }
 
-/* The menu "footer" as one line, for a site without columns. */
-#site-footer .footer-menu {
-  text-align: center;
-
-  a {
-    color: inherit;
-
-    &:hover {
-      color: #fff;
-    }
-  }
-}
-
 .footer-tagline {
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -49,64 +55,58 @@
   gap: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+  /* Where the columns are the last thing in the footer, the rule between
+     them and the line at the bottom goes. */
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
 }
 
-/* Where the columns are the last thing in the footer, the rule between
-   them and the line at the bottom goes. */
-.footer-grid:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
+.footer-col {
+  /* Title of a column: an h2, so the footer's sections can be jumped to
+     by heading, in the look of a small label. */
+  .footer-title {
+    margin-top: 0;
+    font-family: var(--font-body);
+    font-weight: 500;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.9rem;
+  }
 
-/* Title of a footer column: an h2, so the footer's sections can be jumped
-   to by heading, in the look of a small label. */
-.footer-col .footer-title {
-  margin-top: 0;
-  font-family: var(--font-body);
-  font-weight: 500;
-  line-height: 1.2;
-  color: rgba(255, 255, 255, 0.55);
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.9rem;
-}
+  /* The paragraphs of the contact are as far apart as the entries of the
+     menus in the columns beside it. */
+  address p {
+    margin-bottom: 0.5rem;
+  }
 
-.footer-col address {
-  font-style: normal;
-}
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
 
-/* The paragraphs of the contact are as far apart as the entries of the
-   menus in the columns beside it. */
-.footer-col address p {
-  margin-bottom: 0.5rem;
-}
+  li {
+    margin-bottom: 0.5rem;
+  }
 
-.footer-col ul {
-  list-style: none;
-  padding-left: 0;
-  margin-bottom: 0;
-}
+  a {
+    color: inherit;
 
-.footer-col li {
-  margin-bottom: 0.5rem;
-}
+    &:hover {
+      color: #fff;
+    }
 
-.footer-col a,
-.footer-col a:visited,
-.footer-col address a {
-  color: inherit;
-  text-decoration-line: underline;
-}
-
-.footer-col a:hover,
-.footer-col address a:hover {
-  color: #fff;
-}
-
-.footer-col a.active {
-  color: #fff;
-  font-weight: 600;
+    &.active {
+      color: #fff;
+      font-weight: 600;
+    }
+  }
 }
 
 .footer-seals {
@@ -116,6 +116,14 @@
   justify-content: center;
   gap: 2.5rem;
   padding-block: 2rem;
+
+  @media (width < 768px) {
+    gap: 1.5rem;
+
+    img {
+      height: 60px;
+    }
+  }
 }
 
 .footer-seal {
@@ -136,24 +144,8 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Links in it (imprint, licence) keep its colour; the link blue is too
-   dark on the footer. */
-#site-footer .footer-bottom a {
-  color: inherit;
-}
-
 /* Right below the columns the line would sit on their bottom border;
    a site with .footer-seals in between gets its air from those. */
 .footer-grid + .footer-bottom {
   padding-top: 1.5rem;
-}
-
-@media (width < 768px) {
-  .footer-seals {
-    gap: 1.5rem;
-  }
-
-  .footer-seals img {
-    height: 60px;
-  }
 }

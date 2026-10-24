@@ -3,14 +3,8 @@
    -------------------------------------------------------------------- */
 
 /* Fields in the colours of the page; what the browser does well it keeps
-   doing: a select keeps its own arrow and list, checkboxes and sliders
-   stay native and take the brand colour through accent-color, and
-   color-scheme (tokens.css) turns all of them dark along with the page. */
-
-.form-label {
-  display: inline-block;
-  margin-bottom: 0.5rem;
-}
+   doing: a select keeps its own arrow and list, and color-scheme
+   (tokens.css) turns fields and checkboxes dark along with the page. */
 
 /* A text field or a select, as wide as its container. */
 .form-control,
@@ -52,93 +46,4 @@
 
   font-size: 0.875rem;
   border-radius: var(--radius-sm);
-}
-
-/* Native checkboxes and sliders in the brand colour. */
-.form-check-input,
-.form-range {
-  accent-color: var(--color-button);
-
-  &:focus-visible {
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
-  }
-}
-
-.form-check-input {
-  width: 1em;
-  height: 1em;
-  margin: 0;
-  flex-shrink: 0;
-}
-
-.form-range {
-  width: 100%;
-}
-
-/* A checkbox with its label beside it. */
-.form-check {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  min-height: 1.5rem;
-  margin-bottom: 0.125rem;
-}
-
-/* The label of a checkbox that can't be changed (yet) fades with it. */
-.form-check-input:disabled + .form-check-label {
-  opacity: 0.5;
-}
-
-/* Fields, buttons and notes joined into one bar: a search field with
-   its icon, a number between - and +. The inner corners are square and
-   neighbours share their border; the field takes the room left. */
-.input-group {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  width: 100%;
-
-  > :is(.form-control, .form-select) {
-    position: relative;
-    flex: 1 1 auto;
-    width: 1%;
-    min-width: 0;
-  }
-
-  > :is(.form-control, .form-select, .btn):focus {
-    z-index: 3;
-  }
-
-  > .btn {
-    position: relative;
-    z-index: 2;
-  }
-
-  > :not(:last-child) {
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
-  }
-
-  > :not(:first-child) {
-    margin-inline-start: -1px;
-    border-start-start-radius: 0;
-    border-end-start-radius: 0;
-  }
-}
-
-/* A note in the bar, e.g. an icon or a label with a control in it. */
-.input-group-text {
-  display: flex;
-  align-items: center;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--color-ink);
-  text-align: center;
-  white-space: nowrap;
-  background-color: color-mix(in srgb, var(--color-ink) 6%, var(--color-surface));
-  border: 1px solid var(--color-border-solid);
-  border-radius: var(--radius-md);
 }

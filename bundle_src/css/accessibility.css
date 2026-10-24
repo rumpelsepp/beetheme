@@ -13,11 +13,11 @@
   color: var(--color-surface);
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   transition: top 0.15s ease;
-}
 
-.skip-link:focus {
-  top: 0;
-  color: var(--color-surface);
+  &:focus {
+    top: 0;
+    color: var(--color-surface);
+  }
 }
 
 /* There for screen readers, invisible on the screen. */

@@ -84,11 +84,6 @@
   text-align: left;
   hyphens: none;
 
-  /* The hidden attribute loses against display: flex otherwise. */
-  &[hidden] {
-    display: none;
-  }
-
   .tag-filter-text .bi {
     margin-right: 0.3rem;
     color: var(--color-accent);
@@ -102,10 +97,6 @@
 
     .bi {
       margin-right: 0.15rem;
-    }
-
-    .btn-link {
-      vertical-align: baseline;
     }
   }
 }
